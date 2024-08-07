@@ -1,0 +1,388 @@
+{
+    "header": {
+        "name": "Subnests file for PC version of NFS Underground 2",
+        "description": "Default subnests file for parsing files of NFS Underground 2 for PC",
+        "subnests_version": 3,
+        "use_localization": true
+    },
+    "subnests": {
+        "0x00000000": {
+            "ignore": true
+        },
+        "0x00030201": {
+            "description_entry": "BCHUNK_FENG_FONT"
+        },
+        "0x00030203": {
+            "description_entry": "BCHUNK_FENG_PACKAGE"
+        },
+        "0x00030210": {
+            "description_entry": "BCHUNK_FENG_PACKAGE"
+        },
+        "0x00030220": {
+            "description_entry": "BCHUNK_FE_PRESET_CARS"
+        },
+        "0x00030230": {
+            "description_entry": "BCHUNK_FE_MAGAZINE_DATABASE"
+        },
+        "0x00030231": {
+            "description_entry": "BCHUNK_SC_MAGAZINE_DATABASE"
+        },
+        "0x80134000": {
+            "description_entry": "BCHUNK_SOLID_LIST"
+        },
+        "0x80134001": {
+            "align": 16
+        },
+        "0x00134002": {
+            "schema": {
+                "bNodePointers": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding",
+                    "length": 2
+                },
+                "version": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "numSolids": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "filename": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "string",
+                    "length": 56
+                },
+                "groupName": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "string",
+                    "length": 32
+                },
+                "permChunkByteOffset": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "permChunkByteSize": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "maxSolidChunkByteAlignment": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "endianSwapped": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding",
+                    "length": 1
+                },
+                "solidTables": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding",
+                    "length": 2
+                },
+                "nums": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding",
+                    "length": 2
+                },
+                "bPLists": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding",
+                    "length": 4
+                }
+            }
+        },
+        "0x00134003": {
+            "description_entry": "description",
+            "csm": "$rfind:0x00134002.numSolids",
+            "schema": {
+                "lookup": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "hash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "pointer": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0x00E34009": {
+            "description_entry": "BCHUNK_EAGL_SKELETON",
+            "data_align": 16
+        },
+        "0x00E34010": {
+            "description_entry": "BCHUNK_EAGL_ANIMATION",
+            "data_align": 16
+        },
+        "0x00134011": {
+            "data_align": 16
+        },
+        "0x0013401A": {
+            "data_align": 16
+        },
+        "0x80034020": {
+            "description_entry": "BCHUNK_COLLISION_VOLUMES"
+        },
+        "0x00034030": {
+            "description_entry": "BCHUNK_BODY_DAMAGE"
+        },
+        "0x00034026": {
+            "description_entry": "BCHUNK_SMOKEABLE_INFOS",
+            "data_align": 16
+        },
+        "0x00034027": {
+            "description_entry": "BCHUNK_SMOKEABLE_SPAWNER_PACK",
+            "data_align": 16
+        },
+        "0x00034050": {
+            "data_align": 16
+        },
+        "0x80034100": {
+            "description_entry": "BCHUNK_SCENERY_SECTION_HEADERS"
+        },
+        "0x00034103": {
+            "data_align": 16
+        },
+        "0x00034107": {
+            "description_entry": "BCHUNK_SCENERY_OVERRIDE_INFOS",
+            "align": 128
+        },
+        "0x00034108": {
+            "description_entry": "BCHUNK_SCENERY_GROUPS"
+        },
+        "0x00034110": {
+            "description_entry": "BCHUNK_TRACK_STREAMING_SECTIONS",
+            "align": 128
+        },
+        "0x00034111": {
+            "description_entry": "BCHUNK_TRACK_STREAMING_INFO"
+        },
+        "0x00034112": {
+            "description_entry": "BCHUNK_TRACK_STREAMING_BARRIERS"
+        },
+        "0x00034113": {
+            "description_entry": "BCHUNK_DISC_BUNDLE_SECTIONS"
+        },
+        "0x00034121": {
+            "description_entry": "BCHUNK_TRACK_ROUTES"
+        },
+        "0x00034122": {
+            "description_entry": "BCHUNK_SIGNPOSTS"
+        },
+        "0x00034123": {
+            "description_entry": "BCHUNK_TRAFFIC_INTERSECTIONS"
+        },
+        "0x00034124": {
+            "description_entry": "BCHUNK_CROSS_TRAFFIC_EMITTERS"
+        },
+        "0x0003412F": {
+            "align": 128
+        },
+        "0x80034130": {
+            "description_entry": "BCHUNK_TOPOLOGY_TREE"
+        },
+        "0x00034131": {
+            "data_align": 16
+        },
+        "0x00034146": {
+            "description_entry": "BCHUNK_TRACK_POSITION_MARKERS"
+        },
+        "0x80034147": {
+            "description_entry": "BCHUNK_TRACK_PATH_MANAGER"
+        },
+        "0x80034150": {
+            "description_entry": "BCHUNK_VISIBLE_SECTIONS"
+        },
+        "0x00034201": {
+            "description_entry": "BCHUNK_TRACK_INFOS"
+        },
+        "0x00034202": {
+            "description_entry": "BCHUNK_SUN_INFOS"
+        },
+        "0x00034250": {
+            "description_entry": "BCHUNK_WEATHER_MAN",
+            "data_align": 16,
+            "align": 16
+        },
+        "0x00034600": {
+            "description_entry": "BCHUNK_CAR_TYPE_INFO_ARRAY"
+        },
+        "0x00034601": {
+            "description_entry": "BCHUNK_SKIN_INFOS"
+        },
+        "0x80034602": {
+            "description_entry": "BCHUNK_CAR_PART_PACK"
+        },
+        "0x00034607": {
+            "description_entry": "BCHUNK_SLOT_TYPE_NAMES_AND_OVERRIDES"
+        },
+        "0x00034608": {
+            "description_entry": "BCHUNK_CAR_SLOT_ANIM_HOOKUP_TABLE"
+        },
+        "0x00034609": {
+            "description_entry": "BCHUNK_CAR_SLOT_ANIM_OPEN_CLOSED_TABLES"
+        },
+        "0x00134800": {
+            "align": 16
+        },
+        "0x00134801": {
+            "align": 16
+        },
+        "0x00134802": {
+            "align": 16
+        },
+        "0x00134900": {
+            "data_align": 16
+        },
+        "0x00034A07": {
+            "description_entry": "BCHUNK_STYLE_MOMENTS"
+        },
+        "0x80034A10": {
+            "description_entry": "BCHUNK_MOST_WANTED_CAREER_CHUNK"
+        },
+        "0x80034A30": {
+            "description_entry": "BCHUNK_PERFORMANCE_CONFIGS"
+        },
+        "0x00034B00": {
+            "description_entry": "BCHUNK_DIFFICULTY_INFO"
+        },
+        "0x00134B01": {
+            "data_align": 128
+        },
+        "0x00134B02": {
+            "data_align": 16
+        },
+        "0x00134B03": {
+            "data_align": 16
+        },
+        "0x00135002": {
+            "data_align": 16
+        },
+        "0x00135003": {
+            "data_align": 16
+        },
+        "0x00035020": {
+            "description_entry": "BCHUNK_ACID_EMITTERS",
+            "align": 16
+        },
+        "0x00035021": {
+            "description_entry": "BCHUNK_ACID_EMITTERS_DATA",
+            "data_align": 16,
+            "align": 16
+        },
+        "0x80135000": {
+            "description_entry": "BCHUNK_LIGHT_PACK"
+        },
+        "0x80135100": {
+            "description_entry": "BCHUNK_LIGHT_FLARE_PACK"
+        },
+        "0x00135200": {
+            "description_entry": "BCHUNK_LIGHT_MATERIAL"
+        },
+        "0x80036000": {
+            "description_entry": "BCHUNK_EVENT_MANAGER"
+        },
+        "0x80037020": {
+            "description_entry": "BCHUNK_ANIM_SCENE_DATA"
+        },
+        "0x80037050": {
+            "description_entry": "BCHUNK_ANIM_DIRECTORY_DATA"
+        },
+        "0x00037080": {
+            "description_entry": "BCHUNK_WORLD_ANIM_ENTITY_DATA",
+            "data_align": 16
+        },
+        "0x00037090": {
+            "description_entry": "BCHUNK_WORLD_ANIM_DIRECTORY_DATA",
+            "data_align": 16
+        },
+        "0x00037100": {
+            "description_entry": "BCHUNK_CAR_PARTS_ANIM_HEADER"
+        },
+        "0x00037110": {
+            "description_entry": "BCHUNK_WORLD_ANIM_TREE_MARKER",
+            "data_align": 16
+        },
+        "0x00037140": {
+            "description_entry": "BCHUNK_WORLD_ANIM_EVENT_DIRECTORY"
+        },
+        "0x00037150": {
+            "description_entry": "BCHUNK_WORLD_ANIM_INSTANCE_ENTRY",
+            "data_align": 16
+        },
+        "0x00039000": {
+            "description_entry": "BCHUNK_LANGUAGE"
+        },
+        "0x00039020": {
+            "description_entry": "BCHUNK_MOVIE_CATALOG"
+        },
+        "0x00039200": {
+            "data_align": 16
+        },
+        "0x00039202": {
+            "data_align": 16
+        },
+        "0x0003A000": {
+            "description_entry": "BCHUNK_ELIPSE_TABLE"
+        },
+        "0x8003B000": {
+            "description_entry": "BCHUNK_QUICK_SPLINE",
+            "data_align": 16,
+            "align": 128
+        },
+        "0x8003B200": {
+            "description_entry": "BCHUNK_DRAG_CAMERA_SET_0"
+        },
+        "0x8003B201": {
+            "description_entry": "BCHUNK_DRAG_CAMERA_SET_1"
+        },
+        "0x8003B202": {
+            "description_entry": "BCHUNK_DRAG_CAMERA_SET_2"
+        },
+        "0x8003B500": {
+            "description_entry": "BCHUNK_SOUND_STICHS"
+        },
+        "0x8003B600": {
+            "description_entry": "BCHUNK_PARAMETER_MAPS",
+            "align": 128
+        },
+        "0x0003B700": {
+            "description_entry": "BCHUNK_SHAPER_LIGHT_RINGS"
+        },
+        "0x33320002": {
+            "data_align": 128
+        },
+        "0xB3300000": {
+            "description_entry": "BCHUNK_TEXTURE_PACK"
+        }
+    }
+}

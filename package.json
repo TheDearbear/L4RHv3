@@ -1,0 +1,23 @@
+{
+  "dependencies": {},
+  "name": "l4rh",
+  "version": "3.0.0",
+  "description": "Modern bundle (de)compiler for famous games powered by speed engine",
+  "main": "raw_printer.js",
+  "devDependencies": {
+    "eslint": "^9.8.0"
+  },
+  "scripts": {
+    "test": "node raw_printer.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheDearbear/L4RHv3.git"
+  },
+  "author": "TheDearbear",
+  "license": "LGPL-2.1",
+  "bugs": {
+    "url": "https://github.com/TheDearbear/L4RHv3/issues"
+  },
+  "homepage": "https://github.com/TheDearbear/L4RHv3#readme"
+}
