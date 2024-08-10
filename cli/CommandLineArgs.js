@@ -19,9 +19,7 @@ class CommandLineArgs {
 	 * @returns {CommandLineArg?}
 	 */
 	getTag(tag) {
-		var elem = null;
-		this.args.forEach(e => e.tag == tag ? elem = e : null);
-		return elem;
+		return this.args.find(e => e.tag == tag);
 	}
 
 	/**
@@ -30,9 +28,7 @@ class CommandLineArgs {
 	 * @returns {CommandLineArg[]} All found arguments
 	 */
 	getTags(tag) {
-		var elems = [];
-		this.args.forEach(e => e.tag == tag ? elems.push(e) : null);
-		return elems
+		return this.args.filter(e => e.tag == tag);
 	}
 }
 

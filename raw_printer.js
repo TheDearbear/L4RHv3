@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const CommandLineArgs = require("./CommandLineArgs");
+const CommandLineArgs = require("./cli/CommandLineArgs");
 const DocsManager = require("./DocsManager");
 const Constants = require("./Constants");
 const L4RHUtils = require("./L4RHUtils");
@@ -12,21 +12,25 @@ const ASSETS_FOLDER = path.join(__dirname, "assets");
 
 const args = CommandLineArgs.parse(process.argv.slice(2));
 
-if (args.getTag("wide-pointer") != null) {
+if (args.getTag("wide-pointer")) {
 	Constants.POINTERS_ARE_64BITS = true;
 }
 
 var subnestsFilename = "default.subnests_v3.json";
-if (args.getTag("subnests") != null) {
+if (args.getTag("subnests")) {
 	subnestsFilename = args.getTag("subnests").value;
 }
 
 var outputFile = null;
-if (args.getTag("output") != null) {
+if (args.getTag("output")) {
 	outputFile = args.getTag("output").value;
 }
 
-const docs = DocsManager.from(L4RHUtils.getAssetPath(ASSETS_FOLDER, subnestsFilename));
+if (!fs.existsSync(ASSETS_FOLDER)) {
+	fs.mkdirSync(ASSETS_FOLDER);
+}
+
+const docs = DocsManager.from(path.join(ASSETS_FOLDER, subnestsFilename));
 
 if (!args.extras.length) {
 	console.error("Please specify input file!");
@@ -149,7 +153,7 @@ function decodeFile(path) {
 	});
 
 	stream.on("end", () => {
-		if (args.getTag("evenBroken")) {
+		if (args.getTag("even-broken")) {
 			buffer = tryStartBufferReading(buffer);
 		}
 

@@ -1,5 +1,3 @@
-const fs = require("fs");
-const path = require("path");
 const Constants = require("./Constants");
 
 module.exports = Object.freeze({
@@ -31,19 +29,6 @@ module.exports = Object.freeze({
 		// for (var exec, index = -1; (exec = /0_([0-9]){1,}_/i.exec(str)) && exec; index = str.indexOf(exec[0], index), str = str.replace(exec[0], "").replace(str.slice(index, index + (exec.groups[0] - 0)), /* String to hex */));
 
 		return str;
-	},
-
-	/**
-	 * Returns path to asset
-	 * @param {string} assets 
-	 * @param {string} asset 
-	 * @returns {string}
-	 */
-	getAssetPath: function (assets, asset) {
-		if (!fs.existsSync(assets))
-			fs.mkdirSync(assets, { recursive: true });
-
-		return path.join(assets, asset);
 	},
 
 	/**
