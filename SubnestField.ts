@@ -2,17 +2,17 @@ export default class SubnestField {
     public type: string;
     public endian: string;
     public unsigned: Boolean;
-    public modifier: string | null;
-    public structure: Record<string, SubnestField> | null;
-    public length: number | SubnestField | null;
+    public modifier: string | undefined;
+    public structure: Record<string, SubnestField> | undefined;
+    public length: number | SubnestField | undefined;
 
     constructor(
         type: string,
         endian: string,
         unsigned: Boolean = false,
-        modifier: string | null = null,
-        structure: Record<string, SubnestField> | null = null,
-        length: number | SubnestField | null = null
+        modifier: string | undefined = undefined,
+        structure: Record<string, SubnestField> | undefined = undefined,
+        length: number | SubnestField | undefined = undefined
     ) {
         this.type = type;
         this.endian = endian;

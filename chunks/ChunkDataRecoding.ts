@@ -77,7 +77,7 @@ export default class ChunkDataRecoding {
 
             var size: number;
             if (value.type === FieldTypes.STRUCTURE) {
-                if (value.structure === null) {
+                if (value.structure == null) {
                     throw new Error("Field specified as structure but no layout present (" + chunk + ":" + name + ")");
                 }
 
@@ -106,7 +106,7 @@ export default class ChunkDataRecoding {
 
             var entryValue: any[] | any;
 
-            if (value.length === null) {
+            if (!value.length == null) {
                 entryValue = readData(this, data, value);
             } else {
                 entryValue = [];

@@ -4,15 +4,15 @@ import Utilities from "./Utilities";
 export class Subnest {
 	public description_entry: string;
 	public ignore: Boolean;
-	public align: number | null;
-	public data_align: number | null;
+	public align: number | undefined;
+	public data_align: number | undefined;
 	public schema: Record<string, SubnestField>;
 
 	constructor(
 		description: string = "",
 		ignore: Boolean = false,
-		align: number | null = null,
-		dataAlign: number | null = null,
+		align: number | undefined = undefined,
+		dataAlign: number | undefined = undefined,
 		schema: Record<string, SubnestField> = {}
 	) {
 		this.description_entry = description;

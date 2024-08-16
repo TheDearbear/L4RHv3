@@ -126,7 +126,7 @@ export default class ChunkAssembling {
             if (!doc) {
                 console.warn("Missing documentation for chunk", Utilities.uint32AsHex(chunk.id));
             }
-            else if (doc.align && pseudoPointer % doc.align != 0) {
+            else if (doc.align != null && pseudoPointer % doc.align != 0) {
                 var toAlign = doc.align - (pseudoPointer % doc.align);
                 if (toAlign < 8) {
                     toAlign += doc.align;
@@ -176,7 +176,7 @@ export default class ChunkAssembling {
 
             let data = Buffer.from(chunk.data[DisassembledChunk.RAW_VALUE], "base64");
 
-            if (doc && doc.data_align && pseudoPointer % doc.data_align != 0) {
+            if (doc && doc.data_align != null && pseudoPointer % doc.data_align != 0) {
                 var alignedPointer = Utilities.alignDataPointer(pseudoPointer, doc.data_align);
                 data = Buffer.concat([Buffer.from('\x11'.repeat(alignedPointer - pseudoPointer)), data]);
             }

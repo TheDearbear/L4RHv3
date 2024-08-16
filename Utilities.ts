@@ -105,7 +105,7 @@ export default class Utilities {
 			if (typeof field.length === "number") {
 				length *= field.length;
 			}
-			else if (field.length !== null) {
+			else if (field.length != null) {
 				throw new Error("Context dependent length is currently not supported (field: " + name + ")");
 			}
 
