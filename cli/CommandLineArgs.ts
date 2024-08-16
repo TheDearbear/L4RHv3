@@ -31,7 +31,7 @@ export default class CommandLineArgs {
 	 */
 	public static parse(args: string[]): CommandLineArgs {
 		var cmd = new CommandLineArgs();
-		var previous: CommandLineArg = null;
+		var previous: CommandLineArg | null = null;
 	
 		for (var i = 0; i < args.length; i++) {
 			if (previous) {

@@ -68,11 +68,8 @@ switch (mode) {
 		process.exit();
 }
 
-/**
- * Returns parsed mode from start arguments
- * @returns {symbol}
- */
-function getMode() {
+/** Returns parsed mode from start arguments */
+function getMode(): symbol {
 	var decodeTag = args.getTag("decode");
 	var encodeTag = args.getTag("encode");
 	var disassembleTag = args.getTag("disassemble");
