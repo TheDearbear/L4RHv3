@@ -91,7 +91,7 @@ export default class Utilities {
 			var length: number;
 
 			if (field.type === FieldTypes.STRUCTURE) {
-				var hasStructure = field.structure !== null;
+				var hasStructure = field.structure != null;
 
 				if (!hasStructure) {
 					console.warn("Field specified as structure but no layout present (field: " + name + ")");

@@ -25,7 +25,7 @@ export default class ChunkDataRecoding {
         schema: Record<string, SubnestField> | null = null,
         chunkId: number | null = null
     ): object | string {
-        if (schema === null) {
+        if (schema == null) {
             return data.toString('base64');
         }
 
@@ -34,9 +34,6 @@ export default class ChunkDataRecoding {
 
         for (const name in schema) {
             var value = schema[name];
-            if (value === null) {
-                continue;
-            }
 
             if (typeof value.modifier === "string" &&
                 value.modifier != "array" &&
