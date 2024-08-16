@@ -103,7 +103,7 @@ export default class ChunkDataRecoding {
 
             var entryValue: any[] | any;
 
-            if (!value.length == null) {
+            if (value.length == null) {
                 entryValue = readData(this, data, value);
             } else {
                 entryValue = [];
