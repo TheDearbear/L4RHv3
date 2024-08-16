@@ -1,40 +1,50 @@
-const fs = require("fs");
-const path = require("path");
-const CommandLineArgs = require("./cli/CommandLineArgs");
-const DocsManager = require("./DocsManager");
-const Constants = require("./Constants");
-const L4RHUtils = require("./L4RHUtils");
-const ChunkAssembling = require("./chunks/ChunkAssembling");
-const ChunkRecoding = require("./chunks/ChunkRecoding");
-const Modes = require("./Modes");
+import fs from 'fs';
+import path from 'path';
+import CommandLineArgs from './cli/CommandLineArgs';
+import DocsManager from './DocsManager';
+import Settings from './Settings';
+import Utilities from './Utilities';
+import ChunkAssembling from './chunks/ChunkAssembling';
+import ChunkRecoding from './chunks/ChunkRecoding';
+import Modes from './cli/Modes';
+import RawChunk from './chunks/RawChunk';
+import DisassembledChunk from './chunks/DisassembledChunk';
 
-const ASSETS_FOLDER = path.join(__dirname, "assets");
+const ASSETS_FOLDER = path.join(__dirname, 'assets');
 
 const args = CommandLineArgs.parse(process.argv.slice(2));
 
-if (args.getTag("wide-pointer")) {
-	Constants.POINTERS_ARE_64BITS = true;
+const settings = new Settings();
+
+if (args.getTag('wide-pointer')) {
+	settings.pointersAre64Bits = true;
 }
 
-var subnestsFilename = "default.subnests_v3.json";
-if (args.getTag("subnests")) {
-	subnestsFilename = args.getTag("subnests").value;
+var subnestsFilename = 'default.subnests_v3.json';
+if (args.getTag('subnests')) {
+	subnestsFilename = args.getTag('subnests')!.value!;
 }
 
-var outputFile = null;
-if (args.getTag("output")) {
-	outputFile = args.getTag("output").value;
+var outputFile: string | null = null;
+if (args.getTag('output')) {
+	outputFile = args.getTag('output')!.value;
+}
+
+if (args.getTag("compress-threshold")) {
+	settings.compressThreshold = Number.parseInt(args.getTag("compress-threshold")!.value!);
 }
 
 if (!fs.existsSync(ASSETS_FOLDER)) {
 	fs.mkdirSync(ASSETS_FOLDER);
 }
 
-const docs = DocsManager.from(path.join(ASSETS_FOLDER, subnestsFilename));
+const docs = DocsManager.parse(
+	fs.readFileSync(path.join(ASSETS_FOLDER, subnestsFilename)).toString()
+);
 
 if (!args.extras.length) {
-	console.error("Please specify input file!");
-	return;
+	console.error('Please specify input file!');
+	process.exit();
 }
 
 const filePaths = args.extras;
@@ -54,8 +64,8 @@ switch (mode) {
 		filePaths.forEach(assembleFile);
 		break;
 	case Modes.PRINT:
-		console.log("This mode is currently not implemented");
-		return;
+		console.log('This mode is currently not implemented');
+		process.exit();
 }
 
 /**
@@ -81,19 +91,19 @@ function getMode() {
 		return Modes.PRINT;
 	}
 
-	console.error("Two or more modes were specified!");
+	console.error('Two or more modes were specified!');
 	process.exit(-1);
 }
 
 /**
  * Encodes json file to BlackBox bundle file
- * @param {string} path Path to file
+ * @param path Path to file
  */
-function encodeFile(path) {
+function encodeFile(path: string) {
 	console.log("Opening file:", path);
 
 	/** @type {object[]} */
-	var chunks = JSON.parse(fs.readFileSync(path));
+	var chunks: RawChunk[] = JSON.parse(fs.readFileSync(path).toString());
 
 	var writePath = path.toLowerCase().endsWith(".json") ?
 		path.substring(0, path.length - 5) :
@@ -110,31 +120,26 @@ function encodeFile(path) {
 
 /**
  * Decodes BlackBox bundle file to json file
- * @param {string} path Path to file
+ * @param path Path to file
  */
-function decodeFile(path) {
+function decodeFile(path: string) {
 	console.log("Opening file:", path);
 
-	var chunks = [];
-	var ctTag = args.getTag("compress-threshold");
-	var compressThreshold = ctTag && !isNaN(+ctTag.value) ? +ctTag.value : 150;
+	var chunks: RawChunk[] = [];
 
-	/**
-	 * @param {Buffer} buffer 
-	 */
-	var tryStartBufferReading = buffer => {
-		if (!buffer || buffer.length < 8) return null;
+	var tryStartBufferReading = (buffer: Buffer) => {
+		if (!buffer || buffer.length < 8) return Buffer.alloc(0);
 
-		var returned = ChunkRecoding.decode(buffer, compressThreshold);
+		var returned = ChunkRecoding.decodeMany(buffer, settings.compressThreshold);
 		chunks.push(...(returned.chunks));
-		return returned.leftovers.length > 0 ? returned.leftovers : null;
+		return returned.leftovers.length > 0 ? returned.leftovers : Buffer.alloc(0);
 	};
 
 	var lastProcessedChunkIndex = -1;
 
 	var buffer = Buffer.alloc(0);
-	var stream = fs.createReadStream(path, { highWaterMark: 20480 });
-	stream.on("data", data => {
+	var stream = fs.createReadStream(path, { highWaterMark: 20480,  });
+	stream.on("data", (data: Buffer) => {
 		buffer = buffer ? Buffer.concat([buffer, data]) : data;
 
 		if (buffer.length >= 8) {
@@ -147,7 +152,7 @@ function decodeFile(path) {
 			var doc = docs.lookup(chunk.id);
 
 			if (!doc) {
-				console.warn("Unknown chunk", L4RHUtils.getUInt32Hex(chunk.id));
+				console.warn("Unknown chunk", Utilities.uint32AsHex(chunk.id));
 			}
 		}
 	});
@@ -167,14 +172,14 @@ function decodeFile(path) {
 
 /**
  * Disassembles decoded json chunks to disassembled json chunks
- * @param {string} path Path to file
+ * @param path Path to file
  */
-function disassembleFile(path) {
+function disassembleFile(path: string) {
 	console.log("Opening file:", path);
 
-	var sourceChunks = JSON.parse(fs.readFileSync(path));
-	var chunks = [];
-	ChunkAssembling.disassemble(sourceChunks, docs, 0, chunks, chunks);
+	var sourceChunks: RawChunk[] = JSON.parse(fs.readFileSync(path).toString());
+	var chunks: DisassembledChunk[] = [];
+	new ChunkAssembling(docs, settings).disassemble(sourceChunks, 0, chunks, chunks);
 
 	if (path.toLowerCase().endsWith(".json")) {
 		path = path.substring(0, path.length - 5);
@@ -185,16 +190,13 @@ function disassembleFile(path) {
 
 /**
  * Assembles disassembled json chunks to decoded json chunks
- * @param {string} path Path to file
+ * @param path Path to file
  */
-function assembleFile(path) {
+function assembleFile(path: string) {
 	console.log("Opening file:", path);
 
-	var ctTag = args.getTag("compress-threshold");
-	var compressThreshold = ctTag && !isNaN(+ctTag.value) ? +ctTag.value : 150;
-
-	var sourceChunks = JSON.parse(fs.readFileSync(path));
-	var chunks = ChunkAssembling.assemble(sourceChunks, docs, compressThreshold)[0];
+	var sourceChunks: DisassembledChunk[] = JSON.parse(fs.readFileSync(path).toString());
+	var chunks = new ChunkAssembling(docs, settings).assemble(sourceChunks).chunks;
 
 	if (path.toLowerCase().endsWith(".disassm.json")) {
 		path = path.substring(0, path.length - 13);
