@@ -20,34 +20,36 @@ if (args.getTag('wide-pointer')) {
 	settings.pointersAre64Bits = true;
 }
 
-var subnestsFilename = 'default.subnests_v3.json';
-if (args.getTag('subnests')) {
-	subnestsFilename = args.getTag('subnests')!.value!;
+// Subnests path CLI argument
+{
+	let tag = args.getTag('subnests');
+
+	var subnestsFilename = tag?.value || path.join(ASSETS_FOLDER, 'default.subnests_v3.json');
 }
 
-var outputFile: string | null = null;
-if (args.getTag('output')) {
-	outputFile = args.getTag('output')!.value;
-}
+// TODO: Rework argument as user can specify several files
+// and we will write them to one file. As a result only
+// last file will be saved.
+var outputFile = args.getTag('output')?.value || null;
 
 if (args.getTag("compress-threshold")) {
 	settings.compressThreshold = Number.parseInt(args.getTag("compress-threshold")!.value!);
 }
 
-if (!fs.existsSync(ASSETS_FOLDER)) {
+if (subnestsFilename.startsWith(ASSETS_FOLDER) && !fs.existsSync(ASSETS_FOLDER)) {
 	fs.mkdirSync(ASSETS_FOLDER);
+}
+
+const filePaths = args.extras;
+
+if (!filePaths.length) {
+	console.error('Please specify input file!');
+	process.exit();
 }
 
 const docs = DocsManager.parse(
 	fs.readFileSync(path.join(ASSETS_FOLDER, subnestsFilename)).toString()
 );
-
-if (!args.extras.length) {
-	console.error('Please specify input file!');
-	process.exit();
-}
-
-const filePaths = args.extras;
 
 const mode = getMode();
 switch (mode) {
@@ -76,7 +78,8 @@ function getMode(): symbol {
 	var assembleTag = args.getTag("assemble");
 	var printTag = args.getTag("print");
 
-	if (!encodeTag && !disassembleTag && !assembleTag && !printTag) { // Ignoring decodeTag to use it as default mode
+	// Ignoring decodeTag to use it implicitly as default mode
+	if (!encodeTag && !disassembleTag && !assembleTag && !printTag) {
 		return Modes.DECODE;
 	} else if (!decodeTag && encodeTag && !disassembleTag && !assembleTag && !printTag) {
 		return Modes.ENCODE;
