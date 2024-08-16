@@ -9,7 +9,9 @@
     "typescript": "^5.5.4"
   },
   "scripts": {
-    "test": "node raw_printer.js"
+    "clean": "tsc --build --clean",
+    "build": "tsc --build",
+    "test": "node dist/raw_printer.js --subnests=\"../../assets/default.subnests_v3.json\""
   },
   "repository": {
     "type": "git",
