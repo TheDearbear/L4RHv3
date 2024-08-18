@@ -27,9 +27,6 @@ if (args.getTag('wide-pointer')) {
     var subnestsFilename = tag?.value || path.join(ASSETS_FOLDER, 'default.subnests_v3.json');
 }
 
-// TODO: Rework argument as user can specify several files
-// and we will write them to one file. As a result only
-// last file will be saved.
 var outputFile = args.getTag('output')?.value || null;
 
 if (args.getTag("compress-threshold")) {
@@ -44,6 +41,11 @@ const filePaths = args.extras;
 
 if (!filePaths.length) {
     console.error('Please specify input file!');
+    process.exit();
+}
+
+if (outputFile != null && filePaths.length > 1) {
+    console.error('Output argument can be used only when one input file is specified!');
     process.exit();
 }
 
