@@ -1,14 +1,17 @@
 {
-  "dependencies": {},
   "name": "l4rh",
   "version": "3.0.0",
   "description": "Modern bundle (de)compiler for famous games powered by speed engine",
   "main": "raw_printer.js",
   "devDependencies": {
-    "eslint": "^9.8.0"
+    "@types/node": "^22.2.0",
+    "eslint": "^9.8.0",
+    "typescript": "^5.5.4"
   },
   "scripts": {
-    "test": "node raw_printer.js"
+    "clean": "tsc --build --clean",
+    "build": "tsc --build",
+    "test": "node dist/raw_printer.js --subnests=\"../assets/default.subnests_v3.json\""
   },
   "repository": {
     "type": "git",
