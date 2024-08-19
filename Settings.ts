@@ -4,4 +4,6 @@ export default class Settings {
     public pointersAre64Bits: Boolean = false;
     /** Minimal size (in bytes) of chunk's data required to compress it */
     public compressThreshold: number = 150;
+    /** Forces `ChunkDataRecoding.decode` to write padding fields to output JSON */
+    public exportPaddings: Boolean = false;
 };

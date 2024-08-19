@@ -20,6 +20,10 @@ if (args.getTag('wide-pointer')) {
     settings.pointersAre64Bits = true;
 }
 
+if (args.getTag('export-paddings')) {
+    settings.exportPaddings = true;
+}
+
 // Subnests path CLI argument
 {
     let tag = args.getTag('subnests');

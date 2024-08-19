@@ -117,7 +117,7 @@ export default class ChunkDataRecoding {
             }
 
             data = data.subarray(size * length);
-            if (value.modifier !== "padding") {
+            if (value.modifier !== "padding" || this.utils.behaviour.exportPaddings) {
                 result[name] = entryValue;
             }
         }
