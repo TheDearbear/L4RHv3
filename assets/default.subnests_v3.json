@@ -34,80 +34,124 @@
             "align": 16
         },
         "0x00134002": {
+            "description_entry": "BCHUNK_SOLID_LIST_HEADER",
             "schema": {
-                "bNodePointers": {
+                "Next": {
                     "type": "pointer",
                     "endian": "little",
-                    "unsigned": false,
-                    "modifier": "padding",
-                    "length": 2
+                    "unsigned": true,
+                    "modifier": "padding"
                 },
-                "version": {
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Version": {
                     "type": "int32",
                     "endian": "little",
                     "unsigned": false
                 },
-                "numSolids": {
+                "NumSolids": {
                     "type": "int32",
                     "endian": "little",
                     "unsigned": false
                 },
-                "filename": {
+                "Filename": {
                     "type": "int8",
                     "endian": "little",
                     "unsigned": true,
                     "modifier": "string",
                     "length": 56
                 },
-                "groupName": {
+                "GroupName": {
                     "type": "int8",
                     "endian": "little",
                     "unsigned": true,
                     "modifier": "string",
                     "length": 32
                 },
-                "permChunkByteOffset": {
+                "PermChunkByteOffset": {
                     "type": "int32",
                     "endian": "little",
                     "unsigned": true
                 },
-                "permChunkByteSize": {
+                "PermChunkByteSize": {
                     "type": "int32",
                     "endian": "little",
                     "unsigned": true
                 },
-                "maxSolidChunkByteAlignment": {
+                "MaxSolidChunkByteAlignment": {
                     "type": "int16",
                     "endian": "little",
                     "unsigned": false
                 },
-                "endianSwapped": {
+                "EndianSwapped": {
                     "type": "int16",
                     "endian": "little",
                     "unsigned": false,
-                    "modifier": "padding",
-                    "length": 1
+                    "modifier": "padding"
                 },
-                "solidTables": {
+                "SolidIndexEntryTable": {
                     "type": "pointer",
                     "endian": "little",
-                    "unsigned": false,
-                    "modifier": "padding",
-                    "length": 2
+                    "unsigned": true,
+                    "modifier": "padding"
                 },
-                "nums": {
+                "SolidStreamEntryTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NumTexturePacks": {
                     "type": "int16",
                     "endian": "little",
                     "unsigned": false,
-                    "modifier": "padding",
-                    "length": 2
+                    "modifier": "padding"
                 },
-                "bPLists": {
-                    "type": "pointer",
+                "NumDefaultTextures": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "TexturePackList": {
+                    "type": "structure",
                     "endian": "little",
                     "unsigned": false,
                     "modifier": "padding",
-                    "length": 4
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                },
+                "DefaultTextureList": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
                 }
             }
         },
