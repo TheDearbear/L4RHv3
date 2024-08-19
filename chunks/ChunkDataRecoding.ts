@@ -92,10 +92,11 @@ export default class ChunkDataRecoding {
                 ctx: ChunkDataRecoding,
                 data: Buffer,
                 value: SubnestField,
+                size: number,
                 offset: number = 0
             ): any {
                 if (value.type === FieldTypes.STRUCTURE) {
-                    return ctx.decode(data.subarray(offset), pseudoPointer, value.structure, chunkId);
+                    return ctx.decode(data.subarray(offset, offset + size), pseudoPointer, value.structure, chunkId);
                 }
                 
                 return ctx.decodeSingle(data, value, offset);
@@ -104,11 +105,11 @@ export default class ChunkDataRecoding {
             var entryValue: any[] | any;
 
             if (value.length == null) {
-                entryValue = readData(this, data, value);
+                entryValue = readData(this, data, value, size * length);
             } else {
                 entryValue = [];
                 for (let j = 0; j < length; j++) {
-                    entryValue.push(readData(this, data, value, j * size));
+                    entryValue.push(readData(this, data, value, size, j * size));
                 }
             }
 
