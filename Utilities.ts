@@ -1,6 +1,6 @@
-import FieldTypes from "./FieldTypes";
-import Settings from "./Settings";
-import SubnestField from "./SubnestField";
+import FieldTypes from './FieldTypes';
+import Settings from './Settings';
+import SubnestField from './SubnestField';
 
 export default class Utilities {
     public behaviour: Settings;
@@ -94,7 +94,7 @@ export default class Utilities {
                 var hasStructure = field.structure != null;
 
                 if (!hasStructure) {
-                    console.warn("Field specified as structure but no layout present (field: " + name + ")");
+                    this.behaviour.logger.warn("Field specified as structure but no layout present (field: " + name + ")");
                 }
 
                 length = hasStructure ? this.structureByteLength(field.structure as Record<string, SubnestField>) : 0;

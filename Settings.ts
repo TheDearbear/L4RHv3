@@ -1,3 +1,6 @@
+import Logger from './logging/Logger';
+import StubLogger from './logging/StubLogger';
+
 /** Settings for configuring behaivour of library */
 export default class Settings {
     /** Fields with type `pointer` will be 64 bit length instead of 32 */
@@ -6,4 +9,6 @@ export default class Settings {
     public compressThreshold: number = 150;
     /** Forces `ChunkDataRecoding.decode` to write padding fields to output JSON */
     public exportPaddings: Boolean = false;
+    /** Logger for piping messages */
+    public logger: Logger = new StubLogger();
 };

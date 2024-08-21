@@ -1,7 +1,8 @@
-import bChunk from "./bChunk";
-import RawChunk from "./RawChunk";
-import Utilities from "../Utilities";
-import { inflateSync, deflateSync } from "zlib";
+import bChunk from './bChunk';
+import RawChunk from './RawChunk';
+import Utilities from '../Utilities';
+import { inflateSync, deflateSync } from 'zlib';
+import Logger from '../logging/Logger';
 
 export class DecodeResult {
     chunks: RawChunk[];
@@ -14,13 +15,19 @@ export class DecodeResult {
 }
 
 export default class ChunkRecoding {
+    public logger: Logger;
+
+    constructor(logger: Logger) {
+        this.logger = logger;
+    }
+
     /**
      * Decodes chunks from buffer and returns them with leftovers
      * @param buffer Input buffer
      * @param compressThreshold Minimum data size for compressing them
      * @returns Decoded chunks and leftovers
      */
-    public static decodeMany(buffer: Buffer, compressThreshold: number): DecodeResult {
+    public decodeMany(buffer: Buffer, compressThreshold: number): DecodeResult {
         var chunks: RawChunk[] = [];
 
         for (var chunk: bChunk; buffer.length >= 8; buffer = buffer.subarray(chunk.length + 8)) {
@@ -29,7 +36,7 @@ export default class ChunkRecoding {
                 break;
             }
 
-            chunks.push(ChunkRecoding.decode(chunk, compressThreshold));
+            chunks.push(this.decode(chunk, compressThreshold));
         }
 
         return new DecodeResult(chunks, buffer);
@@ -41,7 +48,7 @@ export default class ChunkRecoding {
      * @param compressThreshold Minimum data size for compressing it
      * @returns Converted chunk in raw format
      */
-    public static decode(chunk: bChunk, compressThreshold: number = 0): RawChunk {
+    public decode(chunk: bChunk, compressThreshold: number = 0): RawChunk {
         var data = new RawChunk(
             chunk.id,
             chunk.length,
@@ -49,11 +56,11 @@ export default class ChunkRecoding {
         );
 
         if ((chunk.id & 0x80000000) != 0 && !data.broken && chunk.length >= 8) {
-            var chunkData = ChunkRecoding.decodeMany(chunk.buffer, compressThreshold);
+            var chunkData = this.decodeMany(chunk.buffer, compressThreshold);
             data.data = chunkData.chunks;
 
             if (chunkData.leftovers.length > 0) {
-                console.error("Cannot properly parse data of chunk", Utilities.uint32AsHex(chunk.id));
+                this.logger.error('Cannot properly parse data of chunk', Utilities.uint32AsHex(chunk.id));
             }
         } else {
             var buffer = chunk.buffer;
@@ -63,10 +70,10 @@ export default class ChunkRecoding {
                 data.compressed = true;
             }
 
-            data.data = buffer.toString("base64");
+            data.data = buffer.toString('base64');
 
             if (data.broken) {
-                console.error("Size mismatch of chunk", Utilities.uint32AsHex(data.id));
+                this.logger.error('Size mismatch of chunk', Utilities.uint32AsHex(data.id));
             }
         }
 
@@ -78,18 +85,18 @@ export default class ChunkRecoding {
      * @param chunk Source chunk
      * @returns Encoded chunk
      */
-    public static encode(chunk: RawChunk): Buffer {
+    public encode(chunk: RawChunk): Buffer {
         var header = Buffer.alloc(8);
         header.writeUInt32LE(chunk.id, 0);
         header.writeUInt32LE(chunk.length, 4);
 
         if (Array.isArray(chunk.data)) {
             return Buffer.concat(
-                [header, ...chunk.data.map(chunk => ChunkRecoding.encode(chunk))]
+                [header, ...chunk.data.map(chunk => this.encode(chunk))]
             );
         }
 
-        var data = Buffer.from(chunk.data, "base64");
+        var data = Buffer.from(chunk.data, 'base64');
         if (chunk.compressed) {
             data = inflateSync(data);
         }

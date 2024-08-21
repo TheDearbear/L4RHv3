@@ -9,12 +9,14 @@ import ChunkRecoding from './chunks/ChunkRecoding';
 import Modes from './cli/Modes';
 import RawChunk from './chunks/RawChunk';
 import DisassembledChunk from './chunks/DisassembledChunk';
+import DefaultConsoleLogger from './logging/DefaultConsoleLogger';
 
 const ASSETS_FOLDER = path.join(__dirname, 'assets');
 
 const args = CommandLineArgs.parse(process.argv.slice(2));
 
 const settings = new Settings();
+settings.logger = new DefaultConsoleLogger();
 
 if (args.getTag('wide-pointer')) {
     settings.pointersAre64Bits = true;
@@ -33,8 +35,8 @@ if (args.getTag('export-paddings')) {
 
 var outputFile = args.getTag('output')?.value || null;
 
-if (args.getTag("compress-threshold")) {
-    settings.compressThreshold = Number.parseInt(args.getTag("compress-threshold")!.value!);
+if (args.getTag('compress-threshold')) {
+    settings.compressThreshold = Number.parseInt(args.getTag('compress-threshold')!.value!);
 }
 
 if (subnestsFilename.startsWith(ASSETS_FOLDER) && !fs.existsSync(ASSETS_FOLDER)) {
@@ -44,12 +46,12 @@ if (subnestsFilename.startsWith(ASSETS_FOLDER) && !fs.existsSync(ASSETS_FOLDER))
 const filePaths = args.extras;
 
 if (!filePaths.length) {
-    console.error('Please specify input file!');
+    settings.logger.critical('Please specify input file!');
     process.exit();
 }
 
 if (outputFile != null && filePaths.length > 1) {
-    console.error('Output argument can be used only when one input file is specified!');
+    settings.logger.critical('Output argument can be used only when one input file is specified!');
     process.exit();
 }
 
@@ -72,17 +74,17 @@ switch (mode) {
         filePaths.forEach(assembleFile);
         break;
     case Modes.PRINT:
-        console.log('This mode is currently not implemented');
+        settings.logger.error('This mode is currently not implemented');
         process.exit();
 }
 
 /** Returns parsed mode from start arguments */
 function getMode(): symbol {
-    var decodeTag = args.getTag("decode");
-    var encodeTag = args.getTag("encode");
-    var disassembleTag = args.getTag("disassemble");
-    var assembleTag = args.getTag("assemble");
-    var printTag = args.getTag("print");
+    var decodeTag = args.getTag('decode');
+    var encodeTag = args.getTag('encode');
+    var disassembleTag = args.getTag('disassemble');
+    var assembleTag = args.getTag('assemble');
+    var printTag = args.getTag('print');
 
     // Ignoring decodeTag to use it implicitly as default mode
     if (!encodeTag && !disassembleTag && !assembleTag && !printTag) {
@@ -97,7 +99,7 @@ function getMode(): symbol {
         return Modes.PRINT;
     }
 
-    console.error('Two or more modes were specified!');
+    settings.logger.critical('Two or more modes were specified!');
     process.exit(-1);
 }
 
@@ -106,19 +108,20 @@ function getMode(): symbol {
  * @param path Path to file
  */
 function encodeFile(path: string) {
-    console.log("Opening file:", path);
+    settings.logger.log('Opening file:', path);
 
     /** @type {object[]} */
     var chunks: RawChunk[] = JSON.parse(fs.readFileSync(path).toString());
 
-    var writePath = path.toLowerCase().endsWith(".json") ?
+    var writePath = path.toLowerCase().endsWith('.json') ?
         path.substring(0, path.length - 5) :
-        path + ".bin";
+        path + '.bin';
 
     var stream = fs.createWriteStream(outputFile ? outputFile : writePath);
+    var recoder = new ChunkRecoding(settings.logger);
 
     chunks.forEach(chunk => {
-        stream.write(ChunkRecoding.encode(chunk));
+        stream.write(recoder.encode(chunk));
     });
 
     stream.close();
@@ -129,14 +132,15 @@ function encodeFile(path: string) {
  * @param path Path to file
  */
 function decodeFile(path: string) {
-    console.log("Opening file:", path);
+    settings.logger.log('Opening file:', path);
 
     var chunks: RawChunk[] = [];
+    var recoder = new ChunkRecoding(settings.logger);
 
     var tryStartBufferReading = (buffer: Buffer) => {
         if (!buffer || buffer.length < 8) return Buffer.alloc(0);
 
-        var returned = ChunkRecoding.decodeMany(buffer, settings.compressThreshold);
+        var returned = recoder.decodeMany(buffer, settings.compressThreshold);
         chunks.push(...(returned.chunks));
         return returned.leftovers.length > 0 ? returned.leftovers : Buffer.alloc(0);
     };
@@ -145,7 +149,7 @@ function decodeFile(path: string) {
 
     var buffer = Buffer.alloc(0);
     var stream = fs.createReadStream(path, { highWaterMark: 20480,  });
-    stream.on("data", (data: Buffer) => {
+    stream.on('data', (data: Buffer) => {
         buffer = buffer ? Buffer.concat([buffer, data]) : data;
 
         if (buffer.length >= 8) {
@@ -158,21 +162,21 @@ function decodeFile(path: string) {
             var doc = docs.lookup(chunk.id);
 
             if (!doc) {
-                console.warn("Unknown chunk", Utilities.uint32AsHex(chunk.id));
+                settings.logger.warn('Unknown chunk', Utilities.uint32AsHex(chunk.id));
             }
         }
     });
 
-    stream.on("end", () => {
-        if (args.getTag("even-broken")) {
+    stream.on('end', () => {
+        if (args.getTag('even-broken')) {
             buffer = tryStartBufferReading(buffer);
         }
 
         if (buffer && buffer.length > 0) {
-            console.error("Unknown data left (Size:", buffer.length, "): " + buffer);
+            settings.logger.error('Unknown data left (Size:', buffer.length, '): ' + buffer);
         }
 
-        fs.writeFileSync(outputFile ? outputFile : path + ".json", JSON.stringify(chunks, null, 4));
+        fs.writeFileSync(outputFile ? outputFile : path + '.json', JSON.stringify(chunks, null, 4));
     });
 }
 
@@ -181,17 +185,17 @@ function decodeFile(path: string) {
  * @param path Path to file
  */
 function disassembleFile(path: string) {
-    console.log("Opening file:", path);
+    settings.logger.log('Opening file:', path);
 
     var sourceChunks: RawChunk[] = JSON.parse(fs.readFileSync(path).toString());
     var chunks: DisassembledChunk[] = [];
     new ChunkAssembling(docs, settings).disassemble(sourceChunks, 0, chunks, chunks);
 
-    if (path.toLowerCase().endsWith(".json")) {
+    if (path.toLowerCase().endsWith('.json')) {
         path = path.substring(0, path.length - 5);
     }
 
-    fs.writeFileSync(outputFile ? outputFile : path + ".disassm.json", JSON.stringify(chunks, null, 4));
+    fs.writeFileSync(outputFile ? outputFile : path + '.disassm.json', JSON.stringify(chunks, null, 4));
 }
 
 /**
@@ -199,14 +203,14 @@ function disassembleFile(path: string) {
  * @param path Path to file
  */
 function assembleFile(path: string) {
-    console.log("Opening file:", path);
+    settings.logger.log('Opening file:', path);
 
     var sourceChunks: DisassembledChunk[] = JSON.parse(fs.readFileSync(path).toString());
     var chunks = new ChunkAssembling(docs, settings).assemble(sourceChunks).chunks;
 
-    if (path.toLowerCase().endsWith(".disassm.json")) {
+    if (path.toLowerCase().endsWith('.disassm.json')) {
         path = path.substring(0, path.length - 13);
     }
 
-    fs.writeFileSync(outputFile ? outputFile : path + ".json", JSON.stringify(chunks, null, 4));
+    fs.writeFileSync(outputFile ? outputFile : path + '.json', JSON.stringify(chunks, null, 4));
 }

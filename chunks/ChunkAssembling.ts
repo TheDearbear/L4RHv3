@@ -47,7 +47,7 @@ export default class ChunkAssembling {
         raw.forEach((chunk, index) => {
             var doc = this.docs.lookup(chunk.id);
             if (!doc) {
-                console.warn("Missing documentation for chunk", Utilities.uint32AsHex(chunk.id));
+                this.settings.logger.warn("Missing documentation for chunk", Utilities.uint32AsHex(chunk.id));
             }
 
             if (Array.isArray(chunk.data)) {
@@ -77,7 +77,7 @@ export default class ChunkAssembling {
             }
 
             if (doc.align != null && (pseudoPointer % doc.align) != 0) {
-                console.warn("Chunk", Utilities.uint32AsHex(chunk.id), "is not aligned properly!");
+                this.settings.logger.warn("Chunk", Utilities.uint32AsHex(chunk.id), "is not aligned properly!");
             }
 
             pseudoPointer += 8;
@@ -94,7 +94,7 @@ export default class ChunkAssembling {
             }
 
             if (data.length >= 4 && data.readUInt32LE() == 0x11111111) {
-                console.warn("Documentation mismatch for chunk", Utilities.uint32AsHex(chunk.id), "(data align found)");
+                this.settings.logger.warn("Documentation mismatch for chunk", Utilities.uint32AsHex(chunk.id), "(data align found)");
             }
 
             output.push(
@@ -124,7 +124,7 @@ export default class ChunkAssembling {
         disasm.forEach((chunk, index) => {
             let doc = this.docs.lookup(chunk.id);
             if (!doc) {
-                console.warn("Missing documentation for chunk", Utilities.uint32AsHex(chunk.id));
+                this.settings.logger.warn("Missing documentation for chunk", Utilities.uint32AsHex(chunk.id));
             }
             else if (doc.align != null && pseudoPointer % doc.align != 0) {
                 var toAlign = doc.align - (pseudoPointer % doc.align);

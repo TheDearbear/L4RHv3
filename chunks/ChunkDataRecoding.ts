@@ -64,12 +64,15 @@ export default class ChunkDataRecoding {
             else if (typeof value.length === "object") {
                 var lengthOfLength = this.utils.typeByteLength((value.length as SubnestField).type);
                 if (data.length < lengthOfLength) {
-                    console.error(dataTooSmallError);
+                    this.utils.behaviour.logger.error(dataTooSmallError);
                     break;
                 }
 
                 length = this.decodeSingle(data, value.length as SubnestField);
                 data = data.subarray(lengthOfLength);
+            }
+            else if (value.length != null) {
+                this.utils.behaviour.logger.warn("Unknown type of length property. Treating as single (" + chunk + ":" + name + ")");
             }
 
             var size: number;
@@ -84,7 +87,7 @@ export default class ChunkDataRecoding {
             }
             
             if (data.length < size * length) {
-                console.error(dataTooSmallError);
+                this.utils.behaviour.logger.error(dataTooSmallError);
                 break;
             }
 
@@ -124,7 +127,7 @@ export default class ChunkDataRecoding {
         }
 
         if (data.length > 0) {
-            console.warn("Provided schema requires smaller data buffer than provided (" + chunk + ")");
+            this.utils.behaviour.logger.warn("Provided schema requires smaller data buffer than provided (" + chunk + ")");
         }
 
         return result;
