@@ -5,7 +5,7 @@ export default class DefaultConsoleLogger implements Logger {
         console.debug(...data);
     }
     log(...data: any[]): void {
-        console.log(data,);
+        console.log(...data);
     }
     warn(...data: any[]): void {
         console.warn(...data);
