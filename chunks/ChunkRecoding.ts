@@ -30,9 +30,9 @@ export default class ChunkRecoding {
     public decodeMany(buffer: Buffer, compressThreshold: number): DecodeResult {
         var chunks: RawChunk[] = [];
 
-        for (var chunk: bChunk; buffer.length >= 8; buffer = buffer.subarray(chunk.length + 8)) {
+        for (var chunk: bChunk; buffer.length >= 8; buffer = buffer.subarray(chunk.size + 8)) {
             chunk = new bChunk(buffer);
-            if (chunk.length > chunk.buffer.length) {
+            if (chunk.size > chunk.buffer.length) {
                 break;
             }
 
@@ -51,11 +51,11 @@ export default class ChunkRecoding {
     public decode(chunk: bChunk, compressThreshold: number = 0): RawChunk {
         var data = new RawChunk(
             chunk.id,
-            chunk.length,
-            chunk.length != chunk.buffer.length
+            chunk.size,
+            chunk.size != chunk.buffer.length
         );
 
-        if ((chunk.id & 0x80000000) != 0 && !data.broken && chunk.length >= 8) {
+        if ((chunk.id & 0x80000000) != 0 && !data.broken && chunk.size >= 8) {
             var chunkData = this.decodeMany(chunk.buffer, compressThreshold);
             data.data = chunkData.chunks;
 
@@ -81,26 +81,42 @@ export default class ChunkRecoding {
     }
 
     /**
-     * Encodes json chunk to binary chunk without aligning padding
+     * Encodes raw chunk to `bChunk`
      * @param chunk Source chunk
      * @returns Encoded chunk
      */
-    public encode(chunk: RawChunk): Buffer {
-        var header = Buffer.alloc(8);
+    public encode(chunk: RawChunk): bChunk {
+        var data: Buffer;
+        
+        if (Array.isArray(chunk.data)) {
+            data = Buffer.concat(
+                [...chunk.data.map(chunk => this.encodeAsBuffer(chunk))]
+            );
+        } else {
+            data = Buffer.from(chunk.data, 'base64');
+            if (chunk.compressed) {
+                data = inflateSync(data);
+            }
+        }
+
+        return {
+            id: chunk.id,
+            size: chunk.length,
+            buffer: data
+        };
+    }
+
+    /**
+     * Encodes raw chunk to Buffer without aligning padding
+     * @param chunk Source chunk
+     * @returns Encoded chunk
+     */
+    public encodeAsBuffer(chunk: RawChunk): Buffer {
+        var encoded = this.encode(chunk);
+        var header = Buffer.allocUnsafe(8);
         header.writeUInt32LE(chunk.id, 0);
         header.writeUInt32LE(chunk.length, 4);
 
-        if (Array.isArray(chunk.data)) {
-            return Buffer.concat(
-                [header, ...chunk.data.map(chunk => this.encode(chunk))]
-            );
-        }
-
-        var data = Buffer.from(chunk.data, 'base64');
-        if (chunk.compressed) {
-            data = inflateSync(data);
-        }
-
-        return Buffer.concat([header, data]);
+        return Buffer.concat([header, encoded.buffer]);
     }
 }

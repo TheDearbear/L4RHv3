@@ -2,7 +2,7 @@ export default class bChunk
 {
     buffer: Buffer;
     id: number;
-    length: number;
+    size: number;
 
     /**
      * Constructor for chunk
@@ -11,8 +11,8 @@ export default class bChunk
     constructor(buffer: Buffer)
     {
         this.id = buffer.readUInt32LE(0);
-        this.length = buffer.readUInt32LE(4);
+        this.size = buffer.readUInt32LE(4);
 
-        this.buffer = buffer.subarray(8, this.length + 8);
+        this.buffer = buffer.subarray(8, this.size + 8);
     }
 }

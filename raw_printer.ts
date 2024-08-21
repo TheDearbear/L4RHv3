@@ -121,7 +121,7 @@ function encodeFile(path: string) {
     var recoder = new ChunkRecoding(settings.logger);
 
     chunks.forEach(chunk => {
-        stream.write(recoder.encode(chunk));
+        stream.write(recoder.encodeAsBuffer(chunk));
     });
 
     stream.close();
