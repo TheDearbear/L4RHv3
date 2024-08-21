@@ -125,11 +125,14 @@
                     }
                 },
                 "length": {
-                    "description": "Defines length of array/string/padding by fixed size or length prefixed field",
+                    "description": "Defines length of array/string/padding by fixed size, length prefixed field or Context Inline Script expression",
                     "oneOf": [
                         {
                             "type": "integer",
                             "minimum": 1
+                        },
+                        {
+                            "type": "string"
                         },
                         {
                             "type": "object",

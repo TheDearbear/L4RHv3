@@ -156,23 +156,23 @@
             }
         },
         "0x00134003": {
-            "description_entry": "description",
-            "csm": "$rfind:0x00134002.numSolids",
+            "description_entry": "BCHUNK_SOLID_INDEX_ENTRY_TABLE",
             "schema": {
                 "lookup": {
                     "type": "structure",
                     "endian": "little",
                     "unsigned": false,
+                    "length": "$rfind:id=0x00134002,max_backtrace=1/.NumSolids",
                     "structure": {
-                        "hash": {
+                        "NameHash": {
                             "type": "int32",
                             "endian": "little",
                             "unsigned": true
                         },
-                        "pointer": {
+                        "Solid": {
                             "type": "pointer",
                             "endian": "little",
-                            "unsigned": false,
+                            "unsigned": true,
                             "modifier": "padding"
                         }
                     }
