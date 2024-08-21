@@ -1,11 +1,10 @@
-import ContextInlineScript from "../ContextInlineScript";
-import ChunkDataRecoding from "./ChunkDataRecoding";
-import DocsManager from "../DocsManager";
-import DisassembledChunk from "./DisassembledChunk";
-import RawChunk from "./RawChunk";
-import Settings from "../Settings";
-import Utilities from "../Utilities";
-import zlib from "zlib";
+import ChunkDataRecoding from './ChunkDataRecoding';
+import DocsManager from '../DocsManager';
+import DisassembledChunk from './DisassembledChunk';
+import RawChunk from './RawChunk';
+import Settings from '../Settings';
+import Utilities from '../Utilities';
+import zlib from 'zlib';
 
 export class AssembleResult {
     public chunks: RawChunk[];
@@ -47,7 +46,7 @@ export default class ChunkAssembling {
         raw.forEach((chunk, index) => {
             var doc = this.docs.lookup(chunk.id);
             if (!doc) {
-                this.settings.logger.warn("Missing documentation for chunk", Utilities.uint32AsHex(chunk.id));
+                this.settings.logger.warn('Missing documentation for chunk', Utilities.uint32AsHex(chunk.id));
             }
 
             if (Array.isArray(chunk.data)) {
@@ -77,7 +76,7 @@ export default class ChunkAssembling {
             }
 
             if (doc.align != null && (pseudoPointer % doc.align) != 0) {
-                this.settings.logger.warn("Chunk", Utilities.uint32AsHex(chunk.id), "is not aligned properly!");
+                this.settings.logger.warn('Chunk', Utilities.uint32AsHex(chunk.id), 'is not aligned properly!');
             }
 
             pseudoPointer += 8;
@@ -94,7 +93,7 @@ export default class ChunkAssembling {
             }
 
             if (data.length >= 4 && data.readUInt32LE() == 0x11111111) {
-                this.settings.logger.warn("Documentation mismatch for chunk", Utilities.uint32AsHex(chunk.id), "(data align found)");
+                this.settings.logger.warn('Documentation mismatch for chunk', Utilities.uint32AsHex(chunk.id), '(data align found)');
             }
 
             output.push(
@@ -124,7 +123,7 @@ export default class ChunkAssembling {
         disasm.forEach((chunk, index) => {
             let doc = this.docs.lookup(chunk.id);
             if (!doc) {
-                this.settings.logger.warn("Missing documentation for chunk", Utilities.uint32AsHex(chunk.id));
+                this.settings.logger.warn('Missing documentation for chunk', Utilities.uint32AsHex(chunk.id));
             }
             else if (doc.align != null && pseudoPointer % doc.align != 0) {
                 var toAlign = doc.align - (pseudoPointer % doc.align);
@@ -143,7 +142,7 @@ export default class ChunkAssembling {
                             toAlign - 8,
                             false,
                             true,
-                            zlib.deflateSync(Buffer.alloc(toAlign - 8)).toString("base64")
+                            zlib.deflateSync(Buffer.alloc(toAlign - 8)).toString('base64')
                         )
                     );
                 }
@@ -171,10 +170,10 @@ export default class ChunkAssembling {
             }
 
             if (DisassembledChunk.RAW_VALUE in chunk.data === false) {
-                throw new Error("Assembling is not yet implemented");
+                throw new Error('Assembling is not yet implemented');
             }
 
-            let data = Buffer.from(chunk.data[DisassembledChunk.RAW_VALUE], "base64");
+            let data = Buffer.from(chunk.data[DisassembledChunk.RAW_VALUE], 'base64');
 
             if (doc && doc.data_align != null && pseudoPointer % doc.data_align != 0) {
                 var alignedPointer = Utilities.alignDataPointer(pseudoPointer, doc.data_align);
@@ -193,7 +192,7 @@ export default class ChunkAssembling {
                     length,
                     false,
                     compressed,
-                    data.toString("base64")
+                    data.toString('base64')
                 )
             );
 
