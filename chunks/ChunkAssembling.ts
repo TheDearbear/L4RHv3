@@ -4,7 +4,7 @@ import DisassembledChunk from './DisassembledChunk';
 import RawChunk from './RawChunk';
 import Settings from '../Settings';
 import Utilities from '../Utilities';
-import zlib from 'zlib';
+import zlib from 'node:zlib';
 
 export class AssembleResult {
     public chunks: RawChunk[];

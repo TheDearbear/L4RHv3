@@ -1,5 +1,5 @@
-import SubnestField from "./SubnestField";
-import Utilities from "./Utilities";
+import SubnestField from './SubnestField';
+import Utilities from './Utilities';
 
 export class Subnest {
     public description_entry: string;

@@ -1,7 +1,7 @@
 import bChunk from './bChunk';
 import RawChunk from './RawChunk';
 import Utilities from '../Utilities';
-import { inflateSync, deflateSync } from 'zlib';
+import zlib from 'node:zlib';
 import Logger from '../logging/Logger';
 
 export class DecodeResult {
@@ -66,7 +66,7 @@ export default class ChunkRecoding {
             var buffer = chunk.buffer;
 
             if (!data.broken && data.length >= compressThreshold) {
-                buffer = deflateSync(buffer);
+                buffer = zlib.deflateSync(buffer);
                 data.compressed = true;
             }
 
@@ -95,7 +95,7 @@ export default class ChunkRecoding {
         } else {
             data = Buffer.from(chunk.data, 'base64');
             if (chunk.compressed) {
-                data = inflateSync(data);
+                data = zlib.inflateSync(data);
             }
         }
 

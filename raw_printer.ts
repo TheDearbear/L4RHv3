@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import CommandLineArgs from './cli/CommandLineArgs';
 import DocsManager from './DocsManager';
 import Settings from './Settings';

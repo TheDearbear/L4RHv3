@@ -1,4 +1,4 @@
-import CommandLineArg from "./CommandLineArg";
+import CommandLineArg from './CommandLineArg';
 
 export default class CommandLineArgs {
     /** Arguments without tag */

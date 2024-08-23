@@ -1,4 +1,4 @@
-import Logger from "./Logger";
+import Logger from './Logger';
 
 export default class StubLogger implements Logger {
     debug(...data: any[]): void { }
