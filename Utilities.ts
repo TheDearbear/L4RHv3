@@ -182,4 +182,8 @@ export default class Utilities {
 
         return prefix + type + endian;
     }
+
+    public static replaceRange(str: string, start: number, end: number, substitute: string) {
+        return str.substring(0, start) + substitute + str.substring(end);
+    }
 };
