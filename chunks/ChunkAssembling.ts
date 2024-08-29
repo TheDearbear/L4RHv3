@@ -43,11 +43,14 @@ export default class ChunkAssembling {
         var pseudoPointer = offset;
         var recoder = new ChunkDataRecoding(new Utilities(this.settings));
 
-        raw.forEach((chunk, index) => {
+        let index = 0;
+        raw.forEach(chunk => {
             var doc = this.docs.lookup(chunk.id);
             if (!doc) {
                 this.settings.logger.warn('Missing documentation for chunk', Utilities.uint32AsHex(chunk.id));
             }
+
+            let currentBacktrace = [...backtrace, index++];
 
             if (Array.isArray(chunk.data)) {
                 pseudoPointer += 8;
@@ -55,7 +58,7 @@ export default class ChunkAssembling {
                 var subchunks: DisassembledChunk[] = [];
                 output.push(new DisassembledChunk(chunk.id, subchunks));
 
-                this.disassemble(chunk.data, pseudoPointer, global, subchunks, [...backtrace, index]);
+                this.disassemble(chunk.data, pseudoPointer, global, subchunks, currentBacktrace);
 
                 pseudoPointer += chunk.length;
                 return;
@@ -71,6 +74,7 @@ export default class ChunkAssembling {
             }
 
             if (doc.ignore) {
+                index--;
                 pseudoPointer += 8 + chunk.length;
                 return;
             }
