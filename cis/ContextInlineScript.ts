@@ -120,8 +120,14 @@ export default class ContextInlineScript {
                 fieldNameNumber.result :
                 fieldNameStr.result;
             
+            let fancyFieldName = typeof fieldName === 'string' ? '"' + fieldName + '"' : fieldName;
+            
+            if (value == null) {
+                throw new Error('Cannot access field ' + fancyFieldName + ' due to null value');
+            }
+            
             if (fieldName in value === false) {
-                throw new Error('Tried to access unknown field ' + (typeof fieldName === 'string' ? '"' + fieldName + '"' : fieldName));
+                throw new Error('Tried to access unknown field ' + fancyFieldName);
             }
 
             value = (value as Record<string | number, any>)[fieldName];
