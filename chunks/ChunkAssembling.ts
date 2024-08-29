@@ -100,12 +100,17 @@ export default class ChunkAssembling {
                 this.settings.logger.warn('Documentation mismatch for chunk', Utilities.uint32AsHex(chunk.id), '(data align found)');
             }
 
-            output.push(
-                new DisassembledChunk(
-                    chunk.id,
-                    recoder.decode(data, pseudoPointer, doc.schema, chunk.id)
-                )
-            );
+            let outIndex = output.push(new DisassembledChunk(chunk.id, {})) - 1;
+            let outValue = recoder.decode(data, pseudoPointer, doc.schema, chunk.id, global, currentBacktrace);
+
+            if (typeof outValue === 'string') {
+                let outValueRaw: Record<string, string> = {};
+                outValueRaw[DisassembledChunk.RAW_VALUE] = outValue;
+
+                output[outIndex].data = outValueRaw;
+            } else {
+                output[outIndex].data = outValue;
+            }
 
             pseudoPointer += chunk.length;
         });

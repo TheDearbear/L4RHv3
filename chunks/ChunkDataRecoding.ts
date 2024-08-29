@@ -1,6 +1,8 @@
 import FieldTypes from '../FieldTypes';
 import SubnestField from '../SubnestField';
 import Utilities from '../Utilities';
+import ContextInlineScript from '../cis/ContextInlineScript';
+import DisassembledChunk from './DisassembledChunk';
 
 export default class ChunkDataRecoding {
     public static readonly LEFTOVERS = '__leftovers__';
@@ -17,13 +19,17 @@ export default class ChunkDataRecoding {
      * @param pseudoPointer Pointer to current position in bytes relative to the start of file
      * @param schema Schema for data
      * @param chunkId Id of chunk
+     * @param global Global context for decoding
+     * @param backtrace Backtrace from global context to current
      * @returns Disassembled data or source string encoded with `base64` if schema is `null`
      */
     public decode(
         data: Buffer,
         pseudoPointer: number = 0,
         schema: Record<string, SubnestField> | null = null,
-        chunkId: number | null = null
+        chunkId: number | null = null,
+        global: DisassembledChunk[],
+        backtrace: number[]
     ): object | string {
         if (schema == null) {
             return data.toString('base64');
@@ -59,6 +65,10 @@ export default class ChunkDataRecoding {
             var dataTooSmallError = 'Provided schema requires bigger data buffer than provided (' + chunk + ':' + name + ')';
 
             var length = 1;
+
+            if (typeof rawLength === 'string') {
+                rawLength = ContextInlineScript.execute(rawLength, result, global, backtrace, this.utils.behaviour.logger);
+            }
 
             if (typeof rawLength === 'number') {
                 length = rawLength;
@@ -101,7 +111,8 @@ export default class ChunkDataRecoding {
                 offset: number = 0
             ): any {
                 if (value.type === FieldTypes.STRUCTURE) {
-                    return ctx.decode(data.subarray(offset, offset + size), pseudoPointer, value.structure, chunkId);
+                    // Possible problems with Context Inline Script for nested structures?
+                    return ctx.decode(data.subarray(offset, offset + size), pseudoPointer, value.structure, chunkId, global, backtrace);
                 }
                 
                 return ctx.decodeSingle(data, value, offset);
