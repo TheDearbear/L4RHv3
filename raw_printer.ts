@@ -36,7 +36,14 @@ if (args.getTag('export-paddings')) {
 var outputFile = args.getTag('output')?.value || null;
 
 if (args.getTag('compress-threshold')) {
-    settings.compressThreshold = Number.parseInt(args.getTag('compress-threshold')!.value!);
+    settings.compressThreshold = Number.parseInt(args.getTag('compress-threshold')!.value || "");
+}
+
+var prettyPrintIndent: number | null = null;
+
+if (args.getTag('pretty-print')) {
+    let size = Number.parseInt(args.getTag('pretty-print')!.value || "");
+    prettyPrintIndent = isNaN(size) ? 4 : size;
 }
 
 if (subnestsFilename.startsWith(ASSETS_FOLDER) && !fs.existsSync(ASSETS_FOLDER)) {
@@ -76,6 +83,14 @@ switch (mode) {
     case Modes.PRINT:
         settings.logger.error('This mode is currently not implemented');
         process.exit();
+}
+
+function stringify(value: any) {
+    if (prettyPrintIndent != null) {
+        return JSON.stringify(value, null, prettyPrintIndent);
+    }
+
+    return JSON.stringify(value);
 }
 
 /** Returns parsed mode from start arguments */
@@ -176,7 +191,7 @@ function decodeFile(path: string) {
             settings.logger.error('Unknown data left (Size:', buffer.length, '): ' + buffer);
         }
 
-        fs.writeFileSync(outputFile ? outputFile : path + '.json', JSON.stringify(chunks, null, 4));
+        fs.writeFileSync(outputFile ? outputFile : path + '.json', stringify(chunks));
     });
 }
 
@@ -195,7 +210,7 @@ function disassembleFile(path: string) {
         path = path.substring(0, path.length - 5);
     }
 
-    fs.writeFileSync(outputFile ? outputFile : path + '.disassm.json', JSON.stringify(chunks, null, 4));
+    fs.writeFileSync(outputFile ? outputFile : path + '.disassm.json', stringify(chunks));
 }
 
 /**
@@ -212,5 +227,5 @@ function assembleFile(path: string) {
         path = path.substring(0, path.length - 13);
     }
 
-    fs.writeFileSync(outputFile ? outputFile : path + '.json', JSON.stringify(chunks, null, 4));
+    fs.writeFileSync(outputFile ? outputFile : path + '.json', stringify(chunks));
 }
