@@ -39,7 +39,7 @@ if (args.getTag('compress-threshold')) {
     settings.compressThreshold = Number.parseInt(args.getTag('compress-threshold')!.value || "");
 }
 
-var prettyPrintIndent: number | null = null;
+var prettyPrintIndent: number | undefined;
 
 if (args.getTag('pretty-print')) {
     let size = Number.parseInt(args.getTag('pretty-print')!.value || "");
@@ -83,14 +83,6 @@ switch (mode) {
     case Modes.PRINT:
         settings.logger.error('This mode is currently not implemented');
         process.exit();
-}
-
-function stringify(value: any) {
-    if (prettyPrintIndent != null) {
-        return JSON.stringify(value, null, prettyPrintIndent);
-    }
-
-    return JSON.stringify(value);
 }
 
 /** Returns parsed mode from start arguments */
@@ -143,6 +135,20 @@ function encodeFile(path: string) {
 }
 
 /**
+ * Replacer function for serializing `RawChunk`s to JSON
+ * @param key JSON Key
+ * @param value JSON Value
+ * @returns New JSON Value
+ */
+function rawChunkJsonReplacer(key: string, value: any): any {
+    if (key == 'compressed' && value === false) {
+        return undefined;
+    }
+
+    return value;
+}
+
+/**
  * Decodes BlackBox bundle file to json file
  * @param path Path to file
  */
@@ -162,8 +168,10 @@ function decodeFile(path: string) {
 
     var lastProcessedChunkIndex = -1;
 
+    const OPTICAL_DRIVE_SECTOR_SIZE = 2048;
+
     var buffer = Buffer.alloc(0);
-    var stream = fs.createReadStream(path, { highWaterMark: 20480,  });
+    var stream = fs.createReadStream(path, { highWaterMark: OPTICAL_DRIVE_SECTOR_SIZE });
     stream.on('data', (data: Buffer) => {
         buffer = buffer ? Buffer.concat([buffer, data]) : data;
 
@@ -191,9 +199,14 @@ function decodeFile(path: string) {
             settings.logger.error('Unknown data left (Size:', buffer.length, '): ' + buffer);
         }
 
-        fs.writeFileSync(outputFile ? outputFile : path + '.json', stringify(chunks));
+        fs.writeFileSync(
+            outputFile || path + '.json',
+            JSON.stringify(chunks, rawChunkJsonReplacer, prettyPrintIndent)
+        );
     });
 }
+
+const DISASSEMBLED_FILE_ENDING = '.disassm.json';
 
 /**
  * Disassembles decoded json chunks to disassembled json chunks
@@ -210,7 +223,10 @@ function disassembleFile(path: string) {
         path = path.substring(0, path.length - 5);
     }
 
-    fs.writeFileSync(outputFile ? outputFile : path + '.disassm.json', stringify(chunks));
+    fs.writeFileSync(
+        outputFile || path + DISASSEMBLED_FILE_ENDING,
+        JSON.stringify(chunks, null, prettyPrintIndent)
+    );
 }
 
 /**
@@ -223,9 +239,12 @@ function assembleFile(path: string) {
     var sourceChunks: DisassembledChunk[] = JSON.parse(fs.readFileSync(path).toString());
     var chunks = new ChunkAssembling(docs, settings).assemble(sourceChunks).chunks;
 
-    if (path.toLowerCase().endsWith('.disassm.json')) {
-        path = path.substring(0, path.length - 13);
+    if (path.toLowerCase().endsWith(DISASSEMBLED_FILE_ENDING)) {
+        path = path.substring(0, path.length - DISASSEMBLED_FILE_ENDING.length);
     }
 
-    fs.writeFileSync(outputFile ? outputFile : path + '.json', stringify(chunks));
+    fs.writeFileSync(
+        outputFile || path + '.json',
+        JSON.stringify(chunks, null, prettyPrintIndent)
+    );
 }
