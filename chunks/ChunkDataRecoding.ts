@@ -30,55 +30,57 @@ export default class ChunkDataRecoding {
         }
 
         var result: Record<string, any> = {};
-        var chunk = chunkId ? Utilities.uint32AsHex(chunkId) : "unknown";
+        var chunk = chunkId ? Utilities.uint32AsHex(chunkId) : 'unknown';
 
         for (const name in schema) {
-            var value = schema[name];
+            const value = schema[name];
+            let rawLength = value.length;
 
-            if (typeof value.modifier === "string" &&
-                value.modifier != "array" &&
-                value.modifier != "string" &&
-                value.modifier != "padding"
+            if (typeof value.modifier === 'string' &&
+                value.modifier != 'array' &&
+                value.modifier != 'string' &&
+                value.modifier != 'padding'
             ) {
-                throw new Error("Unknown modifier was specified (" + chunk + ":" + name + ")");
+                throw new Error('Unknown modifier was specified (' + chunk + ':' + name + ')');
             }
 
-            if (value.modifier == "string" && value.type !== FieldTypes.INT8) {
-                throw new Error("String modifier can be applied only to int8");
+            if (value.modifier == 'string' && value.type !== FieldTypes.INT8) {
+                throw new Error('String modifier can be applied only to int8');
             }
 
-            if (value.modifier == "string" && typeof value.length !== "number" && typeof value.length !== "object") {
-                throw new Error("Length of string must be specified");
+            if (value.modifier == 'string' && typeof rawLength !== 'number' && typeof rawLength !== 'object') {
+                throw new Error('Length of string must be specified');
             }
 
-            if (value.modifier == "array" && typeof value.length !== "number" && typeof value.length !== "object") {
-                throw new Error("Length of array must be specified");
+            if (value.modifier == 'array' && typeof rawLength !== 'number' && typeof rawLength !== 'object') {
+                throw new Error('Length of array must be specified');
             }
 
-            var dataTooSmallError = "Provided schema requires bigger data buffer than provided (" + chunk + ":" + name + ")";
+            var dataTooSmallError = 'Provided schema requires bigger data buffer than provided (' + chunk + ':' + name + ')';
 
             var length = 1;
-            if (typeof value.length === "number") {
-                length = value.length;
+
+            if (typeof rawLength === 'number') {
+                length = rawLength;
             }
-            else if (typeof value.length === "object") {
-                var lengthOfLength = this.utils.typeByteLength((value.length as SubnestField).type);
+            else if (typeof rawLength === 'object') {
+                var lengthOfLength = this.utils.typeByteLength((rawLength as SubnestField).type);
                 if (data.length < lengthOfLength) {
                     this.utils.behaviour.logger.error(dataTooSmallError);
                     break;
                 }
 
-                length = this.decodeSingle(data, value.length as SubnestField);
+                length = this.decodeSingle(data, rawLength as SubnestField);
                 data = data.subarray(lengthOfLength);
             }
-            else if (value.length != null) {
-                this.utils.behaviour.logger.warn("Unknown type of length property. Treating as single (" + chunk + ":" + name + ")");
+            else if (rawLength != null) {
+                this.utils.behaviour.logger.warn('Unknown type of length property. Treating as single (' + chunk + ':' + name + ')');
             }
 
             var size: number;
             if (value.type === FieldTypes.STRUCTURE) {
                 if (value.structure == null) {
-                    throw new Error("Field specified as structure but no layout present (" + chunk + ":" + name + ")");
+                    throw new Error('Field specified as structure but no layout present (' + chunk + ':' + name + ')');
                 }
 
                 size = this.utils.structureByteLength(value.structure);
@@ -107,7 +109,7 @@ export default class ChunkDataRecoding {
 
             var entryValue: any[] | any;
 
-            if (value.length == null) {
+            if (rawLength == null) {
                 entryValue = readData(this, data, value, size * length);
             } else {
                 entryValue = [];
@@ -116,18 +118,18 @@ export default class ChunkDataRecoding {
                 }
             }
 
-            if (value.type === FieldTypes.INT8 && value.modifier === "string") {
+            if (value.type === FieldTypes.INT8 && value.modifier === 'string') {
                 entryValue = Utilities.readAscii(Buffer.from(entryValue));
             }
 
             data = data.subarray(size * length);
-            if (value.modifier !== "padding" || this.utils.behaviour.exportPaddings) {
+            if (value.modifier !== 'padding' || this.utils.behaviour.exportPaddings) {
                 result[name] = entryValue;
             }
         }
 
         if (data.length > 0) {
-            this.utils.behaviour.logger.warn("Provided schema requires smaller data buffer than provided (" + chunk + ")");
+            this.utils.behaviour.logger.warn('Provided schema requires smaller data buffer than provided (' + chunk + ')');
         }
 
         return result;

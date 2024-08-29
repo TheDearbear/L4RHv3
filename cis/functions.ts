@@ -1,8 +1,15 @@
-export function rfind(current: object, global: object[], args: Record<string | number, any> | null): object | null {
+import DisassembledChunk from '../chunks/DisassembledChunk';
+
+export function rfind(
+    current: DisassembledChunk[] | Record<string, any>,
+    global: DisassembledChunk[],
+    backtrace: number[],
+    args: Record<string | number, any> | null
+): object[] | object | null {
     return null;
 }
 
-export function find(current: object, global: object[], args: Record<string | number, any> | null): object | null {
+export function find(current: object, global: object[], backtrace: number[], args: Record<string | number, any> | null): object | null {
     return null;
 }
 
@@ -14,11 +21,11 @@ export function global(current: object, global: object[]): object[] {
     return global;
 }
 
-export function newobject(current: object, global: object[], args: Record<string | number, any> | null): Record<string | number, any> {
+export function newobject(current: object, global: object[], backtrace: number[], args: Record<string | number, any> | null): Record<string | number, any> {
     return args || {};
 }
 
-export function strjoin(current: object, global: object[], args: Record<string | number, any> | null): string | null {
+export function strjoin(current: object, global: object[], backtrace: number[], args: Record<string | number, any> | null): string | null {
     if (args == null) {
         return null;
     }

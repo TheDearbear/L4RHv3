@@ -55,8 +55,8 @@ export default class DocsManager {
         var docs = new DocsManager();
         var data = JSON.parse(json) as Record<string, any>;
 
-        docs.header = data.header as Record<string, any>;
-        docs.table = data.subnests as Record<string, Subnest>;
+        docs.header = Object.freeze(data.header) as Record<string, any>;
+        docs.table = Object.freeze(data.subnests) as Record<string, Subnest>;
     
         return docs;
     };

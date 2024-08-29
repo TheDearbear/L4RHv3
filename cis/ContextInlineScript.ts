@@ -1,4 +1,5 @@
 import Utilities from '../Utilities';
+import DisassembledChunk from '../chunks/DisassembledChunk';
 import Logger from '../logging/Logger';
 import StubLogger from '../logging/StubLogger';
 import ContextFunction from './ContextFunction';
@@ -35,7 +36,7 @@ export default class ContextInlineScript {
 
     public static readonly FUNCTION_NAME_REGEXP = /[a-z0-9_]+/i;
 
-    public static execute(script: string, current: object, global: object[], backtrace: number[], logger: Logger = new StubLogger()): any {
+    public static execute(script: string, current: object, global: DisassembledChunk[], backtrace: number[], logger: Logger = new StubLogger()): any {
         var lastPeek: SeekingResult<any> | null = null;
         var result: string = script;
         
@@ -63,7 +64,7 @@ export default class ContextInlineScript {
      * @param input String that starts with Context Inline Script
      * @returns Result of CIS with length of CIS string
      */
-    private static peekCIS(input: string, current: object, global: object[], backtrace: number[]): SeekingResult<any> {
+    private static peekCIS(input: string, current: object, global: DisassembledChunk[], backtrace: number[]): SeekingResult<any> {
         var script = input;
 
         if (!script.startsWith(this.SYMBOL_START)) {
@@ -105,7 +106,7 @@ export default class ContextInlineScript {
             throw new Error('Unknown function');
         }
 
-        var value = this.FUNCTIONS[functionName](current, global, args);
+        var value = this.FUNCTIONS[functionName](current, global, backtrace, args);
 
         // Process accessors
         while (script.startsWith(this.SYMBOL_ACCESSOR)) {
@@ -137,7 +138,7 @@ export default class ContextInlineScript {
      * @param input 
      * @returns 
      */
-    private static peekArgs(input: string, current: object, global: object[], backtrace: number[]): SeekingResult<Record<string | number, any>> {
+    private static peekArgs(input: string, current: object, global: DisassembledChunk[], backtrace: number[]): SeekingResult<Record<string | number, any>> {
         if (input.startsWith(this.SYMBOL_INVOKE)) {
             throw new Error('Input must contain at least one argument');
         }
@@ -258,7 +259,7 @@ export default class ContextInlineScript {
             return new SeekingResult(null, 0);
         }
 
-        let numberRegExp = /(\d+)|(0x[0-9A-Fa-f]+)|(0o[0-7]+)|(0b[01])/;
+        let numberRegExp = /(0x[0-9A-Fa-f]+)|(0o[0-7]+)|(0b[01])|(\d+)/;
         let result = numberRegExp.exec(input)!;
 
         return new SeekingResult(Number(result[0]), result[0].length);

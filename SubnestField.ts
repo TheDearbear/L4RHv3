@@ -4,7 +4,7 @@ export default class SubnestField {
     public unsigned: Boolean;
     public modifier: string | undefined;
     public structure: Record<string, SubnestField> | undefined;
-    public length: number | SubnestField | undefined;
+    public length: number | string | SubnestField | undefined;
 
     constructor(
         type: string,

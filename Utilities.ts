@@ -10,7 +10,7 @@ export default class Utilities {
     }
 
     public static hexAsUInt32(str: string): number | null {
-        if (str.length < 3 || str.length > 10 || !str.startsWith("0x")) {
+        if (str.length < 3 || str.length > 10 || !str.startsWith('0x')) {
             return null;
         }
 
@@ -25,7 +25,7 @@ export default class Utilities {
      * @returns Hex-string
      */
     public static uint32AsHex(number: number): string {
-        return "0x" + number.toString(16).padStart(8, "0").toUpperCase();
+        return '0x' + number.toString(16).padStart(8, '0').toUpperCase();
     }
 
     /**
@@ -50,10 +50,10 @@ export default class Utilities {
     public static readAscii(buffer: Buffer, offset: number = 0): string {
         var end = buffer.indexOf(0, offset);
         if (end == -1) {
-            return buffer.subarray(offset).toString("ascii");
+            return buffer.subarray(offset).toString('ascii');
         }
 
-        return buffer.subarray(offset, end).toString("ascii");
+        return buffer.subarray(offset, end).toString('ascii');
     }
 
     public typeByteLength(type: string): number {
@@ -77,10 +77,10 @@ export default class Utilities {
                 return 8;
             
             case FieldTypes.STRUCTURE:
-                throw new TypeError("Type must be a primitive");
+                throw new TypeError('Type must be a primitive');
         }
 
-        throw new TypeError("Unknown type was passed (" + type + ")");
+        throw new TypeError('Unknown type was passed (' + type + ')');
     }
 
     public structureByteLength(struct: Record<string, SubnestField>): number {
@@ -94,7 +94,7 @@ export default class Utilities {
                 var hasStructure = field.structure != null;
 
                 if (!hasStructure) {
-                    this.behaviour.logger.warn("Field specified as structure but no layout present (field: " + name + ")");
+                    this.behaviour.logger.warn('Field specified as structure but no layout present (field: ' + name + ')');
                 }
 
                 length = hasStructure ? this.structureByteLength(field.structure as Record<string, SubnestField>) : 0;
@@ -102,11 +102,11 @@ export default class Utilities {
                 length = this.typeByteLength(field.type);
             }
 
-            if (typeof field.length === "number") {
+            if (typeof field.length === 'number') {
                 length *= field.length;
             }
             else if (field.length != null) {
-                throw new Error("Context dependent length is currently not supported (field: " + name + ")");
+                throw new Error('Context dependent length is currently not supported (field: ' + name + ')');
             }
 
             totalLength += length;
@@ -121,63 +121,63 @@ export default class Utilities {
         unsigned: Boolean
     ) {
         switch (endian) {
-            case "little":
-                endian = "LE";
+            case 'little':
+                endian = 'LE';
                 break;
             
-            case "big":
-                endian = "BE";
+            case 'big':
+                endian = 'BE';
                 break;
             
             default:
-                throw new TypeError("Unknown endian was specified (" + endian + ")");
+                throw new TypeError('Unknown endian was specified (' + endian + ')');
         }
 
         if (type === FieldTypes.POINTER) {
             type = this.behaviour.pointersAre64Bits ? FieldTypes.INT64 : FieldTypes.INT32;
         }
 
-        var prefix = type === FieldTypes.INT64 ? "readBig" : "read";
+        var prefix = type === FieldTypes.INT64 ? 'readBig' : 'read';
 
         if (unsigned) {
             if (type === FieldTypes.FLOAT || type === FieldTypes.DOUBLE) {
-                throw new TypeError("Passed data type cannot be interpreted as unsigned");
+                throw new TypeError('Passed data type cannot be interpreted as unsigned');
             }
 
-            prefix += "U";
+            prefix += 'U';
         }
 
         if (type === FieldTypes.INT8) {
-            endian = "";
+            endian = '';
         }
 
         switch (type) {
             case FieldTypes.INT8:
-                type = "Int8";
+                type = 'Int8';
                 break;
 
             case FieldTypes.INT16:
-                type = "Int16";
+                type = 'Int16';
                 break;
 
             case FieldTypes.INT32:
-                type = "Int32";
+                type = 'Int32';
                 break;
 
             case FieldTypes.INT64:
-                type = "Int64";
+                type = 'Int64';
                 break;
 
             case FieldTypes.FLOAT:
-                type = "Float";
+                type = 'Float';
                 break;
 
             case FieldTypes.DOUBLE:
-                type = "Double";
+                type = 'Double';
                 break;
 
             default:
-                throw new TypeError("Unknown type passed (" + type + ")");
+                throw new TypeError('Unknown type passed (' + type + ')');
         }
 
         return prefix + type + endian;
