@@ -12,6 +12,7 @@ import DisassembledChunk from './chunks/DisassembledChunk';
 import DefaultConsoleLogger from './logging/DefaultConsoleLogger';
 
 const ASSETS_FOLDER = path.join(__dirname, 'assets');
+const DISASSEMBLED_FILE_ENDING = '.disassm.json';
 
 const args = CommandLineArgs.parse(process.argv.slice(2));
 
@@ -205,8 +206,6 @@ function decodeFile(path: string) {
         );
     });
 }
-
-const DISASSEMBLED_FILE_ENDING = '.disassm.json';
 
 /**
  * Disassembles decoded json chunks to disassembled json chunks
