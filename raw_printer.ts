@@ -31,7 +31,7 @@ if (args.getTag('export-paddings')) {
 {
     let tag = args.getTag('subnests');
 
-    var subnestsFilename = tag?.value || path.join(ASSETS_FOLDER, 'default.subnests_v3.json');
+    var subnestsPath = tag?.value || path.join(ASSETS_FOLDER, 'default.subnests_v3.json');
 }
 
 var outputFile = args.getTag('output')?.value || null;
@@ -47,7 +47,7 @@ if (args.getTag('pretty-print')) {
     prettyPrintIndent = isNaN(size) ? 4 : size;
 }
 
-if (subnestsFilename.startsWith(ASSETS_FOLDER) && !fs.existsSync(ASSETS_FOLDER)) {
+if (subnestsPath.startsWith(ASSETS_FOLDER) && !fs.existsSync(ASSETS_FOLDER)) {
     fs.mkdirSync(ASSETS_FOLDER);
 }
 
@@ -64,7 +64,7 @@ if (outputFile != null && filePaths.length > 1) {
 }
 
 const docs = DocsManager.parse(
-    fs.readFileSync(path.join(ASSETS_FOLDER, subnestsFilename)).toString()
+    fs.readFileSync(subnestsPath).toString()
 );
 
 const mode = getMode();
