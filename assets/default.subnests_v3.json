@@ -31,6 +31,7 @@
             "description_entry": "BCHUNK_SOLID_LIST"
         },
         "0x80134001": {
+            "description_entry": "BCHUNK_SOLID_LIST_HEADER_CHUNKS",
             "align": 16
         },
         "0x00134002": {
@@ -158,7 +159,7 @@
         "0x00134003": {
             "description_entry": "BCHUNK_SOLID_INDEX_ENTRY_TABLE",
             "schema": {
-                "lookup": {
+                "Table": {
                     "type": "structure",
                     "endian": "little",
                     "unsigned": false,
@@ -179,6 +180,63 @@
                 }
             }
         },
+        "0x00134004": {
+            "description_entry": "BCHUNK_SOLID_STREAM_ENTRY_TABLE",
+            "schema": {
+                "Table": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$rfind:id=0x00134002,max_backtrace=1/.NumSolids",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ChunkByteOffset": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ChunkByteSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "UncompressedSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "UserFlags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Flags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "RefCount": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ChunkData": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0x80134004": {
+            "description_entry": "BCHUNK_SOLID_LIST_PLAT_CHUNKS"
+        },
         "0x00E34009": {
             "description_entry": "BCHUNK_EAGL_SKELETON",
             "data_align": 16
@@ -188,7 +246,327 @@
             "data_align": 16
         },
         "0x00134011": {
-            "data_align": 16
+            "description_entry": "BCHUNK_SOLID",
+            "data_align": 16,
+            "schema": {
+                "PlatInfo": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Version": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "EndianSwapped": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Flags": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "NameHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "NumPolys": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumVerts": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumBones": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumTextureTableEntries": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumLightMaterials": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumPositionMarkerTableEntries": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "ReferencedFrameCounter": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "AABBMin": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "x": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "y": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "z": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                },
+                "pTextureTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "AABBMax": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "x": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "y": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "z": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                },
+                "LightMaterialTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "PivotMatrix": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "v0": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "v1": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "v2": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "v3": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        }
+                    }
+                },
+                "PositionMarkerTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NormalSmoother": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "ModelList": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding",
+                    "structure": {
+                        "HeadNode": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "Next": {
+                                    "type": "pointer",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "Prev": {
+                                    "type": "pointer",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        }
+                    }
+                },
+                "DamageVertexTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Volume": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Density": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "__UNKNOWN1": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "__UNKNOWN2": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Name": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "string",
+                    "length": 28
+                }
+            }
         },
         "0x0013401A": {
             "data_align": 16
