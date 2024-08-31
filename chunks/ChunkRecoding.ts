@@ -55,12 +55,12 @@ export default class ChunkRecoding {
             chunk.size != chunk.buffer.length
         );
 
-        if ((chunk.id & 0x80000000) != 0 && !data.broken && chunk.size >= 8) {
+        if ((data.id & 0x80000000) != 0 && !data.broken && (data.length >= 8 || data.length === 0)) {
             var chunkData = this.decodeMany(chunk.buffer, compressThreshold);
             data.data = chunkData.chunks;
 
             if (chunkData.leftovers.length > 0) {
-                this.logger.error('Cannot properly parse data of chunk', Utilities.uint32AsHex(chunk.id));
+                this.logger.error('Cannot properly parse data of chunk', Utilities.uint32AsHex(data.id));
             }
         } else {
             var buffer = chunk.buffer;
