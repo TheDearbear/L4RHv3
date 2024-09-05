@@ -706,11 +706,282 @@
         "0x00134B03": {
             "data_align": 16
         },
+        "0x00135001": {
+            "description_entry": "BCHUNK_LIGHT_PACK_HEADER",
+            "data_align": 16,
+            "schema": {
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Version": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "EndianSwapped": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "Pad": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "ScenerySectionNumber": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "LightTree": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NumTreeNodes": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "LightArray": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NumLights": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                }
+            }
+        },
         "0x00135002": {
-            "data_align": 16
+            "description_entry": "BCHUNK_LIGHT_TREE",
+            "data_align": 16,
+            "schema": {
+                "vAABBTree": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "NodeArray": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "NumLeafNodes": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumParentNodes": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "TotalNodes": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Depth": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "pad1": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        }
+                    }
+                },
+                "vAABB": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$current/.vAABBTree.TotalNodes",
+                    "structure": {
+                        "PositionX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionZ": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ParentIndex": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumChildren": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ExtentX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ExtentY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ExtentZ": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ChildrenIndices": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 10
+                        }
+                    }
+                }
+            }
         },
         "0x00135003": {
-            "data_align": 16
+            "description_entry": "BCHUNK_LIGHT_ARRAY",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$rfind:id=0x00135003,max_backtrace=1/.NumLights",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Type": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "AttenuationType": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Shape": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "State": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ExcludeNameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Colour": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "PositionX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionZ": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Size": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "DirectionX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "DirectionY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "DirectionZ": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Intensity": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FarStart": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FarEnd": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Falloff": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ScenerySectionNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Name": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "string",
+                            "length": 34
+                        }
+                    }
+                }
+            }
         },
         "0x00035020": {
             "description_entry": "BCHUNK_ACID_EMITTERS",
