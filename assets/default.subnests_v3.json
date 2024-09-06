@@ -875,7 +875,7 @@
                     "type": "structure",
                     "endian": "little",
                     "unsigned": false,
-                    "length": "$rfind:id=0x00135003,max_backtrace=1/.NumLights",
+                    "length": "$rfind:id=0x00135001,max_backtrace=1/.NumLights",
                     "structure": {
                         "NameHash": {
                             "type": "int32",
@@ -985,6 +985,7 @@
         },
         "0x00035020": {
             "description_entry": "BCHUNK_ACID_EMITTERS",
+            "data_align": 16,
             "align": 16
         },
         "0x00035021": {
