@@ -47,10 +47,10 @@ export function rfind(
     }
 
     function processLayer(backtrace: number[], iteration: number = 0): object[] | object | null {
-        let wasntEmptry = backtrace.length !== 0;
+        let wasntEmpty = backtrace.length !== 0;
         let limit = backtrace.pop() || global.length;
 
-        if (wasntEmptry && iteration === 0) {
+        if (wasntEmpty && iteration === 0) {
             limit--;
         }
         
