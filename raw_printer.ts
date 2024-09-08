@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node -r ts-node/register
 
 import fs from 'node:fs';
 import path from 'node:path';

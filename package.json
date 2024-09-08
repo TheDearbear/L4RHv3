@@ -2,16 +2,20 @@
   "name": "l4rh",
   "version": "3.0.0",
   "description": "Modern bundle (de)compiler for famous games powered by speed engine",
-  "main": "raw_printer.js",
+  "main": "raw_printer.ts",
+  "bin": {
+    "l4rh": "raw_printer.ts"
+  },
   "devDependencies": {
-    "@types/node": "^22.2.0",
-    "eslint": "^9.8.0",
+    "@types/node": "^22.5.4",
+    "eslint": "^9.10.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
   "scripts": {
     "clean": "tsc --build --clean",
-    "build": "tsc --build",
-    "test": "node dist/raw_printer.js --subnests=\"../assets/default.subnests_v3.json\""
+    "build": "npm i && tsc --build",
+    "start": "node -r ts-node/register ./raw_printer.ts"
   },
   "repository": {
     "type": "git",
