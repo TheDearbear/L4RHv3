@@ -568,6 +568,30 @@
                 }
             }
         },
+        "0x00134012": {
+            "description_entry": "BCHUNK_SOLID_TEXTURE_TABLE",
+            "schema": {
+                "Table": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$rfind:id=0x00134011,max_backtrace=1/.NumTextureTableEntries",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "pTextureInfo": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
         "0x0013401A": {
             "data_align": 16
         },
