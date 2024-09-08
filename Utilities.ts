@@ -83,8 +83,9 @@ export default class Utilities {
         throw new TypeError('Unknown type was passed (' + type + ')');
     }
 
-    public structureByteLength(struct: Record<string, SubnestField>): number {
+    public structureByteLength(struct: Record<string, SubnestField>, ...sizes: number[]): number {
         var totalLength = 0;
+        var sizeIndex = 0;
 
         for (const name in struct) {
             var field = struct[name];
@@ -106,7 +107,13 @@ export default class Utilities {
                 length *= field.length;
             }
             else if (field.length != null) {
-                throw new Error('Context dependent length is currently not supported (field: ' + name + ')');
+                let fieldLength = sizes[sizeIndex++];
+
+                if (fieldLength == null) {
+                    throw new Error('Not enough context values to determine size of struct (field: ' + name + ')');
+                }
+
+                length *= fieldLength;
             }
 
             totalLength += length;
