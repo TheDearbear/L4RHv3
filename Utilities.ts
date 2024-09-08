@@ -193,4 +193,30 @@ export default class Utilities {
     public static replaceRange(str: string, start: number, end: number, substitute: string) {
         return str.substring(0, start) + substitute + str.substring(end);
     }
+
+    public static defaultTypeValue(type: string): any {
+        if (type === FieldTypes.STRUCTURE) {
+            throw new Error('Structure is not a primitive type');
+        }
+
+        return 0;
+    }
+
+    public static defaultStructureValue(fields: Record<string, any>): Record<string, any> {
+        var struct: Record<string, any> = {};
+
+        for (const name in fields) {
+            if (typeof fields[name] === 'string') {
+                struct[name] = this.defaultTypeValue(fields[name]);
+            }
+            else if (typeof fields[name] === 'object') {
+                struct[name] = this.defaultStructureValue(fields[name]);
+            }
+            else {
+                throw new Error('Unknown value type');
+            }
+        }
+
+        return struct;
+    }
 };
