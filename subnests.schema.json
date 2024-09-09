@@ -75,7 +75,7 @@
         "header",
         "subnests"
     ],
-    "additionalProperties": false,
+    "additionalProperties": true,
     "$defs": {
         "subnest_field": {
             "type": "object",
