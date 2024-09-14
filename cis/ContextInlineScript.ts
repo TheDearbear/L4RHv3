@@ -3,6 +3,7 @@ import DisassembledChunk from '../chunks/DisassembledChunk';
 import Logger from '../logging/Logger';
 import StubLogger from '../logging/StubLogger';
 import ContextFunction from './ContextFunction';
+import ReferencedValue from './ReferencedValue';
 import * as CISFunctions from './functions';
 
 class SeekingResult<T> {
@@ -36,15 +37,15 @@ export default class ContextInlineScript {
 
     public static readonly FUNCTION_NAME_REGEXP = /[a-z0-9_]+/i;
 
-    public static execute(script: string, current: object, global: DisassembledChunk[], backtrace: number[], logger: Logger = new StubLogger()): any {
-        var lastPeek: SeekingResult<any> | null = null;
+    public static execute(script: string, current: object, global: DisassembledChunk[], backtrace: number[], logger: Logger = new StubLogger()): ReferencedValue | string {
+        var lastPeek: SeekingResult<ReferencedValue> | null = null;
         var result: string = script;
         
         for (var startIndex: number = 0; (startIndex = result.indexOf(this.SYMBOL_START, startIndex)) !== -1;) {
             try {
                 lastPeek = this.peekCIS(script.substring(startIndex), current, global, backtrace);
 
-                result = Utilities.replaceRange(result, startIndex, startIndex + lastPeek.seeked, String(lastPeek.result));
+                result = Utilities.replaceRange(result, startIndex, startIndex + lastPeek.seeked, String(lastPeek.result.get()));
             } catch (error: any) {
                 logger.error('Unable to parse Context Inline Script:', error);
             }
@@ -64,7 +65,7 @@ export default class ContextInlineScript {
      * @param input String that starts with Context Inline Script
      * @returns Result of CIS with length of CIS string
      */
-    private static peekCIS(input: string, current: object, global: DisassembledChunk[], backtrace: number[]): SeekingResult<any> {
+    private static peekCIS(input: string, current: object, global: DisassembledChunk[], backtrace: number[]): SeekingResult<ReferencedValue> {
         var script = input;
 
         if (!script.startsWith(this.SYMBOL_START)) {
@@ -106,10 +107,16 @@ export default class ContextInlineScript {
             throw new Error('Unknown function');
         }
 
-        var value = this.FUNCTIONS[functionName](current, global, backtrace, args);
+        var obj = this.FUNCTIONS[functionName](current, global, backtrace, args);
+        var accessors: (string | number)[] | null = null;
 
-        // Process accessors
+        // Validate accessors
+        let value = obj;
         while (script.startsWith(this.SYMBOL_ACCESSOR)) {
+            if (accessors == null) {
+                accessors = [];
+            }
+
             length += this.SYMBOL_ACCESSOR.length;
             script = script.substring(this.SYMBOL_ACCESSOR.length);
 
@@ -131,12 +138,13 @@ export default class ContextInlineScript {
             }
 
             value = (value as Record<string | number, any>)[fieldName];
+            accessors.push(fieldName);
 
             length += fieldNameStr.seeked;
             script = script.substring(fieldNameStr.seeked);
         }
 
-        return new SeekingResult(value, length);
+        return new SeekingResult(new ReferencedValue(obj, accessors), length);
     }
 
     /**
@@ -240,7 +248,7 @@ export default class ContextInlineScript {
                         throw new Error('Unknown data after script string. Did you forget to add quotes?');
                     }
 
-                    value = valueCis.result;
+                    value = valueCis.result.get();
                 }
                 // Something unknown
                 else {
