@@ -1,10 +1,8 @@
-import DisassembledChunk from '../chunks/DisassembledChunk';
+import ScriptContext from './ScriptContext';
 
 export default interface ContextFunction {
     (
-        current: DisassembledChunk[] | Record<string, any>,
-        global: DisassembledChunk[],
-        backtrace: number[],
+        context: ScriptContext,
         args: Record<string | number, any> | null
     ): any;
 }

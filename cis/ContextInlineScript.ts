@@ -4,6 +4,7 @@ import Logger from '../logging/Logger';
 import StubLogger from '../logging/StubLogger';
 import ContextFunction from './ContextFunction';
 import ReferencedValue from './ReferencedValue';
+import ScriptContext from './ScriptContext';
 import * as CISFunctions from './functions';
 
 class SeekingResult<T> {
@@ -107,7 +108,9 @@ export default class ContextInlineScript {
             throw new Error('Unknown function');
         }
 
-        var obj = this.FUNCTIONS[functionName](current, global, backtrace, args);
+        let context = new ScriptContext(current, global, backtrace);
+        var obj = this.FUNCTIONS[functionName](context, args);
+
         var accessors: (string | number)[] | null = null;
 
         // Validate accessors

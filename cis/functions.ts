@@ -1,9 +1,8 @@
 import DisassembledChunk from '../chunks/DisassembledChunk';
+import ScriptContext from './ScriptContext';
 
 export function rfind(
-    current: DisassembledChunk[] | Record<string, any>,
-    global: DisassembledChunk[],
-    backtrace: number[],
+    context: ScriptContext,
     args: Record<string | number, any> | null
 ): object[] | object | null {
     if (args == null || typeof args.id !== 'number' || typeof args.max_backtrace !== 'number') {
@@ -11,10 +10,10 @@ export function rfind(
     }
 
     var id = args.id;
-    var maxBacktrace = Math.min(args.max_backtrace, backtrace.length);
+    var maxBacktrace = Math.min(args.max_backtrace, context.backtrace.length);
 
     function getLayer(backtrace: number[]): DisassembledChunk[] {
-        let layer = global;
+        let layer = context.globalStorage;
         for (let i = 0; i < backtrace.length; i++) {
             let layerIndex = backtrace[i];
 
@@ -69,26 +68,26 @@ export function rfind(
         return null;
     }
 
-    return processLayer(backtrace);
+    return processLayer(context.backtrace);
 }
 
-export function find(current: object, global: object[], backtrace: number[], args: Record<string | number, any> | null): object | null {
+export function find(context: ScriptContext, args: Record<string | number, any> | null): object | null {
     return null;
 }
 
-export function current(current: object): object {
-    return current;
+export function current(context: ScriptContext): object {
+    return context.currentChunk;
 }
 
-export function global(current: object, global: object[]): object[] {
-    return global;
+export function global(context: ScriptContext): object[] {
+    return context.globalStorage;
 }
 
-export function newobject(current: object, global: object[], backtrace: number[], args: Record<string | number, any> | null): Record<string | number, any> {
+export function newobject(context: ScriptContext | undefined = undefined, args: Record<string | number, any> | null): Record<string | number, any> {
     return args || {};
 }
 
-export function strjoin(current: object, global: object[], backtrace: number[], args: Record<string | number, any> | null): string | null {
+export function strjoin(context: ScriptContext | undefined = undefined, args: Record<string | number, any> | null): string | null {
     if (args == null) {
         return null;
     }
