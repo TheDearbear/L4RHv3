@@ -3,6 +3,7 @@ import SubnestField from '../SubnestField';
 import Utilities from '../Utilities';
 import ContextInlineScript from '../cis/ContextInlineScript';
 import ReferencedValue from '../cis/ReferencedValue';
+import ScriptContext from '../cis/ScriptContext';
 import DisassembledChunk from './DisassembledChunk';
 
 export default class ChunkDataRecoding {
@@ -68,7 +69,8 @@ export default class ChunkDataRecoding {
             var length = 1;
 
             if (typeof rawLength === 'string') {
-                let executeResult = ContextInlineScript.execute(rawLength, result, global, backtrace, this.utils.behaviour.logger);
+                let context = new ScriptContext(result, global, backtrace, this.utils);
+                let executeResult = ContextInlineScript.execute(rawLength, context);
 
                 rawLength = executeResult instanceof ReferencedValue ? executeResult.get() : executeResult;
             }

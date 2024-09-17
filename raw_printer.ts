@@ -65,9 +65,9 @@ if (outputFile != null && filePaths.length > 1) {
     process.exit();
 }
 
-const docs = DocsManager.parse(
+settings.docs = DocsManager.parse(
     fs.readFileSync(subnestsPath).toString()
-);
+);;
 
 const mode = getMode();
 switch (mode) {
@@ -185,7 +185,7 @@ function decodeFile(path: string) {
         while (lastProcessedChunkIndex < chunks.length - 1) {
             var chunk = chunks[++lastProcessedChunkIndex];
 
-            var doc = docs.lookup(chunk.id);
+            var doc = settings.docs.lookup(chunk.id);
 
             if (!doc) {
                 settings.logger.warn('Unknown chunk', Utilities.uint32AsHex(chunk.id));
@@ -218,7 +218,7 @@ function disassembleFile(path: string) {
 
     var sourceChunks: RawChunk[] = JSON.parse(fs.readFileSync(path).toString());
     var chunks: DisassembledChunk[] = [];
-    new ChunkAssembling(docs, settings).disassemble(sourceChunks, 0, chunks, chunks);
+    new ChunkAssembling(settings).disassemble(sourceChunks, 0, chunks, chunks);
 
     if (path.toLowerCase().endsWith('.json')) {
         path = path.substring(0, path.length - 5);
@@ -238,7 +238,7 @@ function assembleFile(path: string) {
     settings.logger.log('Opening file:', path);
 
     var sourceChunks: DisassembledChunk[] = JSON.parse(fs.readFileSync(path).toString());
-    var chunks = new ChunkAssembling(docs, settings).assemble(sourceChunks).chunks;
+    var chunks = new ChunkAssembling(settings).assemble(sourceChunks).chunks;
 
     if (path.toLowerCase().endsWith(DISASSEMBLED_FILE_ENDING)) {
         path = path.substring(0, path.length - DISASSEMBLED_FILE_ENDING.length);

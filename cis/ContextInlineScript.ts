@@ -1,7 +1,4 @@
 import Utilities from '../Utilities';
-import DisassembledChunk from '../chunks/DisassembledChunk';
-import Logger from '../logging/Logger';
-import StubLogger from '../logging/StubLogger';
 import ContextFunction from './ContextFunction';
 import ReferencedValue from './ReferencedValue';
 import ScriptContext from './ScriptContext';
@@ -23,8 +20,10 @@ export default class ContextInlineScript {
         find: CISFunctions.find,
         current: CISFunctions.current,
         global: CISFunctions.global,
+        size: CISFunctions.size,
         newobject: CISFunctions.newobject,
-        strjoin: CISFunctions.strjoin
+        strjoin: CISFunctions.strjoin,
+        math: CISFunctions.math
     };
 
     public static readonly SYMBOL_START = '$';
@@ -38,17 +37,20 @@ export default class ContextInlineScript {
 
     public static readonly FUNCTION_NAME_REGEXP = /[a-z0-9_]+/i;
 
-    public static execute(script: string, current: object, global: DisassembledChunk[], backtrace: number[], logger: Logger = new StubLogger()): ReferencedValue | string {
+    public static execute(
+        script: string,
+        context: ScriptContext
+    ): ReferencedValue | string {
         var lastPeek: SeekingResult<ReferencedValue> | null = null;
         var result: string = script;
         
         for (var startIndex: number = 0; (startIndex = result.indexOf(this.SYMBOL_START, startIndex)) !== -1;) {
             try {
-                lastPeek = this.peekCIS(script.substring(startIndex), current, global, backtrace);
+                lastPeek = this.peekCIS(script.substring(startIndex), context);
 
                 result = Utilities.replaceRange(result, startIndex, startIndex + lastPeek.seeked, String(lastPeek.result.get()));
             } catch (error: any) {
-                logger.error('Unable to parse Context Inline Script:', error);
+                context.utils.behaviour.logger.error('Unable to parse Context Inline Script:', error);
             }
 
             startIndex += this.SYMBOL_START.length;
@@ -66,7 +68,10 @@ export default class ContextInlineScript {
      * @param input String that starts with Context Inline Script
      * @returns Result of CIS with length of CIS string
      */
-    private static peekCIS(input: string, current: object, global: DisassembledChunk[], backtrace: number[]): SeekingResult<ReferencedValue> {
+    private static peekCIS(
+        input: string,
+        context: ScriptContext
+    ): SeekingResult<ReferencedValue> {
         var script = input;
 
         if (!script.startsWith(this.SYMBOL_START)) {
@@ -93,7 +98,7 @@ export default class ContextInlineScript {
 
         if (script.startsWith(this.SYMBOL_ARGS_START)) {
             let argsStr = script.substring(this.SYMBOL_ARGS_START.length);
-            let argsPeek = this.peekArgs(argsStr, current, global, backtrace);
+            let argsPeek = this.peekArgs(argsStr, context);
             args = argsPeek.result;
 
             length += argsPeek.seeked + this.SYMBOL_ARGS_START.length;
@@ -108,9 +113,7 @@ export default class ContextInlineScript {
             throw new Error('Unknown function');
         }
 
-        let context = new ScriptContext(current, global, backtrace);
         var obj = this.FUNCTIONS[functionName](context, args);
-
         var accessors: (string | number)[] | null = null;
 
         // Validate accessors
@@ -155,7 +158,10 @@ export default class ContextInlineScript {
      * @param input 
      * @returns 
      */
-    private static peekArgs(input: string, current: object, global: DisassembledChunk[], backtrace: number[]): SeekingResult<Record<string | number, any>> {
+    private static peekArgs(
+        input: string,
+        context: ScriptContext
+    ): SeekingResult<Record<string | number, any>> {
         if (input.startsWith(this.SYMBOL_INVOKE)) {
             throw new Error('Input must contain at least one argument');
         }
@@ -242,7 +248,7 @@ export default class ContextInlineScript {
                 }
                 // Parse value as Context Inline Script
                 else if (input.startsWith(this.SYMBOL_START)) {
-                    let valueCis = this.peekCIS(input, current, global, backtrace);
+                    let valueCis = this.peekCIS(input, context);
 
                     length += valueCis.seeked;
                     input = input.substring(valueCis.seeked);

@@ -1,5 +1,4 @@
 import ChunkDataRecoding from './ChunkDataRecoding';
-import DocsManager from '../DocsManager';
 import DisassembledChunk from './DisassembledChunk';
 import RawChunk from './RawChunk';
 import Settings from '../Settings';
@@ -17,11 +16,9 @@ export class AssembleResult {
 }
 
 export default class ChunkAssembling {
-    public docs: DocsManager;
     public settings: Settings;
 
-    constructor(docs: DocsManager, settings: Settings = new Settings()) {
-        this.docs = docs;
+    constructor(settings: Settings = new Settings()) {
         this.settings = settings;
     }
 
@@ -45,7 +42,7 @@ export default class ChunkAssembling {
 
         let index = 0;
         raw.forEach(chunk => {
-            var doc = this.docs.lookup(chunk.id);
+            var doc = this.settings.docs.lookup(chunk.id);
             if (!doc) {
                 this.settings.logger.warn('Missing documentation for chunk', Utilities.uint32AsHex(chunk.id));
             }
@@ -129,8 +126,8 @@ export default class ChunkAssembling {
         var pseudoPointer = offset;
         var result = new AssembleResult([], pseudoPointer);
 
-        disasm.forEach((chunk, index) => {
-            let doc = this.docs.lookup(chunk.id);
+        disasm.forEach(chunk => {
+            let doc = this.settings.docs.lookup(chunk.id);
             if (!doc) {
                 this.settings.logger.warn('Missing documentation for chunk', Utilities.uint32AsHex(chunk.id));
             }

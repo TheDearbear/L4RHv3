@@ -1,3 +1,4 @@
+import DocsManager from './DocsManager';
 import Logger from './logging/Logger';
 import StubLogger from './logging/StubLogger';
 
@@ -11,4 +12,6 @@ export default class Settings {
     public exportPaddings: Boolean = false;
     /** Logger for piping messages */
     public logger: Logger = new StubLogger();
+    /** Documentation storage for subnests */
+    public docs: DocsManager = new DocsManager();
 };
