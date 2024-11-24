@@ -125,7 +125,7 @@
                     }
                 },
                 "length": {
-                    "description": "Defines length of array/string/padding by fixed size, length prefixed field or Context Inline Script expression",
+                    "description": "Defines length of array/string/padding by fixed size or Context Inline Script expression",
                     "oneOf": [
                         {
                             "type": "integer",
@@ -133,36 +133,6 @@
                         },
                         {
                             "type": "string"
-                        },
-                        {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "enum": [
-                                        "int8",
-                                        "int16",
-                                        "int32",
-                                        "int64"
-                                    ]
-                                },
-                                "endian": {
-                                    "type": "string",
-                                    "enum": [
-                                        "little",
-                                        "big"
-                                    ]
-                                },
-                                "unsigned": {
-                                    "type": "boolean"
-                                }
-                            },
-                            "required": [
-                                "type",
-                                "endian",
-                                "unsigned"
-                            ],
-                            "additionalProperties": false
                         }
                     ]
                 }
