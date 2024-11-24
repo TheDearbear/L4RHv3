@@ -4,7 +4,6 @@ import Utilities from '../Utilities';
 import ContextInlineScript from '../cis/ContextInlineScript';
 import ReferencedValue from '../cis/ReferencedValue';
 import ScriptContext from '../cis/ScriptContext';
-import DisassembledChunk from './DisassembledChunk';
 
 export default class ChunkDataRecoding {
     public static readonly LEFTOVERS = '__leftovers__';
@@ -30,8 +29,7 @@ export default class ChunkDataRecoding {
         pseudoPointer: number = 0,
         schema: Record<string, SubnestField> | null = null,
         chunkId: number | null = null,
-        global: DisassembledChunk[],
-        backtrace: number[]
+        context: ScriptContext
     ): object | string {
         if (schema == null) {
             return data.toString('base64');
@@ -56,6 +54,20 @@ export default class ChunkDataRecoding {
                 throw new Error('String modifier can be applied only to int8');
             }
 
+            if (typeof rawLength === 'string') {
+                let localContext = new ScriptContext(
+                    result,
+                    context.globalStorage,
+                    context.backtrace,
+                    context.globalRawStorage,
+                    context.backtraceRaw,
+                    this.utils
+                );
+                let executeResult = ContextInlineScript.execute(rawLength, localContext);
+
+                rawLength = executeResult instanceof ReferencedValue ? executeResult.get() : executeResult;
+            }
+
             if (value.modifier == 'string' && typeof rawLength !== 'number' && typeof rawLength !== 'object') {
                 throw new Error('Length of string must be specified');
             }
@@ -67,13 +79,6 @@ export default class ChunkDataRecoding {
             var dataTooSmallError = 'Provided schema requires bigger data buffer than provided (' + chunk + ':' + name + ')';
 
             var length = 1;
-
-            if (typeof rawLength === 'string') {
-                let context = new ScriptContext(result, global, backtrace, this.utils);
-                let executeResult = ContextInlineScript.execute(rawLength, context);
-
-                rawLength = executeResult instanceof ReferencedValue ? executeResult.get() : executeResult;
-            }
 
             if (typeof rawLength === 'number') {
                 length = rawLength;
@@ -117,7 +122,7 @@ export default class ChunkDataRecoding {
             ): any {
                 if (value.type === FieldTypes.STRUCTURE) {
                     // Possible problems with Context Inline Script for nested structures?
-                    return ctx.decode(data.subarray(offset, offset + size), pseudoPointer, value.structure, chunkId, global, backtrace);
+                    return ctx.decode(data.subarray(offset, offset + size), pseudoPointer, value.structure, chunkId, context);
                 }
                 
                 return ctx.decodeSingle(data, value, offset);

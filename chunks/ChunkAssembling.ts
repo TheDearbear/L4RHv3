@@ -4,6 +4,7 @@ import RawChunk from './RawChunk';
 import Settings from '../Settings';
 import Utilities from '../Utilities';
 import zlib from 'node:zlib';
+import ScriptContext from '../cis/ScriptContext';
 
 export class AssembleResult {
     public chunks: RawChunk[];
@@ -35,19 +36,22 @@ export default class ChunkAssembling {
         offset: number = 0,
         global: DisassembledChunk[],
         output: DisassembledChunk[],
-        backtrace: number[] = []
+        globalRaw: RawChunk[] | undefined = undefined,
+        backtrace: number[] = [],
+        backtraceRaw: number[] = []
     ) {
         var pseudoPointer = offset;
         var recoder = new ChunkDataRecoding(new Utilities(this.settings));
 
         let index = 0;
-        raw.forEach(chunk => {
+        raw.forEach((chunk, rawIndex) => {
             var doc = this.settings.docs.lookup(chunk.id);
             if (!doc) {
                 this.settings.logger.warn('Missing documentation for chunk', Utilities.uint32AsHex(chunk.id));
             }
 
             let currentBacktrace = [...backtrace, index++];
+            let currentRawBacktrace = [...backtraceRaw, rawIndex];
 
             if (Array.isArray(chunk.data)) {
                 pseudoPointer += 8;
@@ -55,7 +59,7 @@ export default class ChunkAssembling {
                 var subchunks: DisassembledChunk[] = [];
                 output.push(new DisassembledChunk(chunk.id, subchunks));
 
-                this.disassemble(chunk.data, pseudoPointer, global, subchunks, currentBacktrace);
+                this.disassemble(chunk.data, pseudoPointer, global, subchunks, globalRaw || raw, currentBacktrace, currentRawBacktrace);
 
                 pseudoPointer += chunk.length;
                 return;
@@ -98,7 +102,14 @@ export default class ChunkAssembling {
             }
 
             let outIndex = output.push(new DisassembledChunk(chunk.id, {})) - 1;
-            let outValue = recoder.decode(data, pseudoPointer, doc.schema, chunk.id, global, currentBacktrace);
+            let context = new ScriptContext(
+                [],
+                global,
+                currentBacktrace,
+                globalRaw || raw,
+                currentRawBacktrace
+            );
+            let outValue = recoder.decode(data, pseudoPointer, doc.schema, chunk.id, context);
 
             if (typeof outValue === 'string') {
                 let outValueRaw: Record<string, string> = {};
