@@ -7,10 +7,10 @@
     "l4rh": "raw_printer.ts"
   },
   "devDependencies": {
-    "@types/node": "^22.5.4",
-    "eslint": "^9.10.0",
+    "@types/node": "^22.9.1",
+    "eslint": "^9.15.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.7.2"
   },
   "scripts": {
     "clean": "tsc --build --clean",
