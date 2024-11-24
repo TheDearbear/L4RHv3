@@ -56,7 +56,12 @@ export default class Utilities {
         return buffer.subarray(offset, end).toString('ascii');
     }
 
-    public typeByteLength(type: string): number {
+    /**
+     * Returns size of primitive data types in bytes
+     * @param type Data type
+     * @returns Size of data type in bytes
+     */
+    public primitiveByteLength(type: string): number {
         if (type === FieldTypes.POINTER) {
             type = this.behaviour.pointersAre64Bits ? FieldTypes.INT64 : FieldTypes.INT32;
         }
@@ -100,7 +105,7 @@ export default class Utilities {
 
                 length = hasStructure ? this.structureByteLength(field.structure as Record<string, SubnestField>) : 0;
             } else {
-                length = this.typeByteLength(field.type);
+                length = this.primitiveByteLength(field.type);
             }
 
             if (typeof field.length === 'number') {

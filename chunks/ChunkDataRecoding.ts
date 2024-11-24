@@ -79,7 +79,7 @@ export default class ChunkDataRecoding {
                 length = rawLength;
             }
             else if (typeof rawLength === 'object') {
-                var lengthOfLength = this.utils.typeByteLength((rawLength as SubnestField).type);
+                var lengthOfLength = this.utils.primitiveByteLength((rawLength as SubnestField).type);
                 if (data.length < lengthOfLength) {
                     this.utils.behaviour.logger.error(dataTooSmallError);
                     break;
@@ -100,7 +100,7 @@ export default class ChunkDataRecoding {
 
                 size = this.utils.structureByteLength(value.structure);
             } else {
-                size = this.utils.typeByteLength(value.type);
+                size = this.utils.primitiveByteLength(value.type);
             }
             
             if (data.length < size * length) {
