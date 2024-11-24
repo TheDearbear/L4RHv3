@@ -1,3 +1,4 @@
+import ByteLengthCountResult from './ByteLengthCountResult';
 import FieldTypes from './FieldTypes';
 import Settings from './Settings';
 import SubnestField from './SubnestField';
@@ -89,21 +90,33 @@ export default class Utilities {
     }
 
     public structureByteLength(struct: Record<string, SubnestField>, ...sizes: number[]): number {
+        var countResult = this.internalStructureByteLength(struct, ...sizes);
+
+        if (countResult.sizesUsed != sizes.length) {
+            this.behaviour.logger.warn('Number of sizes differs from number of sizes used by structure');
+        }
+
+        return countResult.length;
+    }
+
+    private internalStructureByteLength(struct: Record<string, SubnestField>, ...sizes: number[]): ByteLengthCountResult {
         var totalLength = 0;
         var sizeIndex = 0;
 
         for (const name in struct) {
             var field = struct[name];
-            var length: number;
+            var length: number = 0;
 
             if (field.type === FieldTypes.STRUCTURE) {
-                var hasStructure = field.structure != null;
+                let hasStructure = field.structure != null;
 
                 if (!hasStructure) {
                     this.behaviour.logger.warn('Field specified as structure but no layout present (field: ' + name + ')');
+                } else {
+                    let countResult = this.internalStructureByteLength(field.structure as Record<string, SubnestField>, ...sizes);
+                    sizeIndex += countResult.sizesUsed;
+                    length = countResult.length;
                 }
-
-                length = hasStructure ? this.structureByteLength(field.structure as Record<string, SubnestField>) : 0;
             } else {
                 length = this.primitiveByteLength(field.type);
             }
@@ -124,7 +137,7 @@ export default class Utilities {
             totalLength += length;
         }
 
-        return totalLength;
+        return new ByteLengthCountResult(totalLength, sizeIndex);
     }
 
     public functionReadName(
