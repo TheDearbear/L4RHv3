@@ -1,4 +1,6 @@
 import DisassembledChunk from '../chunks/DisassembledChunk';
+import RawChunk from '../chunks/RawChunk';
+import Utilities from '../Utilities';
 import ScriptContext from './ScriptContext';
 
 export function rfind(
@@ -63,26 +65,40 @@ export function global(context: ScriptContext): object[] {
     return context.globalStorage;
 }
 
-export function size(context: ScriptContext): number {
-    var backtrace = context.backtrace.slice(0);
+// Size of current aligned raw chunk data
+export function rawsize(context: ScriptContext): number {
+    var backtrace = context.backtraceRaw.slice(0);
     var lastIndex = backtrace.pop();
 
     if (lastIndex == null) {
         throw new Error('Unexpected end of backtrace');
     }
 
-    var current = getLayer(context.globalStorage, backtrace)[lastIndex];
+    var currentLayer = getRawLayer(context.globalRawStorage, backtrace);
+    var current = currentLayer[lastIndex];
 
     if (Array.isArray(current.data)) {
         let length = 0;
 
         current.data.forEach((v, i) => {
-            let newContext = new ScriptContext(v.data, context.globalStorage, [...context.backtrace, i], context.utils);
-            length += size(newContext);
+            let newContext = new ScriptContext(
+                [],
+                context.globalStorage, [],
+                context.globalRawStorage, [...context.backtraceRaw, i],
+                context.utils);
+            length += rawsize(newContext);
         });
 
         return length;
     }
+
+    var pseudoPointer = getRawPseudoPointer(context.globalRawStorage, backtrace);
+    for (let i = 0; i < lastIndex; i++) {
+        pseudoPointer += currentLayer[i].length;
+    }
+
+    // Also count chunk header
+    pseudoPointer += 8;
 
     var doc = context.utils.behaviour.docs.lookup(current.id);
 
@@ -90,7 +106,13 @@ export function size(context: ScriptContext): number {
         throw new Error('Invalid schema');
     }
 
-    return context.utils.structureByteLength(doc.schema);
+    let length = current.length;
+    if (doc.data_align != null && pseudoPointer % doc.data_align != 0) {
+        var alignedPointer = Utilities.alignDataPointer(pseudoPointer, doc.data_align);
+        length -= alignedPointer - pseudoPointer;
+    }
+
+    return length;
 }
 
 export function newobject(
@@ -164,4 +186,49 @@ function getLayer(global: DisassembledChunk[], backtrace: number[]): Disassemble
     }
 
     return layer;
+}
+
+function getRawLayer(global: RawChunk[], backtrace: number[]): RawChunk[] {
+    var layer = global;
+    for (let i = 0; i < backtrace.length; i++) {
+        let layerIndex = backtrace[i];
+
+        if (layerIndex >= layer.length) {
+            throw new Error('Out-of-bounce backtrace index');
+        }
+
+        let chunk = layer[layerIndex];
+        if (!Array.isArray(chunk.data)) {
+            throw new Error('Chunk with data found');
+        }
+
+        layer = chunk.data;
+    }
+
+    return layer;
+}
+
+function getRawPseudoPointer(global: RawChunk[], backtrace: number[]): number {
+    var layer = global;
+    var pseudoPointer = 0;
+    for (let i = 0; i < backtrace.length; i++) {
+        let layerIndex = backtrace[i];
+
+        for (let j = 0; j < layerIndex; j++) {
+            pseudoPointer += layer[j].length;
+        }
+
+        if (layerIndex >= layer.length) {
+            throw new Error('Out-of-bounce backtrace index');
+        }
+
+        let chunk = layer[layerIndex];
+        if (!Array.isArray(chunk.data)) {
+            throw new Error('Chunk with data found');
+        }
+
+        layer = chunk.data;
+    }
+
+    return pseudoPointer;
 }

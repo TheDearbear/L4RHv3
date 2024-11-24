@@ -20,7 +20,7 @@ export default class ContextInlineScript {
         find: CISFunctions.find,
         current: CISFunctions.current,
         global: CISFunctions.global,
-        size: CISFunctions.size,
+        rawsize: CISFunctions.rawsize,
         newobject: CISFunctions.newobject,
         strjoin: CISFunctions.strjoin,
         math: CISFunctions.math
