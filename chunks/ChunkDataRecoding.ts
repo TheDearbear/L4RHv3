@@ -117,22 +117,33 @@ export default class ChunkDataRecoding {
                 ctx: ChunkDataRecoding,
                 data: Buffer,
                 value: SubnestField,
-                size: number,
+                size: number | undefined,
                 offset: number = 0
             ): any {
+                var dataEnd = size != undefined ? offset + size : undefined;
+                var result: any[] | any;
+
                 if (value.type === FieldTypes.STRUCTURE) {
-                    // Possible problems with Context Inline Script for nested structures?
-                    return ctx.decode(data.subarray(offset, offset + size), pseudoPointer, value.structure, chunkId, context);
+                    result = ctx.decode(data.subarray(offset, dataEnd), pseudoPointer, value.structure, chunkId, context);
+                } else {
+                    result = ctx.decodeSingle(data, value, offset);
                 }
-                
-                return ctx.decodeSingle(data, value, offset);
+
+                return result;
             }
 
-            var entryValue: any[] | any;
+            var entryValue: any;
+            var entryOffset = 0;
 
             if (rawLength == null) {
                 entryValue = readData(this, data, value, size);
                 pseudoPointer += size;
+
+                if (value.align != null) {
+                    let previousPointer = pseudoPointer;
+                    pseudoPointer = Utilities.alignDataPointer(previousPointer, value.align);
+                    entryOffset = pseudoPointer - previousPointer;
+                }
             } else if (isJaggedArray) {
                 entryValue = [];
 
@@ -149,13 +160,17 @@ export default class ChunkDataRecoding {
                 );
 
                 while (data.length > 0) {
-                    let element = recodingContext.decode(data, pseudoPointer, value.structure, chunkId, context);
+                    let element = readData(recodingContext, data, value, undefined);
                     localContext.currentChunk = element as Record<string, any>;
                     let executeResult = ContextInlineScript.execute(value.length as string, localContext);
-                    let size = executeResult instanceof ReferencedValue ? executeResult.get() : executeResult;
+                    let size = executeResult instanceof ReferencedValue ? executeResult.get<number>() : executeResult;
 
                     if (typeof size !== 'number') {
                         throw new Error('Result of different type was returned after calculating element size (' + chunk + ':' + name + ')');
+                    }
+
+                    if (value.align != null) {
+                        size = Utilities.alignDataPointer(pseudoPointer + size, value.align) - pseudoPointer;
                     }
                     
                     entryValue.push(element);
@@ -164,9 +179,16 @@ export default class ChunkDataRecoding {
                 }
             } else {
                 entryValue = [];
+
                 for (let j = 0; j < length; j++) {
                     entryValue.push(readData(this, data, value, size, j * size));
                     pseudoPointer += size;
+                }
+
+                if (value.align != null) {
+                    let previousPointer = pseudoPointer;
+                    pseudoPointer = Utilities.alignDataPointer(previousPointer, value.align);
+                    entryOffset = pseudoPointer - previousPointer;
                 }
             }
 
@@ -174,7 +196,7 @@ export default class ChunkDataRecoding {
                 entryValue = Utilities.readAscii(Buffer.from(entryValue));
             }
 
-            data = data.subarray(size * length);
+            data = data.subarray(size * length + entryOffset);
             if (value.modifier !== 'padding' || this.utils.behaviour.exportPaddings) {
                 result[name] = entryValue;
             }

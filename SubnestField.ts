@@ -5,6 +5,7 @@ export default class SubnestField {
     public modifier: string | undefined;
     public structure: Record<string, SubnestField> | undefined;
     public length: number | string | SubnestField | undefined;
+    public align: number | undefined;
 
     constructor(
         type: string,
@@ -12,7 +13,8 @@ export default class SubnestField {
         unsigned: Boolean = false,
         modifier: string | undefined = undefined,
         structure: Record<string, SubnestField> | undefined = undefined,
-        length: number | SubnestField | undefined = undefined
+        length: number | SubnestField | undefined = undefined,
+        align: number | undefined = undefined
     ) {
         this.type = type;
         this.endian = endian;
@@ -20,5 +22,6 @@ export default class SubnestField {
         this.modifier = modifier;
         this.structure = structure;
         this.length = length;
+        this.align = align;
     }
 }

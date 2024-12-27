@@ -135,6 +135,11 @@
                             "type": "string"
                         }
                     ]
+                },
+                "align": {
+                    "description": "Aligns position up to specified value after field",
+                    "type": "integer",
+                    "minimum": 0
                 }
             },
             "required": [
