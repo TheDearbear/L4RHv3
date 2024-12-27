@@ -131,6 +131,75 @@
                 }
             }
         },
+        "0x00034109": {
+            "description_entry": "BCHUNK_SCENERY_GROUPS",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "jagged_array",
+                    "length": "$math:a=0x16,action=\"plus\",b=$math:a=2,action=\"multiply\",b=$current/.NumObjects//",
+                    "align": 4,
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "GroupNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumObjects": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "BarrierFlag": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "DriveThroughBarrierFlag": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "RaceSpecificSectionNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "OverrideInfoNumbers": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true,
+                            "length": "$current/.NumObjects"
+                        },
+                        "__PADDING1": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
         "0x00034110": {
             "description_entry": "BCHUNK_TRACK_STREAMING_SECTIONS",
             "schema": {
