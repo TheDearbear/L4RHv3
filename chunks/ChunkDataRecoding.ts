@@ -30,7 +30,7 @@ export default class ChunkDataRecoding {
         schema: Record<string, SubnestField> | null = null,
         chunkId: number | null = null,
         context: ScriptContext
-    ): object | string {
+    ): Record<string, any> | string {
         if (schema == null) {
             return data.toString('base64');
         }
@@ -97,6 +97,10 @@ export default class ChunkDataRecoding {
                 this.utils.behaviour.logger.warn('Unknown type of length property. Treating as single (' + chunk + ':' + name + ')');
             }
 
+            if (!Number.isInteger(length)) {
+                this.utils.behaviour.logger.warn('Length have float value (' + chunk + ':' + name + ')');
+            }
+
             var size: number;
             if (value.type === FieldTypes.STRUCTURE) {
                 if (value.structure == null) {
@@ -131,11 +135,13 @@ export default class ChunkDataRecoding {
             var entryValue: any[] | any;
 
             if (rawLength == null) {
-                entryValue = readData(this, data, value, size * length);
+                entryValue = readData(this, data, value, size);
+                pseudoPointer += size;
             } else {
                 entryValue = [];
                 for (let j = 0; j < length; j++) {
                     entryValue.push(readData(this, data, value, size, j * size));
+                    pseudoPointer += size;
                 }
             }
 
