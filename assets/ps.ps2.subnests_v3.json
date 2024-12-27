@@ -300,6 +300,66 @@
                 }
             }
         },
+        "0x00034113": {
+            "description_entry": "BCHUNK_DISK_BUNDLE_SECTION",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "jagged_array",
+                    "length": "$math:a=0x14,action=\"plus\",b=$math:a=8,action=\"multiply\",b=$current/.NumMembers//",
+                    "structure": {
+                        "FileOffset": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FileSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "SectionName": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "string",
+                            "length": 11
+                        },
+                        "NumMembers": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Members": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": "$current/.NumMembers",
+                            "structure": {
+                                "SectionNumber": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "FileOffset": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "pSection": {
+                                    "type": "pointer",
+                                    "endian": "little",
+                                    "unsigned": true,
+                                    "modifier": "padding"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "0x00034146": {
             "description_entry": "BCHUNK_TRACK_POSITION_MARKERS",
             "data_align": 16,
