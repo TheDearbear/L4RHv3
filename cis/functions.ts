@@ -94,7 +94,7 @@ export function rawsize(context: ScriptContext): number {
 
     var pseudoPointer = getRawPseudoPointer(context.globalRawStorage, backtrace);
     for (let i = 0; i < lastIndex; i++) {
-        pseudoPointer += currentLayer[i].length;
+        pseudoPointer += currentLayer[i].length + 8;
     }
 
     // Also count chunk header
@@ -215,7 +215,7 @@ function getRawPseudoPointer(global: RawChunk[], backtrace: number[]): number {
         let layerIndex = backtrace[i];
 
         for (let j = 0; j < layerIndex; j++) {
-            pseudoPointer += layer[j].length;
+            pseudoPointer += layer[j].length + 8;
         }
 
         if (layerIndex >= layer.length) {
@@ -228,6 +228,9 @@ function getRawPseudoPointer(global: RawChunk[], backtrace: number[]): number {
         }
 
         layer = chunk.data;
+        
+        // Count header of parent chunk
+        pseudoPointer += 8;
     }
 
     return pseudoPointer;
