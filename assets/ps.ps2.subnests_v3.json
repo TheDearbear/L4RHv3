@@ -1,0 +1,1752 @@
+{
+    "$schema": "../subnests.schema.json",
+    "header": {
+        "name": "Subnests file for PS2 version of NFS ProStreet",
+        "description": "Based on PROSTREET08EUROPERURELEASE.ELF",
+        "subnests_version": 3
+    },
+    "subnests": {
+        "0x00000000": {
+            "description_entry": "BCHUNK_NULL",
+            "ignore": true
+        },
+        "0x00017006": {
+            "description_entry": "BCHUNK_COLOUR_CUBE"
+        },
+        "0x00030201": {
+            "description_entry": "BCHUNK_FENG_FONT",
+            "schema": {
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Texture": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "pTextureInfo": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                },
+                "pFont": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "mfZValue": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "FontHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "pFontName": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "pTextureName": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Height": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "fBaselineOffset": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "fLeadingScale": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                }
+            }
+        },
+        "0x00034111": {
+            "description_entry": "BCHUNK_TRACK_STREAMING_INFO",
+            "schema": {
+                "FileSize": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": 2
+                }
+            }
+        },
+        "0x00034112": {
+            "description_entry": "BCHUNK_TRACK_STREAMING_BARRIERS",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x10/",
+                    "structure": {
+                        "Points": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 2,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034146": {
+            "description_entry": "BCHUNK_TRACK_POSITION_MARKERS",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x30/",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Param": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Position": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "pad": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false,
+                                    "modifier": "padding"
+                                }
+                            }
+                        },
+                        "TrackNumber": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "SceneryGroupNumber": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "length": 9
+                        },
+                        "NumSceneryGroups": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Angle": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                }
+            }
+        },
+        "0x80034147": {
+            "description_entry": "BCHUNK_TRACK_PATH"
+        },
+        "0x0003414A": {
+            "description_entry": "BCHUNK_TRACK_PATH_ZONES",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "jagged_array",
+                    "length": "$current/.MemoryImageSize",
+                    "structure": {
+                        "Type": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Position": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "Direction": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "Elevation": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ZoneSource": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "CachedIndex": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "VisitInfo": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "pUserData": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "BBoxMin": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "BBoxMax": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "Data": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 4
+                        },
+                        "NumPoints": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "MemoryImageSize": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Points": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": "$current/.NumPoints",
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "0x0003414D": {
+            "description_entry": "BCHUNK_TRACK_PATH_BARRIER",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x18/",
+                    "structure": {
+                        "Points": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 2,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "Enabled": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Pad": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "PlayerBarrier": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "LeftHanded": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "GroupHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                }
+            }
+        },
+        "0x80034150": {
+            "description_entry": "BCHUNK_VISIBLE_SECTIONS"
+        },
+        "0x00034151": {
+            "description_entry": "BCHUNK_VISIBLE_SECTION_MANAGER_INFO",
+            "schema": {
+                "LODOffset": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "TheDrivableSectionsInRegion": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "NumSections": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Sections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 512
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034152": {
+            "description_entry": "BCHUNK_VISIBLE_SECTION_BOUNDARIES",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "jagged_array",
+                    "length": "$math:a=0x30,action=\"plus\",b=$math:a=8,action=\"multiply\",b=$current/.NumPoints//",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "SectionNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumPoints": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PanoramaBoundary": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "DepthSectionNumbers": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 2
+                        },
+                        "DepthNames": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true,
+                            "length": 2
+                        },
+                        "BBoxMin": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "BBoxMax": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "Points": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": "$current/.NumPoints",
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034153": {
+            "description_entry": "BCHUNK_DRIVABLE_SCENERY_SECTIONS",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "jagged_array",
+                    "length": "$math:a=0x14,action=\"plus\",b=$math:a=2,action=\"multiply\",b=$current/.MaxVisibleSections//",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "pBoundary": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "SectionNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "MostVisibleSections": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "MaxVisibleSections": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumVisibleSections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "VisibleSections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": "$current/.MaxVisibleSections"
+                        },
+                        "Padding": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034154": {
+            "description_entry": "BCHUNK_0x00034154"
+        },
+        "0x00034155": {
+            "description_entry": "BCHUNK_LOADING_SECTION",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x4C/",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "Name": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "string",
+                            "length": 15
+                        },
+                        "DefaultFlag": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumDrivableSections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "DrivableSections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 16
+                        },
+                        "NumExtraSections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ExtraSections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 8
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034156": {
+            "description_entry": "BCHUNK_ELEV_POLYS",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x40/",
+                    "structure": {
+                        "DepthName": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Padding": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "length": 3
+                        },
+                        "Vertex": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 3,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "pad": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false,
+                                    "modifier": "padding"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034202": {
+            "description_entry": "BCHUNK_SUN",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x110/",
+                    "structure": {
+                        "Version": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Name": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "string",
+                            "length": 24
+                        },
+                        "PositionX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionZ": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "CarShadowPositionX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "CarShadowPositionY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "CarShadowPositionZ": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "SunLayers": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 6,
+                            "structure": {
+                                "Texture": {
+                                    "type": "int32",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "AlphaType": {
+                                    "type": "int32",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "IntensityScale": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "Size": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "OffsetX": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "OffsetY": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "Colour": {
+                                    "type": "int8",
+                                    "endian": "little",
+                                    "unsigned": false,
+                                    "length": 4
+                                },
+                                "Angle": {
+                                    "type": "int32",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "SweepAngleAmount": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034250": {
+            "description_entry": "BCHUNK_WEATHER_MAN",
+            "data_align": 16,
+            "schema": {
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Version": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumRegions": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Regions": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$current/.NumRegions",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "Name": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "string",
+                            "length": 32
+                        },
+                        "GroupName": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "string",
+                            "length": 32
+                        },
+                        "Type": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FogColour": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "FogStart": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Parameter1": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionZ": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Radius": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Intensity": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FarFalloffStart": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FogFalloff": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FogFalloffX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FogFalloffY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ScreenPosX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ScreenPosY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "GroupNameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Shape": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Blend": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "modifier": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "inFlags": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "effect": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "dynamic": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                }
+            }
+        },
+        "0x80037020": {
+            "description_entry": "BCHUNK_ANIM_SCENE_DATA"
+        },
+        "0x00037030": {
+            "description_entry": "BCHUNK_ANIM_SCENE_HEADER_DATA"
+        },
+        "0x00037040": {
+            "description_entry": "BCHUNK_ANIM_SCENE_ENTITY_DATA",
+            "data_align": 16,
+            "schema": {
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "mType": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "mData": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "mSize": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                }
+            }
+        },
+        "0x00037045": {
+            "description_entry": "BCHUNK_ANIM_SCENE_ENTITY_CLIP_DATA",
+            "data_align": 16
+        },
+        "0x80037050": {
+            "description_entry": "BCHUNK_ANIM_DIRECTORY_DATA"
+        },
+        "0x00037060": {
+            "description_entry": "BCHUNK_ANIM_DIRECTORY",
+            "schema": {
+                "mAnimSceneCount": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mAnimSceneLoadInfo": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": 256,
+                    "structure": {
+                        "mAnimSceneHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mSharedFileCount": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mSharedFileStartIndex": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mSceneFileCount": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mSceneStartIndex": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mAnimType": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mSceneFlags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mICEContext": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                },
+                "mAnimFileLoadInfo": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "mAnimFileCount": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mAnimFileNameTable": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 64,
+                            "structure": {
+                                "FileName": {
+                                    "type": "int8",
+                                    "endian": "little",
+                                    "unsigned": true,
+                                    "modifier": "string",
+                                    "length": 256
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "0x00037070": {
+            "description_entry": "BCHUNK_ANIM_CANDIDATE_DATA",
+            "schema": {
+                "mRaceStartAnimCandidateCount": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mRaceEndAnimCandidateCount": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mOnlineRaceStartAnimCandidateCount": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mForwardTrackRaceAnimEnableMaskCount": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mReverseTrackRaceAnimEnableMaskCount": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mMomentAnimCount": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mRaceStartAnimCandidates": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": 8,
+                    "structure": {
+                        "mSceneHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mCameraTrack": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mFlags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mMinimumNumberOfCars": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mMaximumNumberOfCars": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mCarConfig": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mPad2": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "mPad3": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "mPad4": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                },
+                "mRaceEndAnimCandidates": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": 8,
+                    "structure": {
+                        "mSceneHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mCameraTrack": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mFlags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mWinnerCarNumber": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mLoserCarNumber": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                },
+                "mOnlineRaceStartAnimCandidates": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": 8,
+                    "structure": {
+                        "mSceneHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mCameraTrack": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mFlags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mMinimumNumberOfCars": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mMaximumNumberOfCars": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mCarConfig": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mPad2": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "mPad3": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "mPad4": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "mPerCarCameraTracks": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "length": 8
+                        }
+                    }
+                },
+                "mForwardTrackRaceAnimEnableMasks": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": 120,
+                    "structure": {
+                        "mTrackNum": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mOnlineRaceStartAnimEnable": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mRaceStartAnimEnable1": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mRaceStartAnimEnable2": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mRaceEndAnimEnable": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                },
+                "mReverseTrackRaceAnimEnableMasks": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": 120,
+                    "structure": {
+                        "mTrackNum": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mOnlineRaceStartAnimEnable": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mRaceStartAnimEnable1": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mRaceStartAnimEnable2": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mRaceEndAnimEnable": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                },
+                "mMomentAnim": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": 64,
+                    "structure": {
+                        "mSceneHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mMomentType": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                }
+            }
+        },
+        "0x8003B500": {
+            "description_entry": "BCHUNK_SOUND_STICHS"
+        },
+        "0x0003B502": {
+            "description_entry": "BCHUNK_SOUND_STICH",
+            "schema": {
+                "NameHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "Volume": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "StichIndex": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "eStichType": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Num_SampleRefs": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "RND_Pitch": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "RND_Vol": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "__PADDING1": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "pSampleRefList": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                }
+            }
+        },
+        "0x0003B801": {
+            "description_entry": "BCHUNK_COLLISION_PACK",
+            "data_align": 16,
+            "schema": {
+                "CarpHeader": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "mCrpSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mSectionNumber": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mFlags": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "mLastAddress": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                },
+                "Payload": {
+                    "#": "TODO",
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "length": 1,
+                    "__length": "$current/.CarpHeader.mCrpSize"
+                }
+            }
+        },
+        "0x2053A6E2": {
+            "description_entry": "BCHUNK_TRACK_OBB",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x60/",
+                    "structure": {
+                        "TypeNameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Pad": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 3,
+                            "modifier": "padding"
+                        },
+                        "Matrix": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "v0": {
+                                    "type": "structure",
+                                    "endian": "little",
+                                    "unsigned": false,
+                                    "structure": {
+                                        "x": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "y": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "z": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "w": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        }
+                                    }
+                                },
+                                "v1": {
+                                    "type": "structure",
+                                    "endian": "little",
+                                    "unsigned": false,
+                                    "structure": {
+                                        "x": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "y": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "z": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "w": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        }
+                                    }
+                                },
+                                "v2": {
+                                    "type": "structure",
+                                    "endian": "little",
+                                    "unsigned": false,
+                                    "structure": {
+                                        "x": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "y": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "z": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "w": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        }
+                                    }
+                                },
+                                "v3": {
+                                    "type": "structure",
+                                    "endian": "little",
+                                    "unsigned": false,
+                                    "structure": {
+                                        "x": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "y": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "z": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        },
+                                        "w": {
+                                            "type": "float",
+                                            "endian": "little",
+                                            "unsigned": false
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "Dims": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "pad": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false,
+                                    "modifier": "padding"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "0x55F3C2A5": {
+            "description_entry": "BCHUNK_AI_RACELINE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x10/",
+                    "structure": {
+                        "mKey": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mCountLeft": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mCountRight": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mCountBest": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
