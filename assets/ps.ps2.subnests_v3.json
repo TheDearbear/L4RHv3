@@ -301,7 +301,7 @@
             }
         },
         "0x00034113": {
-            "description_entry": "BCHUNK_DISK_BUNDLE_SECTION",
+            "description_entry": "BCHUNK_DISK_BUNDLE_SECTIONS",
             "schema": {
                 "Array": {
                     "type": "structure",
@@ -596,7 +596,7 @@
             }
         },
         "0x0003414D": {
-            "description_entry": "BCHUNK_TRACK_PATH_BARRIER",
+            "description_entry": "BCHUNK_TRACK_PATH_BARRIERS",
             "schema": {
                 "Array": {
                     "type": "structure",
@@ -856,7 +856,7 @@
             "description_entry": "BCHUNK_0x00034154"
         },
         "0x00034155": {
-            "description_entry": "BCHUNK_LOADING_SECTION",
+            "description_entry": "BCHUNK_LOADING_SECTIONS",
             "schema": {
                 "Array": {
                     "type": "structure",
@@ -970,7 +970,7 @@
             }
         },
         "0x00034202": {
-            "description_entry": "BCHUNK_SUN",
+            "description_entry": "BCHUNK_SUNS",
             "data_align": 16,
             "schema": {
                 "Array": {
@@ -1762,7 +1762,7 @@
             }
         },
         "0x62A653A0": {
-            "description_entry": "BCHUNK_TRACK_OBB",
+            "description_entry": "BCHUNK_TRACK_OBBS",
             "data_align": 16,
             "schema": {
                 "Array": {
@@ -1931,7 +1931,7 @@
             }
         },
         "0x55F3C2A5": {
-            "description_entry": "BCHUNK_AI_RACELINE",
+            "description_entry": "BCHUNK_AI_RACELINES",
             "schema": {
                 "Array": {
                     "type": "structure",
