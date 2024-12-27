@@ -110,7 +110,7 @@
                     "description": "Additional modifier for field types that support it",
                     "type": "string",
                     "enum": [
-                        "array",
+                        "jagged_array",
                         "string",
                         "padding"
                     ]

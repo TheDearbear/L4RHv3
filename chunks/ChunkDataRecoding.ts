@@ -1,4 +1,5 @@
 import FieldTypes from '../FieldTypes';
+import Settings from '../Settings';
 import SubnestField from '../SubnestField';
 import Utilities from '../Utilities';
 import ContextInlineScript from '../cis/ContextInlineScript';
@@ -43,7 +44,7 @@ export default class ChunkDataRecoding {
             let rawLength = value.length;
 
             if (typeof value.modifier === 'string' &&
-                value.modifier != 'array' &&
+                value.modifier != 'jagged_array' &&
                 value.modifier != 'string' &&
                 value.modifier != 'padding'
             ) {
@@ -51,10 +52,12 @@ export default class ChunkDataRecoding {
             }
 
             if (value.modifier == 'string' && value.type !== FieldTypes.INT8) {
-                throw new Error('String modifier can be applied only to int8');
+                throw new Error('String modifier can be applied only to int8 (' + chunk + ':' + name + ')');
             }
 
-            if (typeof rawLength === 'string') {
+            var isJaggedArray = value.modifier == 'jagged_array';
+
+            if (typeof rawLength === 'string' && !isJaggedArray) {
                 let localContext = new ScriptContext(
                     result,
                     context.globalStorage,
@@ -68,32 +71,23 @@ export default class ChunkDataRecoding {
                 rawLength = executeResult instanceof ReferencedValue ? executeResult.get() : executeResult;
             }
 
-            if (value.modifier == 'string' && typeof rawLength !== 'number' && typeof rawLength !== 'object') {
-                throw new Error('Length of string must be specified');
+            if (value.modifier == 'string' && typeof rawLength !== 'number') {
+                throw new Error('Length of string must be specified (' + chunk + ':' + name + ')');
             }
 
-            if (value.modifier == 'array' && typeof rawLength !== 'number' && typeof rawLength !== 'object') {
-                throw new Error('Length of array must be specified');
+            if (isJaggedArray && value.type !== FieldTypes.STRUCTURE) {
+                throw new Error('Jagged array modifier can only be applied to structure (' + chunk + ':' + name + ')');
             }
 
-            var dataTooSmallError = 'Provided schema requires bigger data buffer than provided (' + chunk + ':' + name + ')';
+            if (isJaggedArray && typeof rawLength !== 'string') {
+                throw new Error('Size of array\'s element must be specified as ContextInlineScript (' + chunk + ':' + name + ')');
+            }
 
             var length = 1;
-
             if (typeof rawLength === 'number') {
                 length = rawLength;
             }
-            else if (typeof rawLength === 'object') {
-                var lengthOfLength = this.utils.primitiveByteLength((rawLength as SubnestField).type);
-                if (data.length < lengthOfLength) {
-                    this.utils.behaviour.logger.error(dataTooSmallError);
-                    break;
-                }
-
-                length = this.decodeSingle(data, rawLength as SubnestField);
-                data = data.subarray(lengthOfLength);
-            }
-            else if (rawLength != null) {
+            else if (!isJaggedArray && rawLength != null) {
                 this.utils.behaviour.logger.warn('Unknown type of length property. Treating as single (' + chunk + ':' + name + ')');
             }
 
@@ -101,20 +95,22 @@ export default class ChunkDataRecoding {
                 this.utils.behaviour.logger.warn('Length have float value (' + chunk + ':' + name + ')');
             }
 
-            var size: number;
-            if (value.type === FieldTypes.STRUCTURE) {
-                if (value.structure == null) {
-                    throw new Error('Field specified as structure but no layout present (' + chunk + ':' + name + ')');
-                }
+            var size = 0;
+            if (!isJaggedArray) {
+                if (value.type === FieldTypes.STRUCTURE) {
+                    if (value.structure == null) {
+                        throw new Error('Field specified as structure but no layout present (' + chunk + ':' + name + ')');
+                    }
 
-                size = this.utils.structureByteLength(value.structure);
-            } else {
-                size = this.utils.primitiveByteLength(value.type);
-            }
+                    size = this.utils.structureByteLength(value.structure);
+                } else {
+                    size = this.utils.primitiveByteLength(value.type);
+                }
             
-            if (data.length < size * length) {
-                this.utils.behaviour.logger.error(dataTooSmallError);
-                break;
+                if (data.length < size * length && typeof rawLength !== 'number') {
+                    this.utils.behaviour.logger.error('Provided schema requires bigger data buffer than provided (' + chunk + ':' + name + ')');
+                    break;
+                }
             }
 
             function readData(
@@ -137,6 +133,35 @@ export default class ChunkDataRecoding {
             if (rawLength == null) {
                 entryValue = readData(this, data, value, size);
                 pseudoPointer += size;
+            } else if (isJaggedArray) {
+                entryValue = [];
+
+                let recodingContext = new ChunkDataRecoding(new Utilities(Object.assign(new Settings(), this.utils.behaviour)));
+                recodingContext.utils.behaviour.suppressExtraDataWarning = true;
+
+                let localContext = new ScriptContext(
+                    {},
+                    context.globalStorage,
+                    context.backtrace,
+                    context.globalRawStorage,
+                    context.backtraceRaw,
+                    this.utils
+                );
+
+                while (data.length > 0) {
+                    let element = recodingContext.decode(data, pseudoPointer, value.structure, chunkId, context);
+                    localContext.currentChunk = element as Record<string, any>;
+                    let executeResult = ContextInlineScript.execute(value.length as string, localContext);
+                    let size = executeResult instanceof ReferencedValue ? executeResult.get() : executeResult;
+
+                    if (typeof size !== 'number') {
+                        throw new Error('Result of different type was returned after calculating element size (' + chunk + ':' + name + ')');
+                    }
+                    
+                    entryValue.push(element);
+                    data = data.subarray(size);
+                    pseudoPointer += size;
+                }
             } else {
                 entryValue = [];
                 for (let j = 0; j < length; j++) {
