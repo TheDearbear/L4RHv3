@@ -103,6 +103,34 @@
                 }
             }
         },
+        "0x00034108": {
+            "description_entry": "BCHUNK_SCENERY_OVERRIDE_INFO_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=6/",
+                    "structure": {
+                        "SectionNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "InstanceNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ExcludeFlags": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                }
+            }
+        },
         "0x00034110": {
             "description_entry": "BCHUNK_TRACK_STREAMING_SECTIONS",
             "schema": {
