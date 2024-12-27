@@ -120,16 +120,13 @@ export default class ChunkDataRecoding {
                 size: number | undefined,
                 offset: number = 0
             ): any {
-                var dataEnd = size != undefined ? offset + size : undefined;
-                var result: any[] | any;
-
                 if (value.type === FieldTypes.STRUCTURE) {
-                    result = ctx.decode(data.subarray(offset, dataEnd), pseudoPointer, value.structure, chunkId, context);
-                } else {
-                    result = ctx.decodeSingle(data, value, offset);
-                }
+                    var dataEnd = size != undefined ? offset + size : undefined;
 
-                return result;
+                    return ctx.decode(data.subarray(offset, dataEnd), pseudoPointer, value.structure, chunkId, context);
+                }
+                
+                return ctx.decodeSingle(data, value, offset);
             }
 
             var entryValue: any;
