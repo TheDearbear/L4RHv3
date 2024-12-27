@@ -14,4 +14,6 @@ export default class Settings {
     public logger: Logger = new StubLogger();
     /** Documentation storage for subnests */
     public docs: DocsManager = new DocsManager();
+    /** Suppresses any logger warning about extra data after decoding data */
+    public suppressExtraDataWarning: Boolean = false;
 };

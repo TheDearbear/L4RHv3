@@ -29,6 +29,10 @@ if (args.getTag('export-paddings')) {
     settings.exportPaddings = true;
 }
 
+if (args.getTag('suppress-extra-data-warning')) {
+    settings.suppressExtraDataWarning = true;
+}
+
 // Subnests path CLI argument
 {
     let tag = args.getTag('subnests');

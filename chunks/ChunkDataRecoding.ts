@@ -149,7 +149,7 @@ export default class ChunkDataRecoding {
             }
         }
 
-        if (data.length > 0) {
+        if (data.length > 0 && !this.utils.behaviour.suppressExtraDataWarning) {
             this.utils.behaviour.logger.warn('Provided schema requires smaller data buffer than provided (' + chunk + ')');
         }
 
