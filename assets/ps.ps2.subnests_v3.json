@@ -2071,6 +2071,287 @@
                 }
             }
         },
+        "0x8003B900": {
+            "description_entry": "BCHUNK_BOUNDS_PACK"
+        },
+        "0x0003B901": {
+            "description_entry": "BCHUNK_BOUNDS",
+            "data_align": 16,
+            "schema": {
+                "Collection": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "fNameHash": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "mCRC": {
+                                    "type": "int32",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "fNumBounds": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "fIsResolved": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "fPad": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        }
+                    }
+                },
+                "Bounds": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$current/.Collection.fNumBounds",
+                    "structure": {
+                        "fOrientation": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "z": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "w": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                }
+                            }
+                        },
+                        "fPosition": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "z": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                }
+                            }
+                        },
+                        "fFlags": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "fHalfDimensions": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "z": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                }
+                            }
+                        },
+                        "fNumChildren": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "fPCloudIndex": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "fPivot": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "z": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsinged": false
+                                }
+                            }
+                        },
+                        "fChildIndex": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "fAttributeName": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "mCRC": {
+                                    "type": "int32",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "fSurface": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "mCRC": {
+                                    "type": "int32",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "fNameHash": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "mCRC": {
+                                    "type": "int32",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "fCollection": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                },
+                "PCloudHeader": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "fNumPClouds": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "fPad": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding",
+                            "length": 3
+                        }
+                    }
+                },
+                "PCloud": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "jagged_array",
+                    "length": "$math:a=0x10,action=\"plus\",b=$math:a=0x10,action=\"multiply\",b=$current/.fNumVerts//",
+                    "structure": {
+                        "fNumVerts": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "fPad": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding",
+                            "length": 2
+                        },
+                        "fPList": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "Verts": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": "$current/.fNumVerts",
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "0x62A653A0": {
             "description_entry": "BCHUNK_TRACK_OBBS",
             "data_align": 16,
