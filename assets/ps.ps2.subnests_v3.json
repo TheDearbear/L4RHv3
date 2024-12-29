@@ -200,6 +200,93 @@
                 }
             }
         },
+        "0x8003410B": {
+            "description_entry": "BCHUNK_SCENERIES_HEIRARCHY"
+        },
+        "0x0003410C": {
+            "description_entry": "BCHUNK_SCENERY_HEIRARCHY",
+            "schema": {
+                "ModelHeirarchy": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "mNameHash": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "mCRC": {
+                                    "type": "int32",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "mNumNodes": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mFlags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "pad": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                },
+                "Nodes": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$current/.ModelHeirarchy.mNumNodes",
+                    "structure": {
+                        "mNodeName": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mModelHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mModel": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "mFlags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mParent": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mNumChildren": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mChildIndex": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                }
+            }
+        },
         "0x00034110": {
             "description_entry": "BCHUNK_TRACK_STREAMING_SECTIONS",
             "schema": {
