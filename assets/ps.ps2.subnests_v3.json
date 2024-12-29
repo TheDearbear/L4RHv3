@@ -1847,6 +1847,132 @@
                 }
             }
         },
+        "0x8003B000": {
+            "description_entry": "BCHUNK_QUICK_SPLINES"
+        },
+        "0x8003B001": {
+            "description_entry": "BCHUNK_QUICK_SPLINE"
+        },
+        "0x0003B002": {
+            "description_entry": "BCHUNK_QUICK_SPLINE_HEADER",
+            "data_align": 16,
+            "schema": {
+                "nHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "EndPointType": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "BasisType": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "MaxParam": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "MinParam": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Length": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "ControlPointsDirty": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "BufferWasAllocated": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "MinControlPoints": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "__PADDING1": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "MaxControlPoints": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "NumControlPoints": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "pControlPointBuffer": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "pControlPoints": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "pBasisMatrices": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                }
+            }
+        },
+        "0x0003B003": {
+            "description_entry": "BCHUNK_QUICK_SPLINE_CONTROL_POINTS",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x10/",
+                    "structure": {
+                        "x": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "y": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "z": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "w": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                }
+            }
+        },
         "0x8003B500": {
             "description_entry": "BCHUNK_SOUND_STICHS"
         },
