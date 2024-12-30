@@ -51,6 +51,27 @@ export default class ChunkDataRecoding {
                 throw new Error('Unknown modifier was specified (' + chunk + ':' + name + ')');
             }
 
+            if (value.bitfield != null && value.length != null) {
+                throw new Error('Bitfield cannot be used in array (' + chunk + ':' + name + ')');
+            }
+
+            if (value.bitfield != null && (value.modifier != null && value.modifier != "padding")) {
+                throw new Error('Only "padding" modifier allowed when using bitfield (' + chunk + ':' + name + ')');
+            }
+
+            if (value.bitfield != null && !value.unsigned) {
+                throw new Error('Bitfield can be applied only to unsigned integer field (' + chunk + ':' + name + ')');
+            }
+
+            if (value.bitfield != null &&
+                value.type != FieldTypes.INT8 &&
+                value.type != FieldTypes.INT16 &&
+                value.type != FieldTypes.INT32 &&
+                value.type != FieldTypes.INT64
+            ) {
+                throw new Error('Bitfield can be applied only to integer field (' + chunk + ':' + name + ')');
+            }
+
             if (value.modifier == 'string' && value.type !== FieldTypes.INT8) {
                 throw new Error('String modifier can be applied only to int8 (' + chunk + ':' + name + ')');
             }
@@ -116,24 +137,38 @@ export default class ChunkDataRecoding {
             function readData(
                 ctx: ChunkDataRecoding,
                 data: Buffer,
-                value: SubnestField,
+                result: Record<string, any>,
                 size: number | undefined,
                 offset: number = 0
-            ): any {
+            ) {
                 if (value.type === FieldTypes.STRUCTURE) {
                     var dataEnd = size != undefined ? offset + size : undefined;
 
-                    return ctx.decode(data.subarray(offset, dataEnd), pseudoPointer, value.structure, chunkId, context);
+                    result[name] = ctx.decode(data.subarray(offset, dataEnd), pseudoPointer, value.structure, chunkId, context);
+                    return;
                 }
                 
-                return ctx.decodeSingle(data, value, offset);
+                let decoded = ctx.decodeSingle(data, value, offset);
+                if (value.bitfield == null) {
+                    result[name] = decoded;
+                } else {
+                    let decodedNumber = decoded as number;
+
+                    for (const key in value.bitfield) {
+                        let bitfieldEntry = value.bitfield[key];
+
+                        if (!bitfieldEntry.padding) {
+                            result[key] = (decodedNumber >> bitfieldEntry.offset) & ((1 << bitfieldEntry.width) - 1);
+                        }
+                    }
+                }
             }
 
-            var entryValue: any;
+            var entryValue: Record<string, any> = {};
             var entryOffset = 0;
 
             if (rawLength == null) {
-                entryValue = readData(this, data, value, size);
+                readData(this, data, entryValue, size);
                 pseudoPointer += size;
 
                 if (value.align != null) {
@@ -142,7 +177,7 @@ export default class ChunkDataRecoding {
                     entryOffset = pseudoPointer - previousPointer;
                 }
             } else if (isJaggedArray) {
-                entryValue = [];
+                let array = [];
 
                 let recodingContext = new ChunkDataRecoding(new Utilities(Object.assign(new Settings(), this.utils.behaviour)));
                 recodingContext.utils.behaviour.suppressExtraDataWarning = true;
@@ -157,8 +192,9 @@ export default class ChunkDataRecoding {
                 );
 
                 while (data.length > 0) {
-                    let element = readData(recodingContext, data, value, undefined);
-                    localContext.currentChunk = element as Record<string, any>;
+                    let element: Record<string, any> = {};
+                    readData(recodingContext, data, element, undefined);
+                    localContext.currentChunk = element[name];
                     let executeResult = ContextInlineScript.execute(value.length as string, localContext);
                     let size = executeResult instanceof ReferencedValue ? executeResult.get<number>() : executeResult;
 
@@ -170,15 +206,19 @@ export default class ChunkDataRecoding {
                         size = Utilities.alignDataPointer(pseudoPointer + size, value.align) - pseudoPointer;
                     }
                     
-                    entryValue.push(element);
+                    array.push(element[name]);
                     data = data.subarray(size);
                     pseudoPointer += size;
                 }
+
+                entryValue[name] = array;
             } else {
-                entryValue = [];
+                let array = [];
 
                 for (let j = 0; j < length; j++) {
-                    entryValue.push(readData(this, data, value, size, j * size));
+                    let arrayValue: Record<string, any> = {};
+                    readData(this, data, arrayValue, size, j * size);
+                    array.push(arrayValue[name]);
                     pseudoPointer += size;
                 }
 
@@ -187,15 +227,19 @@ export default class ChunkDataRecoding {
                     pseudoPointer = Utilities.alignDataPointer(previousPointer, value.align);
                     entryOffset = pseudoPointer - previousPointer;
                 }
+
+                entryValue[name] = array;
             }
 
             if (value.type === FieldTypes.INT8 && value.modifier === 'string') {
-                entryValue = Utilities.readAscii(Buffer.from(entryValue));
+                entryValue[name] = Utilities.readAscii(Buffer.from(entryValue[name]));
             }
 
             data = data.subarray(size * length + entryOffset);
             if (value.modifier !== 'padding' || this.utils.behaviour.exportPaddings) {
-                result[name] = entryValue;
+                for (const key in entryValue) {
+                    result[key] = entryValue[key];
+                }
             }
         }
 

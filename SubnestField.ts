@@ -1,3 +1,5 @@
+import BitfieldEntry from "./BitfieldEntry";
+
 export default class SubnestField {
     public type: string;
     public endian: string;
@@ -6,6 +8,7 @@ export default class SubnestField {
     public structure: Record<string, SubnestField> | undefined;
     public length: number | string | SubnestField | undefined;
     public align: number | undefined;
+    public bitfield: Record<string, BitfieldEntry> | undefined;
 
     constructor(
         type: string,
@@ -14,7 +17,8 @@ export default class SubnestField {
         modifier: string | undefined = undefined,
         structure: Record<string, SubnestField> | undefined = undefined,
         length: number | SubnestField | undefined = undefined,
-        align: number | undefined = undefined
+        align: number | undefined = undefined,
+        bitfield: Record<string, BitfieldEntry> | undefined = undefined
     ) {
         this.type = type;
         this.endian = endian;
@@ -23,5 +27,6 @@ export default class SubnestField {
         this.structure = structure;
         this.length = length;
         this.align = align;
+        this.bitfield = bitfield;
     }
 }

@@ -140,6 +140,35 @@
                     "description": "Aligns position up to specified value after field",
                     "type": "integer",
                     "minimum": 0
+                },
+                "bitfield": {
+                    "description": "Allows to separate specific bits into different fields",
+                    "type": "object",
+                    "patternProperties": {
+                        "...": {
+                            "type": "object",
+                            "properties": {
+                                "offset": {
+                                    "description": "Offset of field inside bitfield",
+                                    "type": "integer",
+                                    "minimum": 0
+                                },
+                                "width": {
+                                    "description": "Width of field in bits",
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "padding": {
+                                    "description": "Hides field when disassembling bitfield",
+                                    "type": "boolean"
+                                }
+                            },
+                            "required": [
+                                "offset",
+                                "width"
+                            ]
+                        }
+                    }
                 }
             },
             "required": [
