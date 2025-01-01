@@ -126,7 +126,7 @@ export default class ContextInlineScript {
             length += this.SYMBOL_ACCESSOR.length;
             script = script.substring(this.SYMBOL_ACCESSOR.length);
 
-            let fieldNameStr = this.peekString(script, true, [this.SYMBOL_ACCESSOR, this.SYMBOL_INVOKE]);
+            let fieldNameStr = this.peekString(script, true, [this.SYMBOL_ACCESSOR, this.SYMBOL_INVOKE, this.SYMBOL_NEXT_ARG]);
             let fieldNameNumber = this.peekNumber(script);
             
             let fieldName = fieldNameNumber?.result != null && fieldNameNumber.seeked === fieldNameStr.seeked ?
