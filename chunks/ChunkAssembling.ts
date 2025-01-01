@@ -109,15 +109,21 @@ export default class ChunkAssembling {
                 globalRaw || raw,
                 currentRawBacktrace
             );
-            let outValue = recoder.decode(data, pseudoPointer, doc.schema, chunk.id, context);
+            try {
+                let outValue = recoder.decode(data, pseudoPointer, doc.schema, chunk.id, context);
 
-            if (typeof outValue === 'string') {
-                let outValueRaw: Record<string, string> = {};
-                outValueRaw[DisassembledChunk.RAW_VALUE] = outValue;
+                if (typeof outValue === 'string') {
+                    let outValueRaw: Record<string, string> = {};
+                    outValueRaw[DisassembledChunk.RAW_VALUE] = outValue;
 
-                output[outIndex].data = outValueRaw;
-            } else {
-                output[outIndex].data = outValue;
+                    output[outIndex].data = outValueRaw;
+                } else {
+                    output[outIndex].data = outValue;
+                }
+            } catch (e) {
+                this.settings.logger.critical('Cannot disassemble chunk', Utilities.uint32AsHex(chunk.id), 'due to error');
+                this.settings.logger.critical(e);
+                throw e;
             }
 
             pseudoPointer += chunk.length;
