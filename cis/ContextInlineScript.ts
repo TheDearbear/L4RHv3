@@ -23,7 +23,9 @@ export default class ContextInlineScript {
         rawsize: CISFunctions.rawsize,
         newobject: CISFunctions.newobject,
         strjoin: CISFunctions.strjoin,
-        math: CISFunctions.math
+        math: CISFunctions.math,
+        index: CISFunctions.index,
+        root: CISFunctions.root
     };
 
     public static readonly SYMBOL_START = '$';

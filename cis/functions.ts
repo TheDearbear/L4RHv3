@@ -169,6 +169,26 @@ export function math(
     throw new Error('Unknown action was passed');
 }
 
+export function index(context: ScriptContext): number {
+    var index = context.extraProperties[ScriptContext.PROPERTY_INDEX];
+
+    if (typeof index !== 'number') {
+        throw new Error('Index is not defined or have wrong type');
+    }
+
+    return index;
+}
+
+export function root(context: ScriptContext): object {
+    var root = context.extraProperties[ScriptContext.PROPERTY_ROOT];
+
+    if (typeof root !== 'object') {
+        throw new Error('Invalid root object');
+    }
+
+    return root;
+}
+
 function getLayer(global: DisassembledChunk[], backtrace: number[]): DisassembledChunk[] {
     var layer = global;
     for (let i = 0; i < backtrace.length; i++) {
