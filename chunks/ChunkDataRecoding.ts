@@ -85,6 +85,7 @@ export default class ChunkDataRecoding {
                     context.backtrace,
                     context.globalRawStorage,
                     context.backtraceRaw,
+                    context.extraProperties,
                     this.utils
                 );
                 let executeResult = ContextInlineScript.execute(rawLength, localContext);
@@ -182,16 +183,24 @@ export default class ChunkDataRecoding {
                 let recodingContext = new ChunkDataRecoding(new Utilities(Object.assign(new Settings(), this.utils.behaviour)));
                 recodingContext.utils.behaviour.suppressExtraDataWarning = true;
 
+                let index = 0;
+                let originalProperties = context.extraProperties;
+                let extraProperties = Object.assign({}, originalProperties);
+
+                context.extraProperties = extraProperties;
                 let localContext = new ScriptContext(
                     {},
                     context.globalStorage,
                     context.backtrace,
                     context.globalRawStorage,
                     context.backtraceRaw,
+                    extraProperties,
                     this.utils
                 );
 
                 while (data.length > 0) {
+                    extraProperties[ScriptContext.PROPERTY_INDEX] = index++;
+                    extraProperties[ScriptContext.PROPERTY_ROOT] = result;
                     let element: Record<string, any> = {};
                     readData(recodingContext, data, element, undefined);
                     localContext.currentChunk = element[name];
@@ -212,12 +221,20 @@ export default class ChunkDataRecoding {
                 }
 
                 entryValue[name] = array;
+                context.extraProperties = originalProperties;
             } else {
                 let array = [];
 
+                let originalProperties = context.extraProperties;
+                let extraProperties = Object.assign({}, originalProperties);
+                context.extraProperties = extraProperties;
+
                 for (let j = 0; j < length; j++) {
                     let arrayValue: Record<string, any> = {};
+
+                    extraProperties[ScriptContext.PROPERTY_INDEX] = j;
                     readData(this, data, arrayValue, size, j * size);
+                    
                     array.push(arrayValue[name]);
                     pseudoPointer += size;
                 }
@@ -229,6 +246,7 @@ export default class ChunkDataRecoding {
                 }
 
                 entryValue[name] = array;
+                context.extraProperties = originalProperties;
             }
 
             if (value.type === FieldTypes.INT8 && value.modifier === 'string') {

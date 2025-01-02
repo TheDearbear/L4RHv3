@@ -85,6 +85,7 @@ export function rawsize(context: ScriptContext): number {
                 [],
                 context.globalStorage, [],
                 context.globalRawStorage, [...context.backtraceRaw, i],
+                context.extraProperties,
                 context.utils);
             length += rawsize(newContext);
         });
