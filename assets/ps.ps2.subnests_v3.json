@@ -103,613 +103,6 @@
                 }
             }
         },
-        "0x80134000": {
-            "description_entry": "BCHUNK_SOLID_LIST"
-        },
-        "0x80134001": {
-            "description_entry": "BCHUNK_SOLID_LIST_HEADER_CHUNKS"
-        },
-        "0x00134002": {
-            "description_entry": "BCHUNK_SOLID_LIST_HEADER",
-            "schema": {
-                "Next": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "Prev": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "Version": {
-                    "type": "int32",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "NumSolids": {
-                    "type": "int32",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "Filename": {
-                    "type": "int8",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "string",
-                    "length": 56
-                },
-                "GroupName": {
-                    "type": "int8",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "string",
-                    "length": 32
-                },
-                "PermChunkByteOffset": {
-                    "type": "int32",
-                    "endian": "little",
-                    "unsigned": true
-                },
-                "PermChunkByteSize": {
-                    "type": "int32",
-                    "endian": "little",
-                    "unsigned": true
-                },
-                "MaxSolidChunkByteAlignment": {
-                    "type": "int16",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "EndianSwapped": {
-                    "type": "int16",
-                    "endian": "little",
-                    "unsigned": false,
-                    "modifier": "padding"
-                },
-                "SolidIndexEntryTable": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "SolidStreamEntryTable": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "NumTexturePacks": {
-                    "type": "int16",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "NumDefaultTextures": {
-                    "type": "int16",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "TexturePackList": {
-                    "type": "structure",
-                    "endian": "little",
-                    "unsigned": false,
-                    "modifier": "padding",
-                    "structure": {
-                        "HeadNode": {
-                            "type": "structure",
-                            "endian": "little",
-                            "unsigned": false,
-                            "structure": {
-                                "Next": {
-                                    "type": "pointer",
-                                    "endian": "little",
-                                    "unsigned": true,
-                                    "modifier": "padding"
-                                },
-                                "Prev": {
-                                    "type": "pointer",
-                                    "endian": "little",
-                                    "unsigned": true,
-                                    "modifier": "padding"
-                                }
-                            }
-                        }
-                    }
-                },
-                "DefaultTextureList": {
-                    "type": "structure",
-                    "endian": "little",
-                    "unsigned": false,
-                    "modifier": "padding",
-                    "structure": {
-                        "HeadNode": {
-                            "type": "structure",
-                            "endian": "little",
-                            "unsigned": false,
-                            "structure": {
-                                "Next": {
-                                    "type": "pointer",
-                                    "endian": "little",
-                                    "unsigned": true,
-                                    "modifier": "padding"
-                                },
-                                "Prev": {
-                                    "type": "pointer",
-                                    "endian": "little",
-                                    "unsigned": true,
-                                    "modifier": "padding"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "0x00134003": {
-            "description_entry": "BCHUNK_SOLID_INDEX_ENTRY_TABLE",
-            "schema": {
-                "Array": {
-                    "type": "structure",
-                    "endian": "little",
-                    "unsigned": false,
-                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x8/",
-                    "structure": {
-                        "NameHash": {
-                            "type": "int32",
-                            "endian": "little",
-                            "unsigned": true
-                        },
-                        "Solid": {
-                            "type": "pointer",
-                            "endian": "little",
-                            "unsigned": true,
-                            "modifier": "padding"
-                        }
-                    }
-                }
-            }
-        },
-        "0x00134004": {
-            "description_entry": "BCHUNK_SOLID_STREAM_ENTRY_TABLE",
-            "schema": {
-                "Array": {
-                    "type": "structure",
-                    "endian": "little",
-                    "unsigned": false,
-                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x18/",
-                    "structure": {
-                        "NameHash": {
-                            "type": "int32",
-                            "endian": "little",
-                            "unsigned": true
-                        },
-                        "ChunkByteOffset": {
-                            "type": "int32",
-                            "endian": "little",
-                            "unsigned": true
-                        },
-                        "ChunkByteSize": {
-                            "type": "int32",
-                            "endian": "little",
-                            "unsigned": false
-                        },
-                        "UncompressedSize": {
-                            "type": "int32",
-                            "endian": "little",
-                            "unsigned": false
-                        },
-                        "UserFlags": {
-                            "type": "int8",
-                            "endian": "little",
-                            "unsigned": true
-                        },
-                        "Flags": {
-                            "type": "int8",
-                            "endian": "little",
-                            "unsigned": true
-                        },
-                        "RefCount": {
-                            "type": "int16",
-                            "endian": "little",
-                            "unsigned": true
-                        },
-                        "ChunkData": {
-                            "type": "pointer",
-                            "endian": "little",
-                            "unsigned": true,
-                            "modifier": "padding"
-                        }
-                    }
-                }
-            }
-        },
-        "0x80134008": {
-            "description_entry": "BCHUNK_SOLID_LIST_PLAT_CHUNKS"
-        },
-        "0x80134010": {
-            "description_entry": "BCHUNK_SOLID_CHUNKS"
-        },
-        "0x00134011": {
-            "description_entry": "BCHUNK_SOLID",
-            "data_align": 16,
-            "schema": {
-                "PlatInfo": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "Next": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "Prev": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "Version": {
-                    "type": "int8",
-                    "endian": "little",
-                    "unsigned": true
-                },
-                "EndianSwapped": {
-                    "type": "int8",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "Flags": {
-                    "type": "int16",
-                    "endian": "little",
-                    "unsigned": true
-                },
-                "NameHash": {
-                    "type": "int32",
-                    "endian": "little",
-                    "unsigned": true
-                },
-                "NumPolys": {
-                    "type": "int16",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "NumVerts": {
-                    "type": "int16",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "NumBones": {
-                    "type": "int8",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "NumTextureTableEntries": {
-                    "type": "int8",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "NumLightMaterials": {
-                    "type": "int8",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "NumPositionMarkerTableEntries": {
-                    "type": "int8",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "ReferencedFrameCounter": {
-                    "type": "int32",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "AABBMin": {
-                    "type": "structure",
-                    "endian": "little",
-                    "unsigned": false,
-                    "structure": {
-                        "x": {
-                            "type": "float",
-                            "endian": "little",
-                            "unsigned": false
-                        },
-                        "y": {
-                            "type": "float",
-                            "endian": "little",
-                            "unsigned": false
-                        },
-                        "z": {
-                            "type": "float",
-                            "endian": "little",
-                            "unsigned": false
-                        }
-                    }
-                },
-                "pTextureTable": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "AABBMax": {
-                    "type": "structure",
-                    "endian": "little",
-                    "unsigned": false,
-                    "structure": {
-                        "x": {
-                            "type": "float",
-                            "endian": "little",
-                            "unsigned": false
-                        },
-                        "y": {
-                            "type": "float",
-                            "endian": "little",
-                            "unsigned": false
-                        },
-                        "z": {
-                            "type": "float",
-                            "endian": "little",
-                            "unsigned": false
-                        }
-                    }
-                },
-                "LightMaterialTable": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "PivotMatrix": {
-                    "type": "structure",
-                    "endian": "little",
-                    "unsigned": false,
-                    "structure": {
-                        "v0": {
-                            "type": "structure",
-                            "endian": "little",
-                            "unsigned": false,
-                            "structure": {
-                                "x": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "y": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "z": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "w": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                }
-                            }
-                        },
-                        "v1": {
-                            "type": "structure",
-                            "endian": "little",
-                            "unsigned": false,
-                            "structure": {
-                                "x": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "y": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "z": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "w": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                }
-                            }
-                        },
-                        "v2": {
-                            "type": "structure",
-                            "endian": "little",
-                            "unsigned": false,
-                            "structure": {
-                                "x": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "y": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "z": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "w": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                }
-                            }
-                        },
-                        "v3": {
-                            "type": "structure",
-                            "endian": "little",
-                            "unsigned": false,
-                            "structure": {
-                                "x": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "y": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "z": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                },
-                                "w": {
-                                    "type": "float",
-                                    "endian": "little",
-                                    "unsigned": false
-                                }
-                            }
-                        }
-                    }
-                },
-                "PositionMarkerTable": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "NormalSmoother": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "ModelList": {
-                    "type": "structure",
-                    "endian": "little",
-                    "unsigned": false,
-                    "modifier": "padding",
-                    "structure": {
-                        "HeadNode": {
-                            "type": "structure",
-                            "endian": "little",
-                            "unsigned": false,
-                            "structure": {
-                                "Next": {
-                                    "type": "pointer",
-                                    "endian": "little",
-                                    "unsigned": true,
-                                    "modifier": "padding"
-                                },
-                                "Prev": {
-                                    "type": "pointer",
-                                    "endian": "little",
-                                    "unsigned": true,
-                                    "modifier": "padding"
-                                }
-                            }
-                        }
-                    }
-                },
-                "mMorphTargetList": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "mSelectionSetList": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "Volume": {
-                    "type": "float",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "Density": {
-                    "type": "float",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "pTextureTypeTable": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "PcaWeights": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "Name": {
-                    "type": "int8",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "string",
-                    "length": "$math:a=$rawsize/,action=\"minus\",b=0xA8/"
-                }
-            }
-        },
-        "0x00134012": {
-            "description_entry": "BCHUNK_SOLID_TEXTURE_TABLE",
-            "schema": {
-                "Array": {
-                    "type": "structure",
-                    "endian": "little",
-                    "unsigned": false,
-                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x8/",
-                    "structure": {
-                        "NameHash": {
-                            "type": "int32",
-                            "endian": "little",
-                            "unsigned": true
-                        },
-                        "pTextureInfo": {
-                            "type": "int32",
-                            "endian": "little",
-                            "unsigned": true,
-                            "modifier": "padding"
-                        }
-                    }
-                }
-            }
-        },
-        "0x00134013": {
-            "description_entry": "BCHUNK_SOLID_LIGHT_MATERIAL_TABLE",
-            "schema": {
-                "Array": {
-                    "type": "structure",
-                    "endian": "little",
-                    "unsigned": false,
-                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x8/",
-                    "structure": {
-                        "NameHash": {
-                            "type": "int32",
-                            "endian": "little",
-                            "unsigned": true
-                        },
-                        "LightMaterial": {
-                            "type": "pointer",
-                            "endian": "little",
-                            "unsigned": true,
-                            "modifier": "padding"
-                        }
-                    }
-                }
-            }
-        },
         "0x00034108": {
             "description_entry": "BCHUNK_SCENERY_OVERRIDE_INFO_TABLE",
             "schema": {
@@ -2956,6 +2349,1127 @@
                             }
                         }
                     }
+                }
+            }
+        },
+        "0x80134000": {
+            "description_entry": "BCHUNK_SOLID_LIST"
+        },
+        "0x80134001": {
+            "description_entry": "BCHUNK_SOLID_LIST_HEADER_CHUNKS"
+        },
+        "0x00134002": {
+            "description_entry": "BCHUNK_SOLID_LIST_HEADER",
+            "schema": {
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Version": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumSolids": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Filename": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "string",
+                    "length": 56
+                },
+                "GroupName": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "string",
+                    "length": 32
+                },
+                "PermChunkByteOffset": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "PermChunkByteSize": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "MaxSolidChunkByteAlignment": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "EndianSwapped": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "SolidIndexEntryTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "SolidStreamEntryTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NumTexturePacks": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumDefaultTextures": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "TexturePackList": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding",
+                    "structure": {
+                        "HeadNode": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "Next": {
+                                    "type": "pointer",
+                                    "endian": "little",
+                                    "unsigned": true,
+                                    "modifier": "padding"
+                                },
+                                "Prev": {
+                                    "type": "pointer",
+                                    "endian": "little",
+                                    "unsigned": true,
+                                    "modifier": "padding"
+                                }
+                            }
+                        }
+                    }
+                },
+                "DefaultTextureList": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding",
+                    "structure": {
+                        "HeadNode": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "Next": {
+                                    "type": "pointer",
+                                    "endian": "little",
+                                    "unsigned": true,
+                                    "modifier": "padding"
+                                },
+                                "Prev": {
+                                    "type": "pointer",
+                                    "endian": "little",
+                                    "unsigned": true,
+                                    "modifier": "padding"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "0x00134003": {
+            "description_entry": "BCHUNK_SOLID_INDEX_ENTRY_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x8/",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Solid": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0x00134004": {
+            "description_entry": "BCHUNK_SOLID_STREAM_ENTRY_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x18/",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ChunkByteOffset": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ChunkByteSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "UncompressedSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "UserFlags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Flags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "RefCount": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ChunkData": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0x80134008": {
+            "description_entry": "BCHUNK_SOLID_LIST_PLAT_CHUNKS"
+        },
+        "0x80134010": {
+            "description_entry": "BCHUNK_SOLID_CHUNKS"
+        },
+        "0x00134011": {
+            "description_entry": "BCHUNK_SOLID",
+            "data_align": 16,
+            "schema": {
+                "PlatInfo": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Version": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "EndianSwapped": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Flags": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "NameHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "NumPolys": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumVerts": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumBones": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumTextureTableEntries": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumLightMaterials": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumPositionMarkerTableEntries": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "ReferencedFrameCounter": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "AABBMin": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "x": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "y": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "z": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                },
+                "pTextureTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "AABBMax": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "x": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "y": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "z": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                },
+                "LightMaterialTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "PivotMatrix": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "v0": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "v1": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "v2": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "v3": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        }
+                    }
+                },
+                "PositionMarkerTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NormalSmoother": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "ModelList": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding",
+                    "structure": {
+                        "HeadNode": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "Next": {
+                                    "type": "pointer",
+                                    "endian": "little",
+                                    "unsigned": true,
+                                    "modifier": "padding"
+                                },
+                                "Prev": {
+                                    "type": "pointer",
+                                    "endian": "little",
+                                    "unsigned": true,
+                                    "modifier": "padding"
+                                }
+                            }
+                        }
+                    }
+                },
+                "mMorphTargetList": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "mSelectionSetList": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Volume": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Density": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "pTextureTypeTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "PcaWeights": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Name": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "string",
+                    "length": "$math:a=$rawsize/,action=\"minus\",b=0xA8/"
+                }
+            }
+        },
+        "0x00134012": {
+            "description_entry": "BCHUNK_SOLID_TEXTURE_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x8/",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "pTextureInfo": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0x00134013": {
+            "description_entry": "BCHUNK_SOLID_LIGHT_MATERIAL_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x8/",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "LightMaterial": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0x00134017": {
+            "description_entry": "BCHUNK_SOLID_NORMAL_SMOOTHER",
+            "schema": {
+                "SmoothVertexTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "SmoothVertexPlatTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NumSmoothVertex": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumSmoothVertexPlat": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                }
+            }
+        },
+        "0x00134018": {
+            "description_entry": "BCHUNK_SOLID_SMOOTH_VERTEX_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x8/",
+                    "structure": {
+                        "VertexHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "SmoothingGroupNumber": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "NX": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NY": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NZ": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsinged": false
+                        }
+                    }
+                }
+            }
+        },
+        "0x00134019": {
+            "description_entry": "BCHUNK_SOLID_SMOOTH_VERTEX_PLAT_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0xC/",
+                    "structure": {
+                        "VertexHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "SmoothingGroup": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "VertexOffset": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                }
+            }
+        },
+        "0x0013401A": {
+            "description_entry": "BCHUNK_SOLID_POSITION_MARKER_TABLE",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x50/",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "iParam0": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "fParam0": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "fParam1": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Matrix": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {}
+                        }
+                    }
+                }
+            }
+        },
+        "0x0013401D": {
+            "description_entry": "BCHUNK_SOLID_MORPH_TARGET_LIST",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0xC/",
+                    "structure": {
+                        "mNameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mTarget": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "mBlendAmnt": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                }
+            }
+        },
+        "0x0013401F": {
+            "description_entry": "BCHUNK_SOLID_SELECTION_SET",
+            "schema": {
+                "mHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mSolidHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mEdgeListNum": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "__PADDING1": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding",
+                    "length": 2
+                },
+                "mEdgeList": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                }
+            }
+        },
+        "0x00134020": {
+            "description_entry": "BCHUNK_SOLID_EDGE_LISTS",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x8/",
+                    "structure": {
+                        "Flags": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "EdgeNum": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Edges": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0x00134021": {
+            "description_entry": "BCHUNK_SOLID_EDGES",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0xA/",
+                    "structure": {
+                        "VertexIndex": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true,
+                            "length": 2
+                        },
+                        "Counter": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "RefCount": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "MeshIndex": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                }
+            }
+        },
+        "0x80134100": {
+            "description_entry": "BCHUNK_SOLID_PLAT_CHUNKS"
+        },
+        "0x00134A00": {
+            "description_entry": "BCHUNK_SOLID_PLAT_INFO",
+            "data_align": 16,
+            "schema": {
+                "Version": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "StripFlags": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "NumStrips": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "MorphVertexNum": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "SizeofStripData": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "StripEntryTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "StripDataStart": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "StripMorphDataOffsetList": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "MorphVertexList": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "MorphIndexDataList": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "MorphVertexWriteDataList": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                }
+            }
+        },
+        "0x00134A01": {
+            "description_entry": "BCHUNK_SOLID_STRIP_ENTRY_TABLE",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x10/",
+                    "structure": {
+                        "Flags": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "NumVerts": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "NumPolys": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "DataQWordOffset": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "DataQWordSize": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "PolyGroupNumber": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "MaterialDensity": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Nz": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Nt": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "TextureNumber": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "LightMaterialIndex": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "MultiTextured": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "MultiTextureIndex": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                }
+            }
+        },
+        "0x30300301": {
+            "description_entry": "BCHUNK_SOLID_PCA_WEIGHTS",
+            "data_align": 16,
+            "schema": {
+                "NameHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "NumFrames": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "NumWeightsPerFrame": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "NumSamples": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "NumChannels": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "PcaChannelInfo": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": 9,
+                    "structure": {
+                        "Type": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "NumWeights": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "VectorBufferOffset": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "WeightOffset": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "__PADDING1": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "length": 2
+                        },
+                        "ParamHandle": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                },
+                "Mean": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "Frames": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                }
+            }
+        },
+        "0x30300302": {
+            "description_entry": "BCHUNK_SOLID_PCA_WEIGHTS_MEAN",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x4/"
+                }
+            }
+        },
+        "0x30300303": {
+            "description_entry": "BCHUNK_SOLID_PCA_WEIGHTS_FRAMES",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x4/"
                 }
             }
         },
