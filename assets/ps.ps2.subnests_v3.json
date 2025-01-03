@@ -4107,6 +4107,636 @@
                 }
             }
         },
+        "0xB3300000": {
+            "description_entry": "BCHUNK_TEXTURE_PACK"
+        },
+        "0xB3310000": {
+            "description_entry": "BCHUNK_TEXTURE_PACK_HEADER_CHUNKS"
+        },
+        "0x33310001": {
+            "description_entry": "BCHUNK_TEXTURE_PACK_HEADER",
+            "schema": {
+                "Version": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Name": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "string",
+                    "length": 28
+                },
+                "Filename": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "string",
+                    "length": 64
+                },
+                "FilenameHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "PermChunkByteOffset": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "PermChunkByteSize": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "EndianSwapped": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "pTexturePack": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "TextureIndexEntryTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "TextureStreamEntryTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                }
+            }
+        },
+        "0x33310002": {
+            "description_entry": "BCHUNK_TEXTURE_INDEX_ENTRY_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x8/",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "pTextureInfo": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0x33310003": {
+            "description_entry": "BCHUNK_TEXTURE_STREAM_ENTRY_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x18/",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ChunkByteOffset": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ChunkByteSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "UncompressedSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "UserFlags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Flags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "RefCount": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ChunkData": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0x33310004": {
+            "description_entry": "BCHUNK_TEXTURE_INFO_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "jagged_array",
+                    "length": "$math:a=0x59,action=\"plus\",b=$current/.DebugNameSize/",
+                    "structure": {
+                        "PlatInfo": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ClassNameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "ImagePlacement": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PalettePlacement": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ImageSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PaletteSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "BaseImageSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Width": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Height": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ShiftWidth": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ShiftHeight": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ImageCompressionType": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "PaletteCompressionType": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "NumPaletteEntries": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumMipMapLevels": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "TilableUV": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "BiasLevel": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "RenderingOrder": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ScrollType": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "UsedFlag": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ApplyAlphaSorting": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "AlphaUsageType": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "AlphaBlendType": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Flags": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "MipmapBiasType": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Padding": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "ScrollTimeStep": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ScrollSpeedS": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ScrollSpeedT": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "OffsetS": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "OffsetT": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ScaleS": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ScaleT": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "pTexturePack": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "ImageData": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "PaletteData": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "DebugNameSize": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "DebugName": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "string",
+                            "length": "$current/.DebugNameSize"
+                        }
+                    }
+                }
+            }
+        },
+        "0x33310005": {
+            "description_entry": "BCHUNK_TEXTURE_INFO_PLAT_INFO_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x54/",
+                    "structure": {
+                        "ImageVramBlocksRequired": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PaletteVramBlocksRequired": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PixelStorageMode": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ClutPixelStorageMode": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "TextureFx": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "AlphaBits": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "AlphaFix": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "MMag": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "MMin": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "MipMapL": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "MipMapK": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "AlphaUsage": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Special": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ImageInfos": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 7,
+                            "structure": {
+                                "Width": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "Height": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "TBP": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "TBW": {
+                                    "type": "int8",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "IsSwizzled": {
+                                    "type": "int8",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "pActiveTexture": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "pStackedActiveTexture": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "PaletteVramAddress": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "ImageVramAddress": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0xB3312000": {
+            "description_entry": "BCHUNK_TEXTURE_ANIM_HEADER_CHUNKS"
+        },
+        "0x33312001": {
+            "description_entry": "BCHUNK_TEXTURE_ANIM_HEADER",
+            "schema": {
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Name": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "string",
+                    "length": 16
+                },
+                "NameHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "NumFrames": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "FramesPerSecond": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "TimeBase": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "pad0": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "EndianSwapped": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "Valid": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "CurrentFrame": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "pad1": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "ParentTexturePack": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "TextureAnimTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                }
+            }
+        },
+        "0x33312002": {
+            "description_entry": "BCHUNK_TEXTURE_ANIM_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0xC/",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "pTextureInfo": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "pPlatAnimData": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0xB3312004": {
+            "description_entry": "BCHUNK_TEXTURE_ANIM_CHUNKS"
+        },
         "0x62A653A0": {
             "description_entry": "BCHUNK_TRACK_OBBS",
             "data_align": 16,
