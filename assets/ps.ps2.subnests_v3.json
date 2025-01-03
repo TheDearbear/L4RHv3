@@ -2222,6 +2222,265 @@
                 }
             }
         },
+        "0x00037220": {
+            "description_entry": "BCHUNK_WORLD_ANIM_HEADER",
+            "data_align": 16,
+            "schema": {
+                "mNumAnimBanks": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mNumInstanceNodes": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mSectionNumber": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "mNumTrees": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                }
+            }
+        },
+        "0x00037250": {
+            "description_entry": "BCHUNK_WORLD_ANIM_RT_NODE",
+            "data_align": 16,
+            "schema": {
+                "instance_matrix": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "v0": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "v1": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "v2": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "v3": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        }
+                    }
+                },
+                "MeshNameHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "parent_index": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "speed": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "Properties": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "type_flags": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "lod_hash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true,
+                    "length": 4
+                },
+                "smackable_id": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "SceneryGUID": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "RotateSpeedX": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "RotateSpeedY": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "RotateSpeedZ": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "mNumKeys": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "length_delays_style_and_type": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "Range": {
+                    "type": "float",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Variance": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Pause": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "AnimType": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "section_number": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "ParentNameHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "DefaultLodLevel": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                }
+            }
+        },
+        "0x00037260": {
+            "description_entry": "BCHUNK_WORLD_ANIM_TREE_NUMBER",
+            "data_align": 16,
+            "schema": {
+                "NumOfNodes": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                }
+            }
+        },
         "0x8003B000": {
             "description_entry": "BCHUNK_QUICK_SPLINES"
         },
