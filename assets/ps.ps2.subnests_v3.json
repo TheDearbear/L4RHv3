@@ -103,6 +103,181 @@
                 }
             }
         },
+        "0x00034027": {
+            "description_entry": "BCHUNK_SPAWNER_PACK",
+            "data_align": 16,
+            "schema": {
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "ScenerySectionNumber": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumSpawners": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "EndianSwapped": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "Pad": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "Spawners": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$current/.NumSpawners",
+                    "structure": {
+                        "mOrientation": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "mPosition": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "mModel": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "mCRC": {
+                                    "type": "int32",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "mCollisionName": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "mCRC": {
+                                    "type": "int32",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "mAttributes": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "mCRC": {
+                                    "type": "int32",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "mSceneryOverrideInfoNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mSpawnFlags": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mUniqueID": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mExcludeFlags": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mSimModel": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "mAnimHandle": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "mScenerySection": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mSceneryInstance": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                }
+            }
+        },
         "0x00034108": {
             "description_entry": "BCHUNK_SCENERY_OVERRIDE_INFO_TABLE",
             "schema": {
