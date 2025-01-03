@@ -1620,6 +1620,206 @@
                 }
             }
         },
+        "0x80036000": {
+            "description_entry": "BCHUNK_EVENT_TRIGGER_PACK"
+        },
+        "0x00036001": {
+            "description_entry": "BCHUNK_EVENT_TRIGGER_PACK_HEADER",
+            "data_align": 16,
+            "schema": {
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Version": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "ScenerySectionNumber": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumEventTriggers": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "EndianSwapped": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "EventTree": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "EventTriggerArray": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                }
+            }
+        },
+        "0x00036002": {
+            "description_entry": "BCHUNK_EVENT_TREE",
+            "data_align": 16,
+            "schema": {
+                "NodeArray": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NumLeafNodes": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumParentNodes": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "TotalNodes": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Depth": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "pad1": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "Nodes": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$current/.TotalNodes",
+                    "structure": {
+                        "PositionX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionZ": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ParentIndex": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumChildren": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ExtentX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ExtentY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ExtentZ": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ChildrenIndicies": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 10
+                        }
+                    }
+                }
+            }
+        },
+        "0x00036003": {
+            "description_entry": "BCHUNK_EVENT_TRIGGER",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x20/",
+                    "structure": {
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "EventID": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Parameter": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "TrackDirectionMask": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionZ": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Radius": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                }
+            }
+        },
         "0x80037020": {
             "description_entry": "BCHUNK_ANIM_SCENE_DATA"
         },
