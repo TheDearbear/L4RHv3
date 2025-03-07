@@ -4633,6 +4633,28 @@
                 }
             }
         },
+        "0x00134015": {
+            "description_entry": "BCHUNK_SOLID_TEXTURE_TYPE_TABLE",
+            "schema": {
+                "NumTextureTypes": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "TextureTypeArray": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Offsets": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true,
+                    "length": "$math:a=$current/.NumTextureTypes,action=\"minus\",b=1/"
+                }
+            }
+        },
         "0x00134017": {
             "description_entry": "BCHUNK_SOLID_NORMAL_SMOOTHER",
             "schema": {
