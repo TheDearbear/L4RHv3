@@ -279,7 +279,7 @@ export default class ChunkDataRecoding {
         field: SubnestField,
         offset: number = 0
     ): any {
-        var readName: string = this.utils.functionReadName(field.type, field.endian, field.unsigned);
+        var readName: string = this.utils.bufferIoFunctionName('read', field.type, field.endian, field.unsigned);
         var entryValue = (data as unknown as Record<string, Function>)[readName](offset);
         return entryValue;
     }

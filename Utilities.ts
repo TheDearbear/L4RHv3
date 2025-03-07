@@ -140,7 +140,8 @@ export default class Utilities {
         return new ByteLengthCountResult(totalLength, sizeIndex);
     }
 
-    public functionReadName(
+    public bufferIoFunctionName(
+        basePrefix: string,
         type: string,
         endian: string,
         unsigned: Boolean
@@ -162,7 +163,10 @@ export default class Utilities {
             type = this.behaviour.pointersAre64Bits ? FieldTypes.INT64 : FieldTypes.INT32;
         }
 
-        var prefix = type === FieldTypes.INT64 ? 'readBig' : 'read';
+        var prefix = basePrefix;
+        if (type == FieldTypes.INT64) {
+            prefix += 'Big';
+        }
 
         if (unsigned) {
             if (type === FieldTypes.FLOAT || type === FieldTypes.DOUBLE) {
@@ -212,29 +216,49 @@ export default class Utilities {
         return str.substring(0, start) + substitute + str.substring(end);
     }
 
-    public static defaultTypeValue(type: string): any {
-        if (type === FieldTypes.STRUCTURE) {
-            throw new Error('Structure is not a primitive type');
+    /**
+     * Creates minimal object that matches provided field layout
+     * @param field Subnest field layout
+     * @returns Minimally initialized object that matches field layout
+     */
+    public static defaultValue(field: SubnestField): Record<string, any>[] | Record<string, any> | string | number[] | number {
+        var result: Record<string, any> | string | number;
+        var isString = field.type == FieldTypes.INT8 && field.modifier == 'string';
+        
+        if (field.type != FieldTypes.STRUCTURE) {
+            if (field.type != FieldTypes.INT8 && field.modifier == 'string') {
+                throw new Error('Cannot use string modifier without int8 type');
+            }
+
+            result = field.modifier == 'string' ? "" : 0;
+        }
+        else {
+            if (field.structure == null) {
+                throw new Error('Field is declared as structure but layout is not present');
+            }
+
+            result = {};
+
+            for (const name in field.structure) {
+                result[name] = this.defaultValue(field.structure[name]);
+            }
         }
 
-        return 0;
-    }
-
-    public static defaultStructureValue(fields: Record<string, any>): Record<string, any> {
-        var struct: Record<string, any> = {};
-
-        for (const name in fields) {
-            if (typeof fields[name] === 'string') {
-                struct[name] = this.defaultTypeValue(fields[name]);
-            }
-            else if (typeof fields[name] === 'object') {
-                struct[name] = this.defaultStructureValue(fields[name]);
-            }
-            else {
-                throw new Error('Unknown value type');
-            }
+        if (typeof field.length === 'undefined' || isString) {
+            return result;
         }
 
-        return struct;
+        var array: Record<string, any>[] | number[] = [];
+
+        if (typeof field.length === 'number') {
+            for (let i = 0; i < field.length; i++) {
+                array.push(result as (Record<string, any> & number));
+            }
+        }
+        else {
+            throw new Error('Using array size as Context Inline Script is currently not supported');
+        }
+
+        return array;
     }
 };
