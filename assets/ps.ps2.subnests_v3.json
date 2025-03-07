@@ -278,6 +278,1046 @@
                 }
             }
         },
+        "0x80034100": {
+            "description_entry": "BCHUNK_SCENERY_SECTION"
+        },
+        "0x00034101": {
+            "description_entry": "BCHUNK_SCENERY_SECTION_HEADER",
+            "data_align": 16,
+            "schema": {
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "ChunksLoaded": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "SectionNumber": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "NumPolygonsInMemory": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "NumPolygonsInWorld": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "pSceneryInfo": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NumSceneryInfo": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "pSceneryInstance": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NumSceneryInstances": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "pNGbbs": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "SceneryTreeNodeTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NumSceneryTreeNodes": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "PrecullerInfoTable": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "NumPrecullerInfos": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "ViewsVisibleThisFrame": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "LightTexList": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "pVectorizedInfo": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "pVectorizedCullInfo": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "pVectorizedCullInfo4": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "pVectorizedInstanceInfo": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                }
+            }
+        },
+        "0x00034102": {
+            "description_entry": "BCHUNK_SCENERY_INFO_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x4C/",
+                    "structure": {
+                        "DebugName": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "string",
+                            "length": 24
+                        },
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true,
+                            "length": 4
+                        },
+                        "pModel": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "length": 4
+                        },
+                        "Radius": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Flags": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "mHeirarchyNameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mHeirarchy": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "IsDeinstanced": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "padding1": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "padding2": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034103": {
+            "description_entry": "BCHUNK_SCENERY_INSTANCE_TABLE",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x60/",
+                    "structure": {
+                        "BBoxMin": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "InstanceFlags": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "BBoxMax": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "PrecullerInfoIndex": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "SceneryInfoNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Position": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "SceneryGUID": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Rotation0": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "LodGroup": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "LodLevel": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "SwayMaxMultiplier": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "WSpeedMultiplier": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "Rotation1": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "PcaVertexColourIndexLOD0": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PcaVertexColourIndexLOD1": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Rotation2": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "PcaVertexColourIndexLOD2": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PcaVertexColourIndexLOD3": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034105": {
+            "description_entry": "BCHUNK_SCENERY_TREE_NODE_TABLE",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x30/",
+                    "structure": {
+                        "BBoxMin": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "NumChildren": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Pad": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "BBoxMax": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "ChildCodes": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 10
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034107": {
+            "description_entry": "BCHUNK_SCENERY_PRECULLER_INFO_TABLE",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x200/",
+                    "structure": {
+                        "PrecullerInfo": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "length": 512
+                        }
+                    }
+                }
+            }
+        },
+        "0x0003410A": {
+            "description_entry": "BCHUNK_SCENERY_SECTION_BOUNDING_BOX_TABLE",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x20/",
+                    "structure": {
+                        "centre": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "diag": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "0x0003410D": {
+            "description_entry": "BCHUNK_SCENERY_VECTORIZED_CULL_HEADER",
+            "data_align": 16,
+            "schema": {
+                "mViewCullInfo": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": 64,
+                    "structure": {
+                        "mViewId": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mCount": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mCullInfoOffset": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mInstanceInfosOffset": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mPadCount": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                }
+            }
+        },
+        "0x0003410E": {
+            "description_entry": "BCHUNK_SCENERY_VECTORIZED_CULL_INFO_TABLE",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x20/",
+                    "structure": {
+                        "mPosition": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "mPackedBBX": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "min": {
+                                    "type": "structure",
+                                    "endian": "little",
+                                    "unsigned": false,
+                                    "structure": {
+                                        "x": {
+                                            "type": "int16",
+                                            "endian": "little",
+                                            "unsigned": true
+                                        },
+                                        "y": {
+                                            "type": "int16",
+                                            "endian": "little",
+                                            "unsigned": true
+                                        },
+                                        "z": {
+                                            "type": "int16",
+                                            "endian": "little",
+                                            "unsigned": true
+                                        },
+                                        "w": {
+                                            "type": "int16",
+                                            "endian": "little",
+                                            "unsigned": true
+                                        }
+                                    }
+                                },
+                                "max": {
+                                    "type": "structure",
+                                    "endian": "little",
+                                    "unsigned": false,
+                                    "structure": {
+                                        "x": {
+                                            "type": "int16",
+                                            "endian": "little",
+                                            "unsigned": true
+                                        },
+                                        "y": {
+                                            "type": "int16",
+                                            "endian": "little",
+                                            "unsigned": true
+                                        },
+                                        "z": {
+                                            "type": "int16",
+                                            "endian": "little",
+                                            "unsigned": true
+                                        },
+                                        "w": {
+                                            "type": "int16",
+                                            "endian": "little",
+                                            "unsigned": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "0x0003410F": {
+            "description_entry": "BCHUNK_SCENERY_VECTORIZED_INSTANCE_INFO_TABLE",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x20/",
+                    "structure": {
+                        "mModels": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "length": 4
+                        },
+                        "mSceneryInstance": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "mSceneryInfo": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "pad": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "length": 8
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034C00": {
+            "description_entry": "BCHUNK_SCENERY_VECTORIZED_CULL_INFO_4_TABLE",
+            "data_align": 16,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x70/",
+                    "structure": {
+                        "mPositionX": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "mPositionY": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "mPositionZ": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "mRadius": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "z": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "w": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "mPackedMinX": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "y": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "z": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "w": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "mPackedMinY": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "y": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "z": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "w": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "mPackedMinZ": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "y": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "z": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "w": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "mPackedMaxX": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "y": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "z": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "w": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "mPackedMaxY": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "y": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "z": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "w": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        },
+                        "mPackedMaxZ": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "y": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "z": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                },
+                                "w": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "0x00034108": {
             "description_entry": "BCHUNK_SCENERY_OVERRIDE_INFO_TABLE",
             "schema": {
