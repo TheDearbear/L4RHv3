@@ -6,7 +6,7 @@ export default class SubnestField {
     public unsigned: Boolean;
     public modifier: string | undefined;
     public structure: Record<string, SubnestField> | undefined;
-    public length: number | string | SubnestField | undefined;
+    public length: number | string | undefined;
     public align: number | undefined;
     public bitfield: Record<string, BitfieldEntry> | undefined;
 
@@ -16,7 +16,7 @@ export default class SubnestField {
         unsigned: Boolean = false,
         modifier: string | undefined = undefined,
         structure: Record<string, SubnestField> | undefined = undefined,
-        length: number | SubnestField | undefined = undefined,
+        length: number | undefined = undefined,
         align: number | undefined = undefined,
         bitfield: Record<string, BitfieldEntry> | undefined = undefined
     ) {
