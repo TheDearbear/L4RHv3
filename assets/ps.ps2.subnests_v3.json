@@ -5799,6 +5799,9 @@
         "0xB3312004": {
             "description_entry": "BCHUNK_TEXTURE_ANIM_CHUNKS"
         },
+        "0xB3320000": {
+            "description_entry": "BCHUNK_TEXTURE_PACK_VRAM_DATA_CHUNKS"
+        },
         "0x62A653A0": {
             "description_entry": "BCHUNK_TRACK_OBBS",
             "data_align": 16,
