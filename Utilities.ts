@@ -212,6 +212,77 @@ export default class Utilities {
         return prefix + type + endian;
     }
 
+    public bitfieldToNumber(disassm: Record<string, any>, field: SubnestField): number {
+        if (typeof field.bitfield !== 'object') {
+            throw new Error('Field must be bitfield');
+        }
+
+        if (field.length != null) {
+            throw new Error('Bitfield cannot be used in array');
+        }
+
+        if (field.modifier != null && field.modifier != "padding") {
+            throw new Error('Only \"padding\" modifier allowed when using bitfield');
+        }
+
+        if (!field.unsigned) {
+            throw new Error('Bitfield can be applied only to unsigned integer field');
+        }
+
+        if (field.type != FieldTypes.INT8 &&
+            field.type != FieldTypes.INT16 &&
+            field.type != FieldTypes.INT32 &&
+            field.type != FieldTypes.INT64
+        ) {
+            throw new Error('Bitfield can be applied only to integer field');
+        }
+
+        let value = 0;
+        let bitfieldSize = this.primitiveByteLength(field.type) * 8;
+
+        for (const bitfieldName in field.bitfield) {
+            let bitfield = field.bitfield[bitfieldName];
+
+            if (!Number.isInteger(bitfield.offset) || bitfield.offset < 0) {
+                throw new Error('Offset of bitfield\'s entry must be integer and must not be negative (' + bitfieldName + ')');
+            }
+
+            if (!Number.isInteger(bitfield.width) || bitfield.width < 1) {
+                throw new Error('Width of bitfield\'s entry must be positive integer (' + bitfieldName + ')');
+            }
+
+            if (bitfield.offset + bitfield.width > bitfieldSize) {
+                throw new Error('Entry of bitfield must be located inside bounds of parent type (' + bitfieldName + ')');
+            }
+
+            if (bitfieldName in disassm) {
+                let entryValue = disassm[bitfieldName];
+                if (typeof entryValue !== 'number') {
+                    throw new Error('Value of bitfield\'s entry can be only numeric (' + bitfieldName + ')');
+                }
+                
+                let maxValue = (1 << bitfield.width) - 1;
+                if (entryValue > maxValue) {
+                    let truncated = entryValue & maxValue; // Max value also can be used as mask to truncate bits
+                    this.behaviour.logger.warn(
+                        'Value of entry in bitfield is bigger than maximum possible (' + entryValue + ' > ' + maxValue + '). ' +
+                        'Value will be truncated to ' + truncated + '. (' + bitfieldName + ')'
+                    );
+
+                    entryValue = truncated;
+                }
+
+                let valueMask = ((1 << bitfieldSize) - 1) ^ (maxValue << bitfield.offset);
+                value = ((value as number) & valueMask) + (entryValue << bitfield.offset);
+            }
+            else if (!bitfield.padding && field.modifier !== 'padding') {
+                this.behaviour.logger.warn('Cannot find value of entry in bitfield (' + bitfieldName + ')');
+            }
+        }
+
+        return value;
+    }
+
     public static replaceRange(str: string, start: number, end: number, substitute: string) {
         return str.substring(0, start) + substitute + str.substring(end);
     }

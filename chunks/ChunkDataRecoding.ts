@@ -5,6 +5,7 @@ import Utilities from '../Utilities';
 import ContextInlineScript from '../cis/ContextInlineScript';
 import ReferencedValue from '../cis/ReferencedValue';
 import ScriptContext from '../cis/ScriptContext';
+import DisassembledChunk from './DisassembledChunk';
 
 export default class ChunkDataRecoding {
     public static readonly LEFTOVERS = '__leftovers__';
@@ -56,7 +57,7 @@ export default class ChunkDataRecoding {
             }
 
             if (value.bitfield != null && (value.modifier != null && value.modifier != "padding")) {
-                throw new Error('Only "padding" modifier allowed when using bitfield (' + chunk + ':' + name + ')');
+                throw new Error('Only \"padding\" modifier allowed when using bitfield (' + chunk + ':' + name + ')');
             }
 
             if (value.bitfield != null && !value.unsigned) {
@@ -284,7 +285,264 @@ export default class ChunkDataRecoding {
         return entryValue;
     }
 
-    public encode() {
-        //
+    public encode(
+        data: Record<string, any>,
+        pseudoPointer: number = 0,
+        schema: Record<string, SubnestField> | null = null,
+        chunkId: number | null = null
+    ): Buffer {
+        var chunk = chunkId ? Utilities.uint32AsHex(chunkId) : 'unknown';
+
+        if (DisassembledChunk.RAW_VALUE in data) {
+            return Buffer.from(data[DisassembledChunk.RAW_VALUE], 'base64');
+        }
+        else if (schema == null) {
+            throw new Error('Empty schema only allowed for raw data chunks (' + chunk + ')');
+        }
+
+        return this.encodeSingleStructure(data, schema, pseudoPointer, chunk);
+    }
+
+    public encodeSingleStructure(
+        data: Record<string, any>,
+        schema: Record<string, SubnestField>,
+        pseudoPointer: number = 0,
+        errorLocationPrefix: string = ''
+    ): Buffer {
+        if (errorLocationPrefix.length > 0) {
+            errorLocationPrefix += ':';
+        }
+
+        var buffers = [];
+        for (const name in schema) {
+            let field = schema[name];
+            let value: Record<string, any>[] | Record<string, any> | string | number[] | number;
+            
+            if (typeof field.bitfield !== 'undefined') {
+                try {
+                    value = this.utils.bitfieldToNumber(data, field);
+                }
+                catch (error) {
+                    let message = error instanceof Error ? error.message : String(error);
+
+                    throw new Error('Unable to convert bitfield to a number (' + errorLocationPrefix + name + '): ' + message);
+                }
+            }
+            else if (name in data) {
+                value = data[name];
+            }
+            else if (field.modifier === 'padding') {
+                value = Utilities.defaultValue(field);
+            }
+            else {
+                throw new Error('Trying to encode missing data (' + errorLocationPrefix + name + ')')
+            }
+
+            if (typeof field.align !== 'undefined') {
+                let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
+                if (aligned != pseudoPointer) {
+                    let delta = pseudoPointer - aligned;
+                    buffers.push(Buffer.alloc(delta));
+                    pseudoPointer = aligned;
+                }
+            }
+
+            if (field.modifier === 'jagged_array' && field.type !== FieldTypes.STRUCTURE) {
+                throw new Error('Jagged array modifier can be applied only to structures (' + errorLocationPrefix + name + ')');
+            }
+
+            if (field.modifier === 'jagged_array' && typeof field.length !== 'string') {
+                throw new Error('Length of structure in jagged array must be specified as CIS expression (' + errorLocationPrefix + name + ')');
+            }
+
+            let isString = field.type === FieldTypes.INT8 && field.modifier === 'string';
+
+            if (isString) {
+                if (typeof field.length !== 'string' && !Number.isInteger(field.length)) {
+                    throw new Error('String length must be an integer (' + errorLocationPrefix + name + ')');
+                }
+
+                let length: number;
+                if (Number.isInteger(field.length)) {
+                    length = field.length as number;
+                }
+                else {
+                    throw new Error('String encoding with variable length is currently not supported (' + errorLocationPrefix + name + ')');
+                }
+
+                let stringBuffer = Buffer.alloc(length);
+                let valueLength = (value as string).length;
+
+                if (valueLength >= length) {
+                    this.utils.behaviour.logger.warn(
+                        'String cannot fit into allocated buffer (' + valueLength  + ' >= ' + length + '). ' +
+                        'String will be truncated by ' + (valueLength - length + 1) + ' chars. (' + errorLocationPrefix + name + ')'
+                    );
+
+                    stringBuffer.write(value as string, 'ascii');
+                    stringBuffer[length - 1] = 0; // Replace last byte with string terminator
+                }
+                else {
+                    stringBuffer.write(value as string, 'ascii');
+                }
+
+                buffers.push(stringBuffer);
+                pseudoPointer += length;
+            }
+            else if (field.modifier === 'jagged_array') {
+                throw new Error('Jagged arrays are currently not supported (' + errorLocationPrefix + name + ')');
+            }
+            else if (typeof field.length !== 'undefined') {
+                let length: number;
+
+                if (typeof field.length === 'number') {
+                    length = field.length;
+                }
+                else if (typeof field.length === 'string') {
+                    throw new Error('Dynamic array size is currently not supported (' + errorLocationPrefix + name + ')');
+                }
+                else {
+                    throw new Error('Array size have invalid type (' + errorLocationPrefix + name + ')');
+                }
+
+                if (length < 1) {
+                    throw new Error('Array length must be bigger or equal 1 (' + errorLocationPrefix + name + ')');
+                }
+
+                let actualLength = (value as Record<string, any>[] & number[]).length;
+
+                if (actualLength < length) {
+                    this.utils.behaviour.logger.warn(
+                        'Actual array size is smaller than should be (' + actualLength + ' < ' + length + '). ' +
+                        'Default values will be used instead of missing elements. (' + errorLocationPrefix + name + ')'
+                    );
+
+                    let dummyField = new SubnestField(
+                        field.type,
+                        field.endian,
+                        field.unsigned,
+                        field.modifier,
+                        field.structure,
+                        length - actualLength,
+                        field.align,
+                        field.bitfield
+                    );
+
+                    (value as any[]) = (value as any[]).concat(Utilities.defaultValue(dummyField) as any[]);
+                }
+                else if (actualLength > length) {
+                    this.utils.behaviour.logger.error(
+                        'Actual array size is bigger than should be (' + actualLength + ' > ' + length + '). ' +
+                        'Extra elements will not be written. Consider increasing array size if this was intentional. (' + errorLocationPrefix + name + ')'
+                    );
+                }
+
+                let arrayBuffers: Buffer[] = [];
+                if (field.type !== FieldTypes.STRUCTURE) {
+                    let writeFunctionName = this.utils.bufferIoFunctionName('write', field.type, field.endian, field.unsigned);
+                    let elementSize = this.utils.primitiveByteLength(field.type);
+                    let array = value as number[];
+
+                    for (let i = 0; i < length; i++) {
+                        if (field.align != null) {
+                            let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
+                            if (aligned != pseudoPointer) {
+                                let delta = pseudoPointer - aligned;
+                                arrayBuffers.push(Buffer.alloc(delta));
+                                pseudoPointer = aligned;
+                            }
+                        }
+
+                        let buffer = Buffer.allocUnsafe(elementSize);
+                        this.encodeSingleToInternal(array[i], writeFunctionName, buffer, 0);
+
+                        arrayBuffers.push(buffer);
+                        pseudoPointer += elementSize;
+                    }
+                }
+                else {
+                    if (typeof field.structure !== 'object') {
+                        throw new Error('Field declared as structure but no layout was found (' + errorLocationPrefix + name + ')');
+                    }
+
+                    let array = value as Record<string, any>[];
+
+                    for (let i = 0; i < array.length; i++) {
+                        if (field.align != null) {
+                            let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
+                            if (aligned != pseudoPointer) {
+                                let delta = pseudoPointer - aligned;
+                                arrayBuffers.push(Buffer.alloc(delta));
+                                pseudoPointer = aligned;
+                            }
+                        }
+
+                        let buffer = this.encodeSingleStructure(array[i], field.structure, pseudoPointer, errorLocationPrefix + name);
+                        arrayBuffers.push(buffer);
+                        pseudoPointer += buffer.length;
+                    }
+                }
+
+                buffers.push(...arrayBuffers);
+            }
+            else {
+                let valueBuffer: Buffer;
+
+                if (field.type === FieldTypes.STRUCTURE) {
+                    if (typeof field.structure !== 'object') {
+                        throw new Error('Field declared as structure but no layout was found (' + errorLocationPrefix + name + ')');
+                    }
+
+                    valueBuffer = this.encodeSingleStructure(value as Record<string, any>, field.structure, pseudoPointer, errorLocationPrefix + name);
+                }
+                else {
+                    valueBuffer = this.encodeSingle(value as number, field);
+                }
+                
+                buffers.push(valueBuffer);
+                pseudoPointer += valueBuffer.length;
+            }
+        }
+
+        return Buffer.concat(buffers);
+    }
+
+    public encodeSingleTo(
+        value: number,
+        field: SubnestField,
+        buffer: Buffer,
+        offset: number = 0
+    ): boolean {
+        var minSize = this.utils.primitiveByteLength(field.type);
+        if (buffer.length - offset < minSize) {
+            return false;
+        }
+
+        var writeName = this.utils.bufferIoFunctionName('write', field.type, field.endian, field.unsigned);
+
+        this.encodeSingleToInternal(value, writeName, buffer, offset);
+
+        return true;
+    }
+
+    private encodeSingleToInternal(
+        value: number,
+        writeFunctionName: string,
+        buffer: Buffer,
+        offset: number
+    ) {
+        (buffer as unknown as Record<string, Function>)[writeFunctionName](value, offset);
+    }
+
+    public encodeSingle(
+        value: number,
+        field: SubnestField
+    ): Buffer {
+        var writeName = this.utils.bufferIoFunctionName('write', field.type, field.endian, field.unsigned);
+        
+        var data = Buffer.allocUnsafe(this.utils.primitiveByteLength(field.type));
+        (data as unknown as Record<string, Function>)[writeName](value);
+
+        return data;
     }
 }

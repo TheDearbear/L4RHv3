@@ -142,6 +142,7 @@ export default class ChunkAssembling {
     ): AssembleResult {
         var pseudoPointer = offset;
         var result = new AssembleResult([], pseudoPointer);
+        var recoder = new ChunkDataRecoding(new Utilities(this.settings));
 
         disasm.forEach(chunk => {
             let doc = this.settings.docs.lookup(chunk.id);
@@ -192,11 +193,21 @@ export default class ChunkAssembling {
                 return;
             }
 
-            if (DisassembledChunk.RAW_VALUE in chunk.data === false) {
-                throw new Error('Assembling is not yet implemented');
-            }
+            let data: Buffer;
+            if (DisassembledChunk.RAW_VALUE in chunk.data) {
+                if (doc && doc.schema) {
+                    this.settings.logger.warn('Chunk', Utilities.uint32AsHex(chunk.id), 'have schema but raw value was found');
+                }
 
-            let data = Buffer.from(chunk.data[DisassembledChunk.RAW_VALUE], 'base64');
+                data = Buffer.from(chunk.data[DisassembledChunk.RAW_VALUE], 'base64');
+            }
+            else {
+                if (!doc) {
+                    throw new Error('Cannot assemble chunk without schema (' + Utilities.uint32AsHex(chunk.id) + ')');
+                }
+
+                data = recoder.encode(chunk.data, pseudoPointer, doc.schema, chunk.id);
+            }
 
             if (doc && doc.data_align != null && pseudoPointer % doc.data_align != 0) {
                 var alignedPointer = Utilities.alignDataPointer(pseudoPointer, doc.data_align);
@@ -206,7 +217,7 @@ export default class ChunkAssembling {
             let length = data.length;
             let compressed = data.length >= this.settings.compressThreshold;
             if (compressed) {
-                data = zlib.inflateSync(data);
+                data = zlib.deflateSync(data);
             }
 
             result.chunks.push(
