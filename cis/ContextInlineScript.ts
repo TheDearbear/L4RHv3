@@ -52,7 +52,7 @@ export default class ContextInlineScript {
 
                 result = Utilities.replaceRange(result, startIndex, startIndex + lastPeek.seeked, String(lastPeek.result.get()));
             } catch (error: any) {
-                context.utils.behaviour.logger.error('Unable to parse Context Inline Script:', error);
+                throw new Error('Unable to parse Context Inline Script: ' + (error instanceof Error ? error.message : String(error)));
             }
 
             startIndex += this.SYMBOL_START.length;

@@ -77,6 +77,10 @@ export function rawsize(context: ScriptContext): number {
     var currentLayer = getRawLayer(context.globalRawStorage, backtrace);
     var current = currentLayer[lastIndex];
 
+    if (current == null) {
+        throw new Error('Function \"rawsize\" available only during disassembling');
+    }
+
     if (Array.isArray(current.data)) {
         let length = 0;
 

@@ -134,17 +134,26 @@ export default class ChunkAssembling {
      * Assembles chunks using subnests file
      * @param disasm Source chunks
      * @param offset Starting offset
+     * @param global Global storage of source chunks
+     * @param globalRaw Global storage of assembled chunks
+     * @param backtrace Backtrace from global storage to current chunks
+     * @param backtraceRaw Backtrace from 
      * @returns Assembled raw chunks and `offset + length`
      */
     public assemble(
         disasm: DisassembledChunk[],
-        offset: number = 0
+        offset: number = 0,
+        global: DisassembledChunk[] = disasm,
+        globalRaw: RawChunk[] = [],
+        backtrace: number[] = [],
+        backtraceRaw: number[] = []
     ): AssembleResult {
         var pseudoPointer = offset;
         var result = new AssembleResult([], pseudoPointer);
         var recoder = new ChunkDataRecoding(new Utilities(this.settings));
 
-        disasm.forEach(chunk => {
+        var rawIndex = 0;
+        disasm.forEach((chunk, index) => {
             let doc = this.settings.docs.lookup(chunk.id);
             if (!doc) {
                 this.settings.logger.warn('Missing documentation for chunk', Utilities.uint32AsHex(chunk.id));
@@ -172,6 +181,7 @@ export default class ChunkAssembling {
                 }
 
                 pseudoPointer += toAlign;
+                rawIndex++;
             }
 
             pseudoPointer += 8;
@@ -190,6 +200,7 @@ export default class ChunkAssembling {
                 );
 
                 pseudoPointer = assembled.pseudoPointer;
+                rawIndex++;
                 return;
             }
 
@@ -206,7 +217,17 @@ export default class ChunkAssembling {
                     throw new Error('Cannot assemble chunk without schema (' + Utilities.uint32AsHex(chunk.id) + ')');
                 }
 
-                data = recoder.encode(chunk.data, pseudoPointer, doc.schema, chunk.id);
+                let context = new ScriptContext(
+                    chunk.data,
+                    global,
+                    [...backtrace, index],
+                    globalRaw,
+                    [...backtraceRaw, rawIndex],
+                    {},
+                    recoder.utils
+                )
+
+                data = recoder.encode(chunk.data, pseudoPointer, doc.schema, chunk.id, context);
             }
 
             if (doc && doc.data_align != null && pseudoPointer % doc.data_align != 0) {
@@ -231,6 +252,7 @@ export default class ChunkAssembling {
             );
 
             pseudoPointer += length;
+            rawIndex++;
         });
 
         result.pseudoPointer = pseudoPointer;

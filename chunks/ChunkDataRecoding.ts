@@ -289,7 +289,8 @@ export default class ChunkDataRecoding {
         data: Record<string, any>,
         pseudoPointer: number = 0,
         schema: Record<string, SubnestField> | null = null,
-        chunkId: number | null = null
+        chunkId: number | null = null,
+        context: ScriptContext
     ): Buffer {
         var chunk = chunkId ? Utilities.uint32AsHex(chunkId) : 'unknown';
 
@@ -300,14 +301,15 @@ export default class ChunkDataRecoding {
             throw new Error('Empty schema only allowed for raw data chunks (' + chunk + ')');
         }
 
-        return this.encodeSingleStructure(data, schema, pseudoPointer, chunk);
+        return this.encodeSingleStructure(data, schema, pseudoPointer, chunk, context);
     }
 
     public encodeSingleStructure(
         data: Record<string, any>,
         schema: Record<string, SubnestField>,
         pseudoPointer: number = 0,
-        errorLocationPrefix: string = ''
+        errorLocationPrefix: string = '',
+        context: ScriptContext
     ): Buffer {
         if (errorLocationPrefix.length > 0) {
             errorLocationPrefix += ':';
@@ -359,19 +361,33 @@ export default class ChunkDataRecoding {
 
             if (isString) {
                 if (typeof field.length !== 'string' && !Number.isInteger(field.length)) {
-                    throw new Error('String length must be an integer (' + errorLocationPrefix + name + ')');
+                    throw new Error('String length must be an integer or CIS expression (' + errorLocationPrefix + name + ')');
                 }
 
                 let length: number;
+                let valueLength = (value as string).length;
+
                 if (Number.isInteger(field.length)) {
                     length = field.length as number;
                 }
                 else {
-                    throw new Error('String encoding with variable length is currently not supported (' + errorLocationPrefix + name + ')');
+                    try {
+                        let result = ContextInlineScript.execute(field.length as string, context);
+                        let rawLength = result instanceof ReferencedValue ? result.get<number>() : result;
+
+                        if (typeof rawLength !== 'number') {
+                            throw new Error('String length has unknown type (' + errorLocationPrefix + name + ')');
+                        }
+
+                        length = rawLength;
+                    }
+                    catch (error) {
+                        this.utils.behaviour.logger.debug('Unable to pre-calculate size of buffer for string. Using minimal required size. (' + errorLocationPrefix + name + '): ' + (error instanceof Error ? error.message : String(error)));
+                        length = valueLength + 1; // Add byte for string terminator
+                    }
                 }
 
                 let stringBuffer = Buffer.alloc(length);
-                let valueLength = (value as string).length;
 
                 if (valueLength >= length) {
                     this.utils.behaviour.logger.warn(
@@ -393,23 +409,31 @@ export default class ChunkDataRecoding {
                 throw new Error('Jagged arrays are currently not supported (' + errorLocationPrefix + name + ')');
             }
             else if (typeof field.length !== 'undefined') {
+                let actualLength = (value as Record<string, any>[] & number[]).length;
                 let length: number;
 
                 if (typeof field.length === 'number') {
                     length = field.length;
                 }
                 else if (typeof field.length === 'string') {
-                    throw new Error('Dynamic array size is currently not supported (' + errorLocationPrefix + name + ')');
+                    try {
+                        let result = ContextInlineScript.execute(field.length as string, context);
+                        let rawLength = result instanceof ReferencedValue ? result.get<number>() : result;
+
+                        if (typeof rawLength !== 'number') {
+                            throw new Error('Array length has unknown type (' + errorLocationPrefix + name + ')');
+                        }
+
+                        length = rawLength;
+                    }
+                    catch (error) {
+                        this.utils.behaviour.logger.debug('Unable to pre-calculate size of array. Using minimal required size. (' + errorLocationPrefix + name + '): ' + (error instanceof Error ? error.message : String(error)));
+                        length = actualLength;
+                    }
                 }
                 else {
                     throw new Error('Array size have invalid type (' + errorLocationPrefix + name + ')');
                 }
-
-                if (length < 1) {
-                    throw new Error('Array length must be bigger or equal 1 (' + errorLocationPrefix + name + ')');
-                }
-
-                let actualLength = (value as Record<string, any>[] & number[]).length;
 
                 if (actualLength < length) {
                     this.utils.behaviour.logger.warn(
@@ -467,6 +491,9 @@ export default class ChunkDataRecoding {
 
                     let array = value as Record<string, any>[];
 
+                    let originalProperties = context.extraProperties;
+                    context.extraProperties = Object.assign({}, originalProperties);
+
                     for (let i = 0; i < array.length; i++) {
                         if (field.align != null) {
                             let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
@@ -477,10 +504,14 @@ export default class ChunkDataRecoding {
                             }
                         }
 
-                        let buffer = this.encodeSingleStructure(array[i], field.structure, pseudoPointer, errorLocationPrefix + name);
+                        context.extraProperties[ScriptContext.PROPERTY_INDEX] = i;
+
+                        let buffer = this.encodeSingleStructure(array[i], field.structure, pseudoPointer, errorLocationPrefix + name, context);
                         arrayBuffers.push(buffer);
                         pseudoPointer += buffer.length;
                     }
+
+                    context.extraProperties = originalProperties;
                 }
 
                 buffers.push(...arrayBuffers);
@@ -493,7 +524,7 @@ export default class ChunkDataRecoding {
                         throw new Error('Field declared as structure but no layout was found (' + errorLocationPrefix + name + ')');
                     }
 
-                    valueBuffer = this.encodeSingleStructure(value as Record<string, any>, field.structure, pseudoPointer, errorLocationPrefix + name);
+                    valueBuffer = this.encodeSingleStructure(value as Record<string, any>, field.structure, pseudoPointer, errorLocationPrefix + name, context);
                 }
                 else {
                     valueBuffer = this.encodeSingle(value as number, field);
