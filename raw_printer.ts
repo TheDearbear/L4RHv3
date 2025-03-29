@@ -224,7 +224,7 @@ function disassembleFile(path: string) {
     var chunks: DisassembledChunk[] = [];
     new ChunkAssembling(settings).disassemble(sourceChunks, 0, chunks, chunks);
 
-    if (path.toLowerCase().endsWith('.json')) {
+    if (outputFile == null && path.toLowerCase().endsWith('.json')) {
         path = path.substring(0, path.length - 5);
     }
 
@@ -244,7 +244,7 @@ function assembleFile(path: string) {
     var sourceChunks: DisassembledChunk[] = JSON.parse(fs.readFileSync(path).toString());
     var chunks = new ChunkAssembling(settings).assemble(sourceChunks).chunks;
 
-    if (path.toLowerCase().endsWith(DISASSEMBLED_FILE_ENDING)) {
+    if (outputFile == null && path.toLowerCase().endsWith(DISASSEMBLED_FILE_ENDING)) {
         path = path.substring(0, path.length - DISASSEMBLED_FILE_ENDING.length);
     }
 
