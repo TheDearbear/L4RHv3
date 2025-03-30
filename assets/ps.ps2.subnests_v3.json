@@ -1417,7 +1417,8 @@
             }
         },
         "0x8003410B": {
-            "description_entry": "BCHUNK_SCENERIES_HEIRARCHY"
+            "description_entry": "BCHUNK_SCENERIES_HEIRARCHY",
+            "align": 16
         },
         "0x0003410C": {
             "description_entry": "BCHUNK_SCENERY_HEIRARCHY",
