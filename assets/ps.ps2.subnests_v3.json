@@ -2165,6 +2165,23 @@
                                 }
                             }
                         },
+                        "Centre": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
                         "Points": {
                             "type": "structure",
                             "endian": "little",
