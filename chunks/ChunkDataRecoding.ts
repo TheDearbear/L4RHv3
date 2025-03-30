@@ -419,6 +419,7 @@ export default class ChunkDataRecoding {
 
                 for (let i = 0; i < array.length; i++) {
                     context.currentChunk = array[i];
+                    context.extraProperties[ScriptContext.PROPERTY_ROOT] = data;
                     context.extraProperties[ScriptContext.PROPERTY_INDEX] = i;
                     let result = ContextInlineScript.execute(field.length as string, context);
                     let length = result instanceof ReferencedValue ? result.get<number>() : result;
