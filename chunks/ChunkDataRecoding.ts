@@ -343,7 +343,7 @@ export default class ChunkDataRecoding {
             if (typeof field.align !== 'undefined') {
                 let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
                 if (aligned != pseudoPointer) {
-                    let delta = pseudoPointer - aligned;
+                    let delta = aligned - pseudoPointer;
                     buffers.push(Buffer.alloc(delta));
                     pseudoPointer = aligned;
                 }
@@ -428,6 +428,15 @@ export default class ChunkDataRecoding {
                         throw new Error('Structure length has unknowm type (' + errorLocationPrefix + name + ')');
                     }
 
+                    if (field.align != null) {
+                        let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
+                        if (aligned != pseudoPointer) {
+                            let delta = aligned - pseudoPointer;
+                            arrayBuffers.push(Buffer.alloc(delta));
+                            pseudoPointer = aligned;
+                        }
+                    }
+
                     let buffer = this.encodeSingleStructure(array[i], field.structure, pseudoPointer, errorLocationPrefix + name, context);
 
                     if (buffer.length != length) {
@@ -508,7 +517,7 @@ export default class ChunkDataRecoding {
                         if (field.align != null) {
                             let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
                             if (aligned != pseudoPointer) {
-                                let delta = pseudoPointer - aligned;
+                                let delta = aligned - pseudoPointer;
                                 arrayBuffers.push(Buffer.alloc(delta));
                                 pseudoPointer = aligned;
                             }
@@ -535,7 +544,7 @@ export default class ChunkDataRecoding {
                         if (field.align != null) {
                             let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
                             if (aligned != pseudoPointer) {
-                                let delta = pseudoPointer - aligned;
+                                let delta = aligned - pseudoPointer;
                                 arrayBuffers.push(Buffer.alloc(delta));
                                 pseudoPointer = aligned;
                             }
