@@ -250,6 +250,6 @@ function assembleFile(path: string) {
 
     fs.writeFileSync(
         outputFile || path + '.json',
-        JSON.stringify(chunks, null, prettyPrintIndent)
+        JSON.stringify(chunks, rawChunkJsonReplacer, prettyPrintIndent)
     );
 }
