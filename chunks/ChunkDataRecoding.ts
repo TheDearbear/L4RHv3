@@ -406,7 +406,43 @@ export default class ChunkDataRecoding {
                 pseudoPointer += length;
             }
             else if (field.modifier === 'jagged_array') {
-                throw new Error('Jagged arrays are currently not supported (' + errorLocationPrefix + name + ')');
+                if (typeof field.structure !== 'object') {
+                    throw new Error('Jagged array elements do not have structure layout (' + errorLocationPrefix + name + ')');
+                }
+
+                let arrayBuffers: Buffer[] = [];
+                let originalCurrent = context.currentChunk;
+                let originalProperties = context.extraProperties;
+                let array = value as Record<string, any>[];
+
+                context.extraProperties = Object.assign({}, originalProperties);
+
+                for (let i = 0; i < array.length; i++) {
+                    context.currentChunk = array[i];
+                    context.extraProperties[ScriptContext.PROPERTY_INDEX] = i;
+                    let result = ContextInlineScript.execute(field.length as string, context);
+                    let length = result instanceof ReferencedValue ? result.get<number>() : result;
+
+                    if (typeof length !== 'number') {
+                        throw new Error('Structure length has unknowm type (' + errorLocationPrefix + name + ')');
+                    }
+
+                    let buffer = this.encodeSingleStructure(array[i], field.structure, pseudoPointer, errorLocationPrefix + name, context);
+
+                    if (buffer.length != length) {
+                        this.utils.behaviour.logger.error(
+                            'Structure size differs from pre-calculated (' + buffer.length + ' != ' + length + '). ' +
+                            'Consider checking data and subnests file (' + errorLocationPrefix + name + '[' + i + '])'
+                        );
+                    }
+
+                    arrayBuffers.push(buffer);
+                    pseudoPointer += buffer.length;
+                }
+
+                buffers.push(...arrayBuffers);
+                context.currentChunk = originalCurrent;
+                context.extraProperties = originalProperties;
             }
             else if (typeof field.length !== 'undefined') {
                 let actualLength = (value as Record<string, any>[] & number[]).length;
