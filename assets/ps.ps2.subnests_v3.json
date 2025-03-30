@@ -3723,6 +3723,11 @@
                 }
             }
         },
+        "0x0003B800": {
+            "description_entry": "BCHUNK_COLLISION_ASSETS",
+            "data_align": 16,
+            "align": 16
+        },
         "0x0003B801": {
             "description_entry": "BCHUNK_COLLISION_PACK",
             "data_align": 16,
