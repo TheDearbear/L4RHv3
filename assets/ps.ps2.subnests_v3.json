@@ -1320,6 +1320,7 @@
         },
         "0x00034108": {
             "description_entry": "BCHUNK_SCENERY_OVERRIDE_INFO_TABLE",
+            "align": 16,
             "schema": {
                 "Array": {
                     "type": "structure",
@@ -1504,6 +1505,7 @@
         },
         "0x00034110": {
             "description_entry": "BCHUNK_TRACK_STREAMING_SECTIONS",
+            "align": 16,
             "schema": {
                 "Array": {
                     "type": "structure",
@@ -2503,6 +2505,7 @@
         "0x00034250": {
             "description_entry": "BCHUNK_WEATHER_MAN",
             "data_align": 16,
+            "align": 16,
             "schema": {
                 "Next": {
                     "type": "pointer",
