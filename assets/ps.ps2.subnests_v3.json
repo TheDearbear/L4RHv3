@@ -5822,6 +5822,45 @@
         "0xB3320000": {
             "description_entry": "BCHUNK_TEXTURE_PACK_VRAM_DATA_CHUNKS"
         },
+        "0x33320001": {
+            "description_entry": "BCHUNK_TEXTURE_PACK_VRAM_DATA_HEADER",
+            "schema": {
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Version": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "FilenameHash": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": true
+                },
+                "EndianSwapped": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "VRAMDataChunk": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                }
+            }
+        },
         "0x62A653A0": {
             "description_entry": "BCHUNK_TRACK_OBBS",
             "data_align": 16,
