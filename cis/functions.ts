@@ -75,11 +75,12 @@ export function rawsize(context: ScriptContext): number {
     }
 
     var currentLayer = getRawLayer(context.globalRawStorage, backtrace);
-    var current = currentLayer[lastIndex];
 
-    if (current == null) {
+    if (currentLayer == null || currentLayer.length <= lastIndex) {
         throw new Error('Function \"rawsize\" available only during disassembling');
     }
+
+    var current = currentLayer[lastIndex];
 
     if (Array.isArray(current.data)) {
         let length = 0;
@@ -213,13 +214,13 @@ function getLayer(global: DisassembledChunk[], backtrace: number[]): Disassemble
     return layer;
 }
 
-function getRawLayer(global: RawChunk[], backtrace: number[]): RawChunk[] {
+function getRawLayer(global: RawChunk[], backtrace: number[]): RawChunk[] | null {
     var layer = global;
     for (let i = 0; i < backtrace.length; i++) {
         let layerIndex = backtrace[i];
 
         if (layerIndex >= layer.length) {
-            throw new Error('Out-of-bounce backtrace index');
+            return null;
         }
 
         let chunk = layer[layerIndex];
