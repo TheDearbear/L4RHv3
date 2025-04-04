@@ -340,15 +340,6 @@ export default class ChunkDataRecoding {
                 throw new Error('Trying to encode missing data (' + errorLocationPrefix + name + ')')
             }
 
-            if (typeof field.align !== 'undefined') {
-                let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
-                if (aligned != pseudoPointer) {
-                    let delta = aligned - pseudoPointer;
-                    buffers.push(Buffer.alloc(delta));
-                    pseudoPointer = aligned;
-                }
-            }
-
             if (field.modifier === 'jagged_array' && field.type !== FieldTypes.STRUCTURE) {
                 throw new Error('Jagged array modifier can be applied only to structures (' + errorLocationPrefix + name + ')');
             }
@@ -428,15 +419,6 @@ export default class ChunkDataRecoding {
                         throw new Error('Structure length has unknowm type (' + errorLocationPrefix + name + ')');
                     }
 
-                    if (field.align != null) {
-                        let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
-                        if (aligned != pseudoPointer) {
-                            let delta = aligned - pseudoPointer;
-                            arrayBuffers.push(Buffer.alloc(delta));
-                            pseudoPointer = aligned;
-                        }
-                    }
-
                     let buffer = this.encodeSingleStructure(array[i], field.structure, pseudoPointer, errorLocationPrefix + name, context);
 
                     if (buffer.length != length) {
@@ -448,6 +430,15 @@ export default class ChunkDataRecoding {
 
                     arrayBuffers.push(buffer);
                     pseudoPointer += buffer.length;
+                    
+                    if (field.align != null) {
+                        let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
+                        if (aligned != pseudoPointer) {
+                            let delta = aligned - pseudoPointer;
+                            arrayBuffers.push(Buffer.alloc(delta));
+                            pseudoPointer = aligned;
+                        }
+                    }
                 }
 
                 buffers.push(...arrayBuffers);
@@ -514,6 +505,12 @@ export default class ChunkDataRecoding {
                     let array = value as number[];
 
                     for (let i = 0; i < length; i++) {
+                        let buffer = Buffer.allocUnsafe(elementSize);
+                        this.encodeSingleToInternal(array[i], writeFunctionName, buffer, 0);
+
+                        arrayBuffers.push(buffer);
+                        pseudoPointer += elementSize;
+                        
                         if (field.align != null) {
                             let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
                             if (aligned != pseudoPointer) {
@@ -522,12 +519,6 @@ export default class ChunkDataRecoding {
                                 pseudoPointer = aligned;
                             }
                         }
-
-                        let buffer = Buffer.allocUnsafe(elementSize);
-                        this.encodeSingleToInternal(array[i], writeFunctionName, buffer, 0);
-
-                        arrayBuffers.push(buffer);
-                        pseudoPointer += elementSize;
                     }
                 }
                 else {
@@ -541,6 +532,12 @@ export default class ChunkDataRecoding {
                     context.extraProperties = Object.assign({}, originalProperties);
 
                     for (let i = 0; i < array.length; i++) {
+                        context.extraProperties[ScriptContext.PROPERTY_INDEX] = i;
+
+                        let buffer = this.encodeSingleStructure(array[i], field.structure, pseudoPointer, errorLocationPrefix + name, context);
+                        arrayBuffers.push(buffer);
+                        pseudoPointer += buffer.length;
+                        
                         if (field.align != null) {
                             let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
                             if (aligned != pseudoPointer) {
@@ -549,12 +546,6 @@ export default class ChunkDataRecoding {
                                 pseudoPointer = aligned;
                             }
                         }
-
-                        context.extraProperties[ScriptContext.PROPERTY_INDEX] = i;
-
-                        let buffer = this.encodeSingleStructure(array[i], field.structure, pseudoPointer, errorLocationPrefix + name, context);
-                        arrayBuffers.push(buffer);
-                        pseudoPointer += buffer.length;
                     }
 
                     context.extraProperties = originalProperties;
@@ -578,6 +569,15 @@ export default class ChunkDataRecoding {
                 
                 buffers.push(valueBuffer);
                 pseudoPointer += valueBuffer.length;
+            }
+
+            if (typeof field.align !== 'undefined') {
+                let aligned = Utilities.alignDataPointer(pseudoPointer, field.align);
+                if (aligned != pseudoPointer) {
+                    let delta = aligned - pseudoPointer;
+                    buffers.push(Buffer.alloc(delta));
+                    pseudoPointer = aligned;
+                }
             }
         }
 
