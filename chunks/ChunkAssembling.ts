@@ -149,6 +149,7 @@ export default class ChunkAssembling {
         backtraceRaw: number[] = []
     ): AssembleResult {
         var pseudoPointer = offset;
+        var compressThreshold = this.settings.compressThreshold;
         var result = new AssembleResult([], pseudoPointer);
         var recoder = new ChunkDataRecoding(new Utilities(this.settings));
 
@@ -160,22 +161,30 @@ export default class ChunkAssembling {
             }
             else if (doc.align != null && pseudoPointer % doc.align != 0) {
                 var toAlign = doc.align - (pseudoPointer % doc.align);
-                if (toAlign < 8) {
-                    toAlign += doc.align;
-                }
 
                 if (toAlign == 8) {
                     result.chunks.push(
                         new RawChunk(0)
                     );
                 } else {
+                    if (toAlign < 8) {
+                        toAlign += doc.align;
+                    }
+
+                    let compressed = chunk.data.length >= compressThreshold;
+                    let data = Buffer.alloc(toAlign - 8);
+
+                    if (compressed) {
+                        data = zlib.deflateSync(data);
+                    }
+
                     result.chunks.push(
                         new RawChunk(
                             0,
                             toAlign - 8,
                             false,
-                            true,
-                            zlib.deflateSync(Buffer.alloc(toAlign - 8)).toString('base64')
+                            compressed,
+                            data.toString('base64')
                         )
                     );
                 }
@@ -236,7 +245,7 @@ export default class ChunkAssembling {
             }
 
             let length = data.length;
-            let compressed = data.length >= this.settings.compressThreshold;
+            let compressed = data.length >= compressThreshold;
             if (compressed) {
                 data = zlib.deflateSync(data);
             }
