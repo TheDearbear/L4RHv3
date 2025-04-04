@@ -171,7 +171,7 @@ export default class ChunkAssembling {
                         toAlign += doc.align;
                     }
 
-                    let compressed = chunk.data.length >= compressThreshold;
+                    let compressed = (toAlign - 8) >= compressThreshold;
                     let data = Buffer.alloc(toAlign - 8);
 
                     if (compressed) {
