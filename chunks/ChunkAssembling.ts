@@ -5,6 +5,7 @@ import Settings from '../Settings';
 import Utilities from '../Utilities';
 import zlib from 'node:zlib';
 import ScriptContext from '../cis/ScriptContext';
+import { Subnest } from '../DocsManager';
 
 export class AssembleResult {
     public chunks: RawChunk[];
@@ -137,7 +138,8 @@ export default class ChunkAssembling {
      * @param global Global storage of source chunks
      * @param globalRaw Global storage of assembled chunks
      * @param backtrace Backtrace from global storage to current chunks
-     * @param backtraceRaw Backtrace from 
+     * @param backtraceRaw Backtrace from raw storage to current chunks
+     * @param parent Docs for parent chunk
      * @returns Assembled raw chunks and `offset + length`
      */
     public assemble(
@@ -146,7 +148,8 @@ export default class ChunkAssembling {
         global: DisassembledChunk[] = disasm,
         globalRaw: RawChunk[] = [],
         backtrace: number[] = [],
-        backtraceRaw: number[] = []
+        backtraceRaw: number[] = [],
+        parent: Subnest | undefined = undefined
     ): AssembleResult {
         var pseudoPointer = offset;
         var compressThreshold = this.settings.compressThreshold;
@@ -156,47 +159,61 @@ export default class ChunkAssembling {
         var rawIndex = 0;
         disasm.forEach((chunk, index) => {
             let doc = this.settings.docs.lookup(chunk.id);
+            let allowInnerAlign = parent == null || parent.inner_align !== false;
+
+            if ((doc != null && typeof doc.inner_align !== 'undefined') && (chunk.id & 0x80000000) == 0) {
+                throw new Error('Inner align can only be applied to parent chunks (' + Utilities.uint32AsHex(chunk.id) + ')');
+            }
+
             if (!doc) {
                 this.settings.logger.warn('Missing documentation for chunk', Utilities.uint32AsHex(chunk.id));
             }
             else if (doc.align != null && pseudoPointer % doc.align != 0) {
-                var toAlign = doc.align - (pseudoPointer % doc.align);
 
-                if (toAlign == 8) {
-                    result.chunks.push(
-                        new RawChunk(0)
-                    );
-                } else {
-                    if (toAlign < 8) {
-                        toAlign += doc.align;
-                    }
-
-                    let compressed = (toAlign - 8) >= compressThreshold;
-                    let data = Buffer.alloc(toAlign - 8);
-
-                    if (compressed) {
-                        data = zlib.deflateSync(data);
-                    }
-
-                    result.chunks.push(
-                        new RawChunk(
-                            0,
-                            toAlign - 8,
-                            false,
-                            compressed,
-                            data.toString('base64')
-                        )
-                    );
+                if (!allowInnerAlign) {
+                    this.settings.logger.error('Chunk is not properly aligned but parent chunk prohibits using of aligning chunks (' + Utilities.uint32AsHex(chunk.id) + ')');
                 }
+                else {
+                    let toAlign = doc.align - (pseudoPointer % doc.align);
+                    let alignChunk = this.getAlignChunk(doc.align, toAlign);
 
-                pseudoPointer += toAlign;
-                rawIndex++;
+                    result.chunks.push(alignChunk);
+
+                    pseudoPointer += alignChunk.length + 8;
+                    rawIndex++;
+                }
+            }
+
+            if (doc != null && doc.inner_align === false && typeof doc.align === 'number') {
+                throw new Error('Cannot use inner align and outer align at the same time (' + Utilities.uint32AsHex(chunk.id) + ')');
             }
 
             pseudoPointer += 8;
 
             if (Array.isArray(chunk.data)) {
-                let assembled = this.assemble(chunk.data, pseudoPointer);
+                if (doc != null && doc.inner_align === false && chunk.data.length > 0) {
+                    let firstChildDoc = this.settings.docs.lookup((chunk.data[0] as DisassembledChunk).id);
+                    
+                    if (firstChildDoc != null && typeof firstChildDoc.align === 'number' && pseudoPointer % firstChildDoc.align != 0) {
+                        let toAlign = firstChildDoc.align - (pseudoPointer % firstChildDoc.align);
+                        let alignChunk = this.getAlignChunk(firstChildDoc.align, toAlign);
+                        
+                        result.chunks.push(alignChunk);
+
+                        pseudoPointer += alignChunk.length + 8;
+                        rawIndex++;
+                    }
+                }
+
+                let assembled = this.assemble(
+                    chunk.data,
+                    pseudoPointer,
+                    global,
+                    globalRaw,
+                    [...backtrace, index],
+                    [...backtraceRaw, rawIndex],
+                    doc
+                );
 
                 result.chunks.push(
                     new RawChunk(
@@ -266,5 +283,31 @@ export default class ChunkAssembling {
 
         result.pseudoPointer = pseudoPointer;
         return result;
+    }
+
+    private getAlignChunk(align: number, toAlign: number): RawChunk {
+        if (toAlign == 8) {
+            return new RawChunk(0);
+        }
+
+        if (toAlign < 8) {
+            toAlign += align;
+        }
+
+        let dataSize = toAlign - 8;
+        let compressed = dataSize >= this.settings.compressThreshold;
+        let data = Buffer.alloc(dataSize);
+
+        if (compressed) {
+            data = zlib.deflateSync(data);
+        }
+
+        return new RawChunk(
+            0,
+            dataSize,
+            false,
+            compressed,
+            data.toString('base64')
+        );
     }
 }

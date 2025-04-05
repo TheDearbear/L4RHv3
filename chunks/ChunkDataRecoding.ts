@@ -298,7 +298,7 @@ export default class ChunkDataRecoding {
             return Buffer.from(data[DisassembledChunk.RAW_VALUE], 'base64');
         }
         else if (schema == null) {
-            throw new Error('Empty schema only allowed for raw data chunks (' + chunk + ')');
+            throw new Error('Empty schema allowed only for raw data chunks (' + chunk + ')');
         }
 
         return this.encodeSingleStructure(data, schema, pseudoPointer, chunk, context);

@@ -3772,11 +3772,13 @@
             }
         },
         "0x8003B900": {
-            "description_entry": "BCHUNK_BOUNDS_PACK"
+            "description_entry": "BCHUNK_BOUNDS_PACK",
+            "inner_align": false
         },
         "0x0003B901": {
             "description_entry": "BCHUNK_BOUNDS",
             "data_align": 16,
+            "align": 16,
             "schema": {
                 "Collection": {
                     "type": "structure",

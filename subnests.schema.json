@@ -58,6 +58,10 @@
                             "type": "integer",
                             "minimum": 0
                         },
+                        "inner_align": {
+                            "description": "Program can use aligning chunks inside parent chunk. Can only be applied to parent chunks. Enabled by default",
+                            "type": "boolean"
+                        },
                         "schema": {
                             "description": "Schema of chunk's data for disassembling/assembling",
                             "type": "object",
@@ -139,7 +143,7 @@
                 "align": {
                     "description": "Aligns position up to specified value after field",
                     "type": "integer",
-                    "minimum": 0
+                    "minimum": 2
                 },
                 "bitfield": {
                     "description": "Allows to separate specific bits into different fields",

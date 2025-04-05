@@ -6,6 +6,7 @@ export class Subnest {
     public ignore: Boolean;
     public align: number | undefined;
     public data_align: number | undefined;
+    public inner_align: boolean | undefined;
     public schema: Record<string, SubnestField>;
 
     constructor(
@@ -13,12 +14,14 @@ export class Subnest {
         ignore: Boolean = false,
         align: number | undefined = undefined,
         dataAlign: number | undefined = undefined,
+        innerAlign: boolean | undefined = undefined,
         schema: Record<string, SubnestField> = {}
     ) {
         this.description_entry = description;
         this.ignore = ignore;
         this.align = align;
         this.data_align = dataAlign;
+        this.inner_align = innerAlign;
         this.schema = schema;
     }
 }
