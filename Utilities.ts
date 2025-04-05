@@ -237,8 +237,12 @@ export default class Utilities {
             throw new Error('Bitfield can be applied only to integer field');
         }
 
-        let value = 0;
-        let bitfieldSize = this.primitiveByteLength(field.type) * 8;
+        if (field.type === FieldTypes.INT64) {
+            throw new Error('Bitfields for 64 bit integers are not supported');
+        }
+
+        let value = BigInt(0);
+        let bitfieldSize = BigInt(this.primitiveByteLength(field.type)) * BigInt(8);
 
         for (const bitfieldName in field.bitfield) {
             let bitfield = field.bitfield[bitfieldName];
@@ -251,17 +255,19 @@ export default class Utilities {
                 throw new Error('Width of bitfield\'s entry must be positive integer (' + bitfieldName + ')');
             }
 
-            if (bitfield.offset + bitfield.width > bitfieldSize) {
+            if (BigInt(bitfield.offset + bitfield.width) > bitfieldSize) {
                 throw new Error('Entry of bitfield must be located inside bounds of parent type (' + bitfieldName + ')');
             }
 
             if (bitfieldName in disassm) {
-                let entryValue = disassm[bitfieldName];
-                if (typeof entryValue !== 'number') {
+                let entryValueRaw = disassm[bitfieldName];
+                if (typeof entryValueRaw !== 'number') {
                     throw new Error('Value of bitfield\'s entry can be only numeric (' + bitfieldName + ')');
                 }
+
+                let entryValue = BigInt(entryValueRaw);
                 
-                let maxValue = (1 << bitfield.width) - 1;
+                let maxValue = (BigInt(1) << BigInt(bitfield.width)) - BigInt(1);
                 if (entryValue > maxValue) {
                     let truncated = entryValue & maxValue; // Max value also can be used as mask to truncate bits
                     this.behaviour.logger.warn(
@@ -272,15 +278,15 @@ export default class Utilities {
                     entryValue = truncated;
                 }
 
-                let valueMask = ((1 << bitfieldSize) - 1) ^ (maxValue << bitfield.offset);
-                value = ((value as number) & valueMask) + (entryValue << bitfield.offset);
+                let valueMask = ((BigInt(1) << bitfieldSize) - BigInt(1)) ^ (maxValue << BigInt(bitfield.offset));
+                value = (value & valueMask) + (entryValue << BigInt(bitfield.offset));
             }
             else if (!bitfield.padding && field.modifier !== 'padding') {
                 this.behaviour.logger.warn('Cannot find value of entry in bitfield (' + bitfieldName + ')');
             }
         }
 
-        return value;
+        return Number(value);
     }
 
     public static replaceRange(str: string, start: number, end: number, substitute: string) {
