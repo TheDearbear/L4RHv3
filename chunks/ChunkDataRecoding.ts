@@ -486,6 +486,7 @@ export default class ChunkDataRecoding {
                         field.structure,
                         length - actualLength,
                         field.align,
+                        field.default_value,
                         field.bitfield
                     );
 

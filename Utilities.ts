@@ -301,17 +301,44 @@ export default class Utilities {
     public static defaultValue(field: SubnestField): Record<string, any>[] | Record<string, any> | string | number[] | number {
         var result: Record<string, any> | string | number;
         var isString = field.type == FieldTypes.INT8 && field.modifier == 'string';
-        
+
+        if (typeof field.default_value !== 'string' &&
+            typeof field.default_value !== 'number' &&
+            typeof field.default_value !== 'undefined'
+        ) {
+            throw new Error('Default value has invalid value');
+        }
+
+        if (typeof field.default_value !== 'undefined' && field.modifier != 'padding') {
+            throw new Error('Default value can only be specified for padding fields');
+        }
+
         if (field.type != FieldTypes.STRUCTURE) {
             if (field.type != FieldTypes.INT8 && field.modifier == 'string') {
                 throw new Error('Cannot use string modifier without int8 type');
             }
 
-            result = field.modifier == 'string' ? "" : 0;
+            if (typeof field.default_value === 'string' && field.modifier != 'string') {
+                throw new Error('String default value can only be applied to string field');
+            }
+
+            if (typeof field.default_value === 'number' && field.modifier == 'string') {
+                throw new Error('Numeric default value can only be applied to numeric field');
+            }
+
+            if (field.default_value != null) {
+                return field.default_value;
+            }
+
+            return isString ? "" : 0;
         }
         else {
             if (field.structure == null) {
                 throw new Error('Field is declared as structure but layout is not present');
+            }
+
+            if (field.default_value != null) {
+                throw new Error('Default value can only be set to numeric and string fields');
             }
 
             result = {};

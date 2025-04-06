@@ -145,6 +145,17 @@
                     "type": "integer",
                     "minimum": 2
                 },
+                "default_value": {
+                    "description": "Default value of padding field when it is not present in disassembled chunk",
+                    "oneOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
                 "bitfield": {
                     "description": "Allows to separate specific bits into different fields",
                     "type": "object",

@@ -1362,13 +1362,15 @@
                             "type": "pointer",
                             "endian": "little",
                             "unsigned": true,
-                            "modifier": "padding"
+                            "modifier": "padding",
+                            "default_value": 11
                         },
                         "Prev": {
                             "type": "pointer",
                             "endian": "little",
                             "unsigned": true,
-                            "modifier": "padding"
+                            "modifier": "padding",
+                            "default_value": 11
                         },
                         "NameHash": {
                             "type": "int32",
@@ -1578,7 +1580,6 @@
                             "type": "structure",
                             "endian": "little",
                             "unsigned": false,
-                            "modifier": "padding",
                             "structure": {
                                 "x": {
                                     "type": "float",
@@ -1595,8 +1596,7 @@
                         "Radius": {
                             "type": "float",
                             "endian": "little",
-                            "unsigned": false,
-                            "modifier": "padding"
+                            "unsigned": false
                         },
                         "Checksum": {
                             "type": "int32",
@@ -2099,13 +2099,15 @@
                             "type": "pointer",
                             "endian": "little",
                             "unsigned": true,
-                            "modifier": "padding"
+                            "modifier": "padding",
+                            "default_value": 11
                         },
                         "Prev": {
                             "type": "pointer",
                             "endian": "little",
                             "unsigned": true,
-                            "modifier": "padding"
+                            "modifier": "padding",
+                            "default_value": 11
                         },
                         "SectionNumber": {
                             "type": "int16",
@@ -2221,13 +2223,15 @@
                             "type": "pointer",
                             "endian": "little",
                             "unsigned": true,
-                            "modifier": "padding"
+                            "modifier": "padding",
+                            "default_value": 11
                         },
                         "Prev": {
                             "type": "pointer",
                             "endian": "little",
                             "unsigned": true,
-                            "modifier": "padding"
+                            "modifier": "padding",
+                            "default_value": 11
                         },
                         "pBoundary": {
                             "type": "pointer",
@@ -2287,13 +2291,15 @@
                             "type": "pointer",
                             "endian": "little",
                             "unsigned": true,
-                            "modifier": "padding"
+                            "modifier": "padding",
+                            "default_value": 11
                         },
                         "Prev": {
                             "type": "pointer",
                             "endian": "little",
                             "unsigned": true,
-                            "modifier": "padding"
+                            "modifier": "padding",
+                            "default_value": 11
                         },
                         "Name": {
                             "type": "int8",
@@ -2512,13 +2518,15 @@
                     "type": "pointer",
                     "endian": "little",
                     "unsigned": true,
-                    "modifier": "padding"
+                    "modifier": "padding",
+                    "default_value": 3
                 },
                 "Prev": {
                     "type": "pointer",
                     "endian": "little",
                     "unsigned": true,
-                    "modifier": "padding"
+                    "modifier": "padding",
+                    "default_value": 3
                 },
                 "Version": {
                     "type": "int32",
