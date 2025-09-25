@@ -3732,7 +3732,7 @@
             }
         },
         "0x0003B800": {
-            "description_entry": "BCHUNK_COLLISION_ASSETS",
+            "description_entry": "BCHUNK_CARP_WGRID_MAP",
             "data_align": 16,
             "align": 16
         },
