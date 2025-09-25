@@ -249,13 +249,16 @@ export default class ChunkAssembling {
                     throw new Error('Cannot assemble chunk without schema (' + Utilities.uint32AsHex(chunk.id) + ')');
                 }
 
+                let extraProperties: Record<string | number, any> = {};
+                extraProperties[ScriptContext.PROPERTY_CHUNK_ID] = chunk.id;
+
                 let context = new ScriptContext(
                     chunk.data,
                     global,
                     [...backtrace, index],
                     globalRaw,
                     [...backtraceRaw, rawIndex],
-                    {},
+                    extraProperties,
                     recoder.utils
                 )
 
