@@ -3,6 +3,7 @@ import RawChunk from '../chunks/RawChunk';
 import Utilities from '../Utilities';
 
 export default class ScriptContext {
+    public static readonly PROPERTY_CHUNK_ID: string = "chunk_id";
     public static readonly PROPERTY_INDEX: string = "index";
     public static readonly PROPERTY_ROOT: string = "root";
 

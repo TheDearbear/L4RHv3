@@ -30,7 +30,9 @@ export default class ChunkAssembling {
      * @param offset Starting offset
      * @param global Global context for executing CIS
      * @param output Output array for chunks
+     * @param globalRaw Global raw context for executing CIS
      * @param backtrace Way from `global` to `output`
+     * @param backtraceRaw Raw way from `global` to `output`
      */
     public disassemble(
         raw: RawChunk[],
@@ -103,12 +105,16 @@ export default class ChunkAssembling {
             }
 
             let outIndex = output.push(new DisassembledChunk(chunk.id, {})) - 1;
+            let extraProperties: Record<string | number, any> = {};
+            extraProperties[ScriptContext.PROPERTY_CHUNK_ID] = chunk.id;
+
             let context = new ScriptContext(
                 [],
                 global,
                 currentBacktrace,
                 globalRaw || raw,
-                currentRawBacktrace
+                currentRawBacktrace,
+                extraProperties
             );
             try {
                 let outValue = recoder.decode(data, pseudoPointer, doc.schema, chunk.id, context);
