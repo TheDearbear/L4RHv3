@@ -669,6 +669,295 @@
         "0x80034150": {
             "description_entry": "BCHUNK_VISIBLE_SECTIONS"
         },
+        "0x00034151": {
+            "description_entry": "BCHUNK_VISIBLE_SECTION_MANAGER_INFO",
+            "schema": {
+                "LODOffset": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "TheDrivableSectionsInRegion": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "NumSections": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Sections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 400
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034152": {
+            "description_entry": "BCHUNK_VISIBLE_SECTION_BOUNDARIES",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "jagged_array",
+                    "length": "$math:a=0x24,action=\"plus\",b=$math:a=8,action=\"multiply\",b=$current/.NumPoints//",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 11
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 11
+                        },
+                        "SectionNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumPoints": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "BBoxMin": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "BBoxMax": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "Centre": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "Points": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": "$current/.NumPoints",
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsinged": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034153": {
+            "description_entry": "BCHUNK_DRIVABLE_SCENERY_SECTIONS",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0xA4/",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 11
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 11
+                        },
+                        "SectionNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Padding": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "pBoundary": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "NumVisibleSections": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "VisibleSections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 72
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034154": {
+            "description_entry": "BCHUNK_TRACK_SPECIFIC_SECTIONS",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x20/",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 11
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 11
+                        },
+                        "TrackNumber": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumSectionNumbers": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "SectionNumbers": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 8
+                        }
+                    }
+                }
+            }
+        },
+        "0x00034155": {
+            "description_entry": "BCHUNK_LOADING_SECTIONS",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x4C/",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 11
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 11
+                        },
+                        "Name": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "string",
+                            "length": 16
+                        },
+                        "NumDrivableSections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "DrivableSections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 16
+                        },
+                        "NumExtraSections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "ExtraSections": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 8
+                        }
+                    }
+                }
+            }
+        },
         "0x00034201": {
             "description_entry": "BCHUNK_TRACK_INFOS"
         },

@@ -2276,7 +2276,7 @@
             }
         },
         "0x00034154": {
-            "description_entry": "BCHUNK_0x00034154"
+            "description_entry": "BCHUNK_TRACK_SPECIFIC_SECTIONS"
         },
         "0x00034155": {
             "description_entry": "BCHUNK_LOADING_SECTIONS",
