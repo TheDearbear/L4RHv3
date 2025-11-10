@@ -628,16 +628,243 @@
         },
         "0x00034110": {
             "description_entry": "BCHUNK_TRACK_STREAMING_SECTIONS",
-            "align": 128
+            "align": 128,
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x50/",
+                    "structure": {
+                        "SectionName": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "string",
+                            "length": 8
+                        },
+                        "SectionNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "WasRendered": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "CurrentlyVisible": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "Status": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "FileType": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FileOffset": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Size": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PermSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "SectionPriority": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Centre": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "Radius": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Checksum": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "LastNeededTimestamp": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "UnactivatedFrameCount": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "LoadedTime": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "LoadingPriority": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "pMemory": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "pDiscBundle": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "LoadedSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
         },
         "0x00034111": {
-            "description_entry": "BCHUNK_TRACK_STREAMING_INFO"
+            "description_entry": "BCHUNK_TRACK_STREAMING_INFO",
+            "schema": {
+                "FileSize": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": 2
+                }
+            }
         },
         "0x00034112": {
-            "description_entry": "BCHUNK_TRACK_STREAMING_BARRIERS"
+            "description_entry": "BCHUNK_TRACK_STREAMING_BARRIERS",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=0x10/",
+                    "structure": {
+                        "Points": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 2,
+                            "structure": {
+                                "x": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "y": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         },
         "0x00034113": {
-            "description_entry": "BCHUNK_DISC_BUNDLE_SECTIONS"
+            "description_entry": "BCHUNK_DISC_BUNDLE_SECTIONS",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "jagged_array",
+                    "length": "$math:a=0x14,action=\"plus\",b=$math:a=8,action=\"multiply\",b=$current/.NumMembers//",
+                    "structure": {
+                        "FileOffset": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FileSize": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "SectionName": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "string",
+                            "length": 11
+                        },
+                        "NumMembers": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Members": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": "$current/.NumMembers",
+                            "structure": {
+                                "SectionNumber": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "FileOffset": {
+                                    "type": "int16",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "pSection": {
+                                    "type": "pointer",
+                                    "endian": "little",
+                                    "unsigned": true,
+                                    "modifier": "padding"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         },
         "0x00034121": {
             "description_entry": "BCHUNK_TRACK_ROUTES"
