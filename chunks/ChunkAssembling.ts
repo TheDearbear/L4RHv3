@@ -124,6 +124,8 @@ export default class ChunkAssembling {
                     outValueRaw[DisassembledChunk.RAW_VALUE] = outValue;
 
                     output[outIndex].data = outValueRaw;
+
+                    this.settings.logger.warn('Missing schema for chunk', Utilities.uint32AsHex(chunk.id));
                 } else {
                     output[outIndex].data = outValue;
                 }

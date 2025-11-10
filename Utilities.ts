@@ -176,13 +176,10 @@ export default class Utilities {
             prefix += 'U';
         }
 
-        if (type === FieldTypes.INT8) {
-            endian = '';
-        }
-
         switch (type) {
             case FieldTypes.INT8:
                 type = 'Int8';
+                endian = '';
                 break;
 
             case FieldTypes.INT16:
