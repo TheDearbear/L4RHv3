@@ -967,7 +967,191 @@
         "0x00034250": {
             "description_entry": "BCHUNK_WEATHER_MAN",
             "data_align": 16,
-            "align": 16
+            "align": 16,
+            "schema": {
+                "WeatherRegionPack": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 3
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 3
+                        },
+                        "Version": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumRegions": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                },
+                "GenericRegions": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$current/.WeatherRegionPack.NumRegions",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 11
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 11
+                        },
+                        "Type": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FogColour": {
+                            "type": "structure",
+                            "endian": "little",
+                            "unsigned": false,
+                            "structure": {
+                                "r": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "g": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                },
+                                "b": {
+                                    "type": "float",
+                                    "endian": "little",
+                                    "unsigned": false
+                                }
+                            }
+                        },
+                        "FogStart": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Parameter1": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "PositionZ": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Radius": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "Intensity": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FarFalloffStart": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FarFalloff": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FarFalloffX": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "FarFalloffY": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "GroupNameHash": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "Shape": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "Blend": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "modifier": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "inFlags": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding"
+                        },
+                        "effect": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        },
+                        "dynamic": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "modifier": "padding"
+                        }
+                    }
+                }
+            }
         },
         "0x00034600": {
             "description_entry": "BCHUNK_CAR_TYPE_INFO_ARRAY"
