@@ -16,92 +16,101 @@
         "0x00030201": {
             "description_entry": "BCHUNK_FENG_FONT",
             "schema": {
-                "Next": {
-                    "type": "pointer",
+                "pFontName": {
+                    "type": "int8",
                     "endian": "little",
                     "unsigned": true,
-                    "modifier": "padding"
+                    "modifier": "string",
+                    "length": 256
                 },
-                "Prev": {
-                    "type": "pointer",
+                "pTextureName": {
+                    "type": "int8",
                     "endian": "little",
                     "unsigned": true,
-                    "modifier": "padding"
+                    "modifier": "string",
+                    "length": 256
                 },
-                "Texture": {
+                "pFont": {
                     "type": "structure",
                     "endian": "little",
                     "unsigned": false,
                     "structure": {
-                        "Next": {
-                            "type": "pointer",
+                        "mSignature": {
+                            "type": "int8",
                             "endian": "little",
-                            "unsigned": true,
-                            "modifier": "padding"
+                            "unsigned": false,
+                            "length": 4
                         },
-                        "Prev": {
-                            "type": "pointer",
-                            "endian": "little",
-                            "unsigned": true,
-                            "modifier": "padding"
-                        },
-                        "NameHash": {
+                        "mSize": {
                             "type": "int32",
                             "endian": "little",
                             "unsigned": true
                         },
-                        "pTextureInfo": {
-                            "type": "pointer",
+                        "mVersion": {
+                            "type": "int16",
                             "endian": "little",
-                            "unsigned": true,
-                            "modifier": "padding"
+                            "unsigned": true
+                        },
+                        "mNum": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mFlags": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mCenterX": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mCenterY": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mAscent": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mDescent": {
+                            "type": "int8",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "mGlyphTbl": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mKernTbl": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mShape": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "mStates": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false,
+                            "length": 24
                         }
                     }
-                },
-                "pFont": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "mfZValue": {
-                    "type": "float",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "FontHash": {
-                    "type": "int32",
-                    "endian": "little",
-                    "unsigned": true
-                },
-                "pFontName": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "pTextureName": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding"
-                },
-                "Height": {
-                    "type": "float",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "fBaselineOffset": {
-                    "type": "float",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "fLeadingScale": {
-                    "type": "float",
-                    "endian": "little",
-                    "unsigned": false
                 }
             }
+        },
+        "0x00030203": {
+            "description_entry": "BCHUNK_FENG_PACKAGE_DATA"
+        },
+        "0x00030210": {
+            "description_entry": "BCHUNK_FENG_PACKAGE"
         },
         "0x00034027": {
             "description_entry": "BCHUNK_SPAWNER_PACK",
@@ -1318,6 +1327,29 @@
                 }
             }
         },
+        "0x00034106": {
+            "description_entry": "BCHUNK_SCENERY_OVERRIDE_INFO_HOOKUP",
+            "schema": {
+                "Array": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": true,
+                    "length": "$math:a=$rawsize/,action=\"divide\",b=4/",
+                    "structure": {
+                        "OverrideInfoNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        },
+                        "InstanceNumber": {
+                            "type": "int16",
+                            "endian": "little",
+                            "unsigned": true
+                        }
+                    }
+                }
+            }
+        },
         "0x00034108": {
             "description_entry": "BCHUNK_SCENERY_OVERRIDE_INFO_TABLE",
             "align": 16,
@@ -1703,7 +1735,7 @@
             }
         },
         "0x00034113": {
-            "description_entry": "BCHUNK_DISK_BUNDLE_SECTIONS",
+            "description_entry": "BCHUNK_DISC_BUNDLE_SECTIONS",
             "schema": {
                 "Array": {
                     "type": "structure",
@@ -2514,35 +2546,42 @@
             "data_align": 16,
             "align": 16,
             "schema": {
-                "Next": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding",
-                    "default_value": 3
-                },
-                "Prev": {
-                    "type": "pointer",
-                    "endian": "little",
-                    "unsigned": true,
-                    "modifier": "padding",
-                    "default_value": 3
-                },
-                "Version": {
-                    "type": "int32",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "NumRegions": {
-                    "type": "int32",
-                    "endian": "little",
-                    "unsigned": false
-                },
-                "Regions": {
+                "WeatherRegionPack": {
                     "type": "structure",
                     "endian": "little",
                     "unsigned": false,
-                    "length": "$current/.NumRegions",
+                    "structure": {
+                        "Next": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 3
+                        },
+                        "Prev": {
+                            "type": "pointer",
+                            "endian": "little",
+                            "unsigned": true,
+                            "modifier": "padding",
+                            "default_value": 3
+                        },
+                        "Version": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "NumRegions": {
+                            "type": "int32",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                },
+                "GenericRegions": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$current/.WeatherRegionPack.NumRegions",
                     "structure": {
                         "Next": {
                             "type": "pointer",
@@ -5098,6 +5137,10 @@
                 }
             }
         },
+        "0x00134A02": {
+            "description_entry": "BCHUNK_SOLID_STRIP_DATA",
+            "data_align": 16
+        },
         "0x30300301": {
             "description_entry": "BCHUNK_SOLID_PCA_WEIGHTS",
             "data_align": 16,
@@ -5874,6 +5917,118 @@
                     "endian": "little",
                     "unsigned": true,
                     "modifier": "padding"
+                }
+            }
+        },
+        "0x57944655": {
+            "description_entry": "BCHUNK_TROUGH_BOUNDARY",
+            "schema": {
+                "Next": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Prev": {
+                    "type": "pointer",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "padding"
+                },
+                "Name": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": true,
+                    "modifier": "string",
+                    "length": 80
+                },
+                "TypeRegularTrough": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "TypeTroughHole": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "TypeAntiTrough": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Pad": {
+                    "type": "int8",
+                    "endian": "little",
+                    "unsigned": false,
+                    "modifier": "padding"
+                },
+                "TroughNumber": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "ParentTroughNumber": {
+                    "type": "int16",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "BBoxMin": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "x": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "y": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                },
+                "BBoxMax": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "structure": {
+                        "x": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "y": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
+                },
+                "NumPoints": {
+                    "type": "int32",
+                    "endian": "little",
+                    "unsigned": false
+                },
+                "Points": {
+                    "type": "structure",
+                    "endian": "little",
+                    "unsigned": false,
+                    "length": "$current/.NumPoints",
+                    "structure": {
+                        "x": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        },
+                        "y": {
+                            "type": "float",
+                            "endian": "little",
+                            "unsigned": false
+                        }
+                    }
                 }
             }
         },
