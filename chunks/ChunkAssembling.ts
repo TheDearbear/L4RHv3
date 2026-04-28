@@ -67,10 +67,16 @@ export default class ChunkAssembling {
                 pseudoPointer += chunk.length;
                 return;
             }
+            
+            let data = Buffer.from(chunk.data, 'base64');
+
+            if (chunk.compressed) {
+                data = zlib.inflateSync(data);
+            }
 
             if (!doc) {
                 output.push(
-                    new DisassembledChunk(chunk.id, chunk.data)
+                    new DisassembledChunk(chunk.id, data.toString('base64'))
                 );
 
                 pseudoPointer += 8 + chunk.length;
@@ -88,11 +94,6 @@ export default class ChunkAssembling {
             }
 
             pseudoPointer += 8;
-            let data = Buffer.from(chunk.data, 'base64');
-
-            if (chunk.compressed) {
-                data = zlib.inflateSync(data);
-            }
 
             if (doc.data_align != null) {
                 var alignedPointer = Utilities.alignDataPointer(pseudoPointer, doc.data_align);
